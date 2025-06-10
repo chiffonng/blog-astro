@@ -3,11 +3,11 @@ import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } fro
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'Astro Theme Pure',
+  title: 'My (Chiffon) Nguyen',
   /** Will be used in index page & copyright declaration */
-  author: 'Pure Lab',
+  author: 'My (Chiffon) Nguyen',
   /** Description metadata for your website. Can be used in page metadata. */
-  description: 'Stay hungry, stay foolish',
+  description: '',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/favicon/favicon.ico',
   /** Specify the default language for this site. */
@@ -24,7 +24,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: 'src/assets/avatar.png',
+    src: 'src/assets/avatar.jpg',
     alt: 'Avatar'
   },
 
@@ -47,8 +47,10 @@ export const theme: ThemeUserConfig = {
   /** Configure the header of your site. */
   header: {
     menu: [
+      { title: 'About', link: '/about' },
+      { title: 'Projects', link: '/projects' },
       { title: 'Blog', link: '/blog' },
-      { title: 'About', link: '/about' }
+      { title: 'Tags', link: '/tags' }
     ]
   },
 
@@ -65,7 +67,13 @@ export const theme: ThemeUserConfig = {
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
-    social: { github: 'https://github.com/cworld1/astro-theme-pure' }
+    social: {
+      github: 'https://github.com/chiffonng',
+      x: 'https://x.com/chiffonng',
+      bluesky: 'https://mychiffonng.bsky.social',
+      email: 'mailto:chiffonng@gmail.com',
+      instagram: 'https://www.instagram.com/mychiffonng/'
+    }
   },
 
   content: {
@@ -82,19 +90,8 @@ export const integ: IntegrationUserConfig = {
   // Links management
   // See: https://astro-pure.js.org/docs/integrations/links
   links: {
-    // Friend logbook
-    logbook: [
-      { date: '2024-07-01', content: 'Lorem ipsum dolor sit amet.' },
-      { date: '2024-07-01', content: 'vidit suscipit at mei.' },
-      { date: '2024-07-01', content: 'Quem denique mea id.' }
-    ],
-    // Yourself link info
-    applyTip: [
-      { name: 'Name', val: theme.title },
-      { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://astro-pure.js.org/' },
-      { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
-    ]
+    logbook: [],
+    applyTip: []
   },
   // Enable page search function
   pagefind: true,
@@ -124,7 +121,7 @@ export const integ: IntegrationUserConfig = {
   },
   // Comment system
   waline: {
-    enable: true,
+    enable: false,
     // Server service link
     server: 'https://astro-theme-pure-waline.arthals.ink/',
     // Refer https://waline.js.org/en/guide/features/emoji.html
