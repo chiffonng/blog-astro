@@ -22,3 +22,5 @@ export async function getBlogCollection(contentType: CollectionKey = 'blog') {
     return !prod || data.publish
   })
 }
+
+export default getBlogCollection 
