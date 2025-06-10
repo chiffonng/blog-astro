@@ -20,9 +20,10 @@ const machineLearning = [
   'PyTorch',
   'scikit-learn',
   'litellm',
-  'LlamaIndex/LangChain'
+  'LlamaIndex',
+  'LangChain'
 ]
-const frameworks = ['Flask (Python)', 'Gradio (Python)', 'React.js', 'Astro.js', 'Nuxt.js']
+const frameworks = ['Flask', 'React.js', 'Astro.js', 'Vue.js', 'Nuxt.js']
 const other = ['LaTeX', 'Markdown', 'Canva']
 
 const MAX_POSTS = 10
@@ -87,10 +88,10 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             >. I currently focus on:
           </p>
           <ul>
-            <li>computer-aided learning, language and technology education</li>
             <li>low-resource, multilingual, and multicultural adaptation</li>
             <li>human-AI collaboration in decision-making</li>
             <li>knowledge management and reasoning across modalities</li>
+            <li>computer-aided learning, language and technology education</li>
           </ul>
         </div>
         <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
