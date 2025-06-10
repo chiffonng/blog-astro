@@ -48,9 +48,6 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: 'Blog', link: '/blog' },
-      { title: 'Docs', link: '/docs' },
-      { title: 'Projects', link: '/projects' },
-      { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' }
     ]
   },
@@ -58,17 +55,6 @@ export const theme: ThemeUserConfig = {
   /** Configure the footer of your site. */
   footer: {
     links: [
-      // Registration link
-      {
-        title: 'Moe ICP APTX4869',
-        link: 'https://icp.gov.moe/?keyword=APTX4869',
-        style: 'text-sm' // Uno/TW CSS class
-      },
-      {
-        title: 'Travelling',
-        link: 'https://www.travellings.cn/go.html',
-        style: 'text-sm'
-      },
       // Privacy Policy link
       {
         title: 'Site Policy',
