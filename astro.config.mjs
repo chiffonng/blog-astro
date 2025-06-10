@@ -2,6 +2,7 @@
 
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import vercel from '@astrojs/vercel'
+import icon from 'astro-icon'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
@@ -23,6 +24,11 @@ import {
   updateStyle
 } from './src/plugins/shiki-transformers.ts'
 import config from './src/site.config.ts'
+
+// TODO: Install icon sets from iconify-json
+// e.g. bun install @iconify-json/mingcute
+const iconSet = 'mingcute'
+const iconsToInclude = ['map-pin-line', 'github-line', 'linkedin-line', 'mail-line']
 
 // https://astro.build/config
 export default defineConfig({
@@ -53,12 +59,17 @@ export default defineConfig({
     // astro-pure will automatically add sitemap, mdx & unocss
     // sitemap(),
     // mdx(),
-    AstroPureIntegration(config)
+    AstroPureIntegration(config),
     // (await import('@playform/compress')).default({
     //   SVG: false,
     //   Exclude: ['index.*.js']
     // }),
-
+    icon({
+      iconDir: 'src/assets/icons'
+      // include: {
+      //   [iconSet]: iconsToInclude
+      // }
+    })
     // Temporary fix vercel adapter
     // static build method is not needed
   ],
@@ -88,8 +99,8 @@ export default defineConfig({
     // https://docs.astro.build/en/guides/syntax-highlighting/
     shikiConfig: {
       themes: {
-        light: 'github-light',
-        dark: 'github-dark'
+        light: 'one-light',
+        dark: 'one-dark-pro'
       },
       transformers: [
         transformerNotationDiff(),

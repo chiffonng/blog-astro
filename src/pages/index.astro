@@ -1,13 +1,13 @@
 ---
 import { Image } from 'astro:assets'
+import { Icon } from 'astro-icon/components'
 
 import { PostPreview } from 'astro-pure/components/pages'
 import { sortMDByDate } from 'astro-pure/server'
-import { Button, Card, Icon, Label } from 'astro-pure/user'
+import { Button, Card, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
-import LinkedIn from '@/components/icons/Socials.astro'
 import getBlogCollection from '@/utils/blog'
 import avatar from '@/assets/avatar.jpg'
 import config from '@/site-config'
@@ -46,28 +46,26 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           Researcher, Developer, Teacher, and Life-long Learner
         </p>
         <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          <Label title='San Francisco, CA, USA'>
-            <Icon name='location' class='size-5' slot='icon' />
-          </Label>
-          <Label title='chiffonng' as='a' href='https://github.com/chiffonng' target='_blank'>
-            <Icon name='github' class='size-5' slot='icon' />
-          </Label>
+          <Icon name='mingcute:map-pin-line' class='size-6' />
+          <Label title='San Francisco, CA, USA' />
+          <Icon name='mingcute:github-line' class='size-6' />
+          <Label title='chiffonng' as='a' href='https://github.com/chiffonng' target='_blank' />
+          <Icon name='mingcute:linkedin-line' class='size-6' />
           <Label
             title='chiffonng'
             as='a'
             href='https://www.linkedin.com/in/chiffonng/'
             target='_blank'
-          >
-            <LinkedIn class='size-5' slot='icon' />
-          </Label>
+          />
+          <Icon name='mingcute:mail-line' class='size-6' />
           <Label
             title='chiffonng136 at gmail.com'
             as='a'
             href='mailto:chiffonng136@gmail.com'
             target='_blank'
-          >
-            <Icon name='email' class='size-6' slot='icon' />
-          </Label>
+          />
+          <Icon name='mingcute:file-download-line' class='size-6' />
+          <Label title='Resume' as='a' href='/' target='_blank' />
         </div>
       </div>
     </section>
