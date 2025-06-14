@@ -17,10 +17,10 @@ export async function getBlogCollection(contentType: CollectionKey = 'blog') {
   return await getCollection(contentType, ({ data }: CollectionEntry<typeof contentType>) => {
     // Convert "publish: false" to "draft: true" for internal server logic
     if (!prod) {
-      (data as BlogData).draft = !data.publish
+      ;(data as BlogData).draft = !(data as BlogData).publish
     }
-    return !prod || data.publish
+    return !prod || (data as BlogData).publish
   })
 }
 
-export default getBlogCollection 
+export default getBlogCollection
