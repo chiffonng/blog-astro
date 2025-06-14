@@ -11,14 +11,16 @@ interface Props {
     name: string
     description: string
     href: string
-    icon: Promise<typeof import('*.svg?raw')> | ImageMetadata // 支持SVG或图像资源
+    icon: Promise<typeof import('*.svg?raw')> | ImageMetadata
     darkIcon?: Promise<typeof import('*.svg?raw')> | ImageMetadata
+    isOpenSource?: boolean
+    usage?: 'free' | 'paid' | 'gifted' | 'subscription'
   }[]
 }
 
 const { class: className, title, tools, ...props } = Astro.props
 
-// 判断是否为ImageMetadata类型
+// Check if object is ImageMetadata type
 function isImageMetadata(obj: any): obj is ImageMetadata {
   return obj && typeof obj === 'object' && 'src' in obj
 }
@@ -82,7 +84,29 @@ function isImageMetadata(obj: any): obj is ImageMetadata {
               </>
             )}
             <div class='z-20 flex flex-col'>
-              <div class='font-medium text-foreground'>{tool.name}</div>
+              <div class='flex items-center gap-2'>
+                <div class='font-medium text-foreground'>{tool.name}</div>
+                <div class='flex gap-1'>
+                  {tool.isOpenSource && (
+                    <span class='text-xs px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-600 dark:text-yellow-400'>
+                      open-source
+                    </span>
+                  )}
+                  {tool.usage && (
+                    <span
+                      class={cn(
+                        'text-xs px-1.5 py-0.5 rounded',
+                        (tool.usage === 'free' || tool.usage === 'gifted') &&
+                          'bg-muted text-muted-foreground',
+                        tool.usage === 'paid' && 'bg-destructive/80 text-destructive-foreground',
+                        tool.usage === 'subscription' && 'bg-primary text-primary-foreground'
+                      )}
+                    >
+                      {tool.usage}
+                    </span>
+                  )}
+                </div>
+              </div>
               <div class='font-normal'>{tool.description}</div>
             </div>
           </div>
