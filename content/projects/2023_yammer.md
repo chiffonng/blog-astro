@@ -10,11 +10,8 @@ tags:
 ---
 
 This report analyzes the drop in user engagement observed in Yammer, an
-enterprise social networking platform, from late July to late August 2014. It
-reveals that long-term mobile users became disengaged since July 2014. Despite
-stable open rates (around 30%), the weekly digest email click-through rates
-sharply dropped from 40% in July to 30% in August 2014, indicating potential
-issues with email content relevance or quality. The report also list several
-recommendations for Yammer team to enhance user engagement, including improving
-mobile experience, optimizing email content, and providing more channels for and
-embracing user feedback.
+enterprise social networking platform, from late July to late August 2014. I
+identified that **long-term mobile users** became disengaged while email
+click-through rates dropped from 40% to 30% despite stable open rates (around
+30%). I thus provided targeted recommendations for mobile experience
+optimization, email content improvement, and enhanced user feedback mechanisms.

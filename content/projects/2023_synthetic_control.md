@@ -2,8 +2,8 @@
 title: Synthetic Control Replication
 fromDate: 2023-01-01
 toDate: 2023-12-31
-repo: https://rpubs.com/chiffonng/cs130-final
-doc: https://docs.google.com/document/d/e/2PACX-1vS7M4qIJw1eHuWvxYqioz5JKEQSlpFassm44jzCjYzNeVmTg1_y4JPJMWN5PV3j2bNU2-h5DF5CXNyx/pub
+repo: https://github.com/chiffonng/synthetic-control-rep
+doc: https://github.com/chiffonng/synthetic-control-rep/blob/main/CS130%20Final%20Assignment.pdf
 context: school
 isHighlighted: true
 tags:
@@ -13,3 +13,12 @@ tags:
   - Synthetic Control
   - replication
 ---
+
+In a pair, we replicated Benjamin W. Chrisinger's paper
+"[Philadelphia’s Excise Tax on Sugar-Sweetened and Artificially Sweetened Beverages and Supplemental Nutrition Assistance Program Benefit Redemption](https://pmc.ncbi.nlm.nih.gov/articles/PMC8630475/)"
+in R. While we were able to replicate similar trends, the magnitude of the
+effects differs, and our models lack robustness. We attribute these disparities
+to our lack of access to final data used (we cleaned the data ourselves) and
+variations in synthetic control implementations. Until these discrepancies are
+addressed, we withhold definitive conclusions regarding the claimed impact of
+the introduced excise tax in Philadelphia County and its neighboring counties.
