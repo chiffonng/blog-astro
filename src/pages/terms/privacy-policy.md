@@ -7,4 +7,5 @@ language: 'En'
 back: '/terms/list'
 ---
 
-It may be recommended to generate policies from [PolicyMaker.io](https://policymaker.io).
+It may be recommended to generate policies from
+[PolicyMaker.io](https://policymaker.io).
