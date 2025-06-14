@@ -1,0 +1,138 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+import ToolSection from '@/components/ToolSection.astro'
+---
+
+<PageLayout title='Tools' info='/tools'>
+  <p>
+    A collection of tools that I use on a daily basis. It is a work in progress and will be updated
+    as I update my setup. Except for the hardware, I use free versions of most tools.
+  </p>
+  {/* See src/components/ToolSection.astro for the tool section component */}
+  <ToolSection
+    class='mb-5'
+    title='Hardware (Operating System)'
+    tools={[
+      {
+        name: 'MacBook M1 Pro 14',
+        description: 'MacOS Sequoia 15',
+        href: 'https://www.apple.com/mac/',
+        icon: import('@/assets/icons/apple.html?raw')
+      },
+      {
+        name: 'iPhone 11',
+        description: 'iOS 18',
+        href: 'https://www.apple.com/iphone/',
+        icon: import('@/assets/icons/apple.html?raw')
+      },
+      {
+        name: 'Kobo Clara BW',
+        description: 'eBook Reader',
+        href: 'https://www.kobo.com/',
+        icon: import('@/assets/icons/kobo.svg?raw')
+      },
+      {
+        name: 'Linux (Virtual Machine)',
+        description: 'Ubuntu 24.04 LTS',
+        href: 'https://ubuntu.com/',
+        icon: import('@/assets/icons/ubuntu.html?raw')
+      },
+      {
+        name: 'Logitech Lift for Mac',
+        description: 'Vertical Ergonomic Mouse',
+        href: 'https://www.logitech.com/en-us/shop/p/lift-vertical-ergonomic-mouse-mac.910-006471',
+        icon: import('@/assets/icons/logitech.svg?raw')
+      },
+      {
+        name: 'Logitech Wave Keys for Mac',
+        description: 'Wireless Ergonomic Keyboard',
+        href: 'https://www.logitech.com/en-us/shop/p/wave-keys-mac.920-012402',
+        icon: import('@/assets/icons/logitech.svg?raw')
+      }
+    ]}
+  />
+  <ToolSection
+    class='mb-5'
+    title='Productivity'
+    tools={[
+      {
+        name: 'Zen Browser',
+        description: 'Browser (Firefox-based)',
+        href: 'https://zen-browser.app/',
+        icon: import('@/assets/icons/zen.html?raw'),
+        isOpenSource: true,
+        usage: 'free'
+      },
+      {
+        name: 'Arc Browser',
+        description: 'Browser (Chrominium-based)',
+        href: 'https://arc.net/',
+        icon: import('@/assets/icons/arc.html?raw')
+      },
+      {
+        name: 'Raycast',
+        description: 'Launcher / Spotlight alternative',
+        href: 'https://www.raycast.com/',
+        icon: import('@/assets/icons/raycast.html?raw'),
+        usage: 'free'
+      },
+      {
+        name: 'Obsidian',
+        description: 'Knowledge Management',
+        href: 'https://obsidian.md/',
+        icon: import('@/assets/icons/obsidian.html?raw'),
+        usage: 'free'
+      },
+      {
+        name: 'Notion',
+        description: 'Project Management, Calendar & Email',
+        href: 'https://www.notion.so/',
+        icon: import('@/assets/icons/notion.html?raw'),
+        darkIcon: import('@/assets/icons/notion-dark.html?raw'),
+        usage: 'free'
+      },
+      {
+        name: 'Reclaim.ai',
+        description: 'AI Calendar',
+        href: 'https://reclaim.ai/',
+        icon: import('@/assets/icons/reclaimai.svg?raw'),
+        usage: 'subscription'
+      }
+    ]}
+  />
+  <ToolSection
+    class='mb-5'
+    title='Development'
+    tools={[
+      {
+        name: 'Cursor',
+        description: 'IDE (Vim mode)',
+        href: 'https://www.cursor.com/',
+        icon: import('@/assets/icons/cursor.html?raw'),
+        darkIcon: import('@/assets/icons/cursor-dark.html?raw'),
+        usage: 'gifted'
+      },
+      {
+        name: 'iTerm2',
+        description: 'Terminal',
+        href: 'https://iterm2.com/',
+        icon: import('@/assets/icons/iterm2.svg?raw'),
+        isOpenSource: true
+      },
+      {
+        name: 'Claude Sonnet 4.0',
+        description: 'AI-powered Code Assistant',
+        href: 'https://www.anthropic.com/claude',
+        icon: import('@/assets/icons/claude.html?raw'),
+        usage: 'subscription'
+      },
+      {
+        name: 'Linear',
+        description: 'Software Development Tracking',
+        href: 'https://linear.app/',
+        icon: import('@/assets/icons/linear.html?raw'),
+        usage: 'free'
+      }
+    ]}
+  />
+</PageLayout>
