@@ -6,7 +6,6 @@ description: 'Test page for any purpose'
 tags:
   - Test
 language: 'English'
-publish: true
 ---
 
 <!-- http://localhost:4321/blog/test -->
