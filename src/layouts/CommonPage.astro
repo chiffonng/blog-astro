@@ -1,16 +1,14 @@
 ---
-import { PageInfo } from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/ContentLayout.astro'
 
 interface Props {
   title: string
-  info?: string
   frontmatter?: {
     title?: string
   }
 }
 
-const { title, info, frontmatter, ...props } = Astro.props
+const { title, frontmatter, ...props } = Astro.props
 ---
 
 <PageLayout meta={{ title }} {...props}>
@@ -19,7 +17,6 @@ const { title, info, frontmatter, ...props } = Astro.props
       {title || frontmatter?.title}
     </h1>
   </Fragment>
-  {info && <PageInfo path={info} />}
 
   <slot />
 

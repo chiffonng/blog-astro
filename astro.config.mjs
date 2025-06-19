@@ -70,13 +70,10 @@ export default defineConfig({
       //   [iconSet]: iconsToInclude
       // }
     })
-    // Temporary fix vercel adapter
-    // static build method is not needed
   ],
-  // root: './my-project-directory',
 
-  // Prefetch Options
   prefetch: true,
+
   // Server Options
   server: {
     host: true
