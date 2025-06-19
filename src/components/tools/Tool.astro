@@ -1,0 +1,99 @@
+---
+import { Image } from 'astro:assets'
+
+import { Svg } from 'astro-pure/user'
+
+export enum ToolTag {
+  OpenSource = 'oss',
+  SelfHosted = 'self-hosted',
+  Free = 'free',
+  Paid = 'paid',
+  Gifted = 'gifted',
+  Subscription = 'subscription',
+  Organization = 'org'
+}
+
+const tagStyles: Record<ToolTag, string> = {
+  [ToolTag.OpenSource]: 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400',
+  [ToolTag.SelfHosted]: 'bg-green-500/20 text-green-600 dark:text-green-400',
+  [ToolTag.Free]: 'bg-muted text-muted-foreground',
+  [ToolTag.Gifted]: 'bg-muted text-muted-foreground',
+  [ToolTag.Paid]: 'bg-destructive/80 text-destructive-foreground',
+  [ToolTag.Subscription]: 'bg-primary text-primary-foreground',
+  [ToolTag.Organization]: 'bg-primary text-primary-foreground'
+}
+
+export interface ToolProps {
+  name: string
+  description: string
+  href: string
+  icon: Promise<typeof import('*.svg?raw')> | ImageMetadata
+  darkIcon?: Promise<typeof import('*.svg?raw')> | ImageMetadata
+  tags?: ToolTag[]
+}
+
+const { name, description, href, icon, darkIcon, tags } = Astro.props
+
+function isImageMetadata(obj: any): obj is ImageMetadata {
+  return obj && typeof obj === 'object' && 'src' in obj
+}
+---
+
+<a class='group relative text-sm leading-normal no-underline' href={href} id={name} target='_blank'>
+  <div
+    class='flex items-center gap-x-3 rounded-lg border border-transparent px-1.5 py-1 transition-colors hover:border-border hover:bg-muted'
+  >
+    {
+      darkIcon ? (
+        <>
+          {isImageMetadata(icon) ? (
+            <div class='size-10 rounded-lg bg-primary-foreground p-2 dark:hidden'>
+              <Image src={icon} alt={name} class='h-full w-full object-contain' />
+            </div>
+          ) : (
+            <Svg
+              src={icon}
+              class='size-10 rounded-lg bg-primary-foreground fill-foreground p-2 dark:hidden'
+            />
+          )}
+
+          {isImageMetadata(darkIcon) ? (
+            <div class='size-10 rounded-lg bg-primary-foreground p-2 hidden dark:block'>
+              <Image src={darkIcon} alt={name} class='h-full w-full object-contain' />
+            </div>
+          ) : (
+            <Svg
+              src={darkIcon}
+              class='size-10 rounded-lg bg-primary-foreground fill-foreground p-2 hidden dark:block'
+            />
+          )}
+        </>
+      ) : (
+        <>
+          {isImageMetadata(icon) ? (
+            <div class='size-10 rounded-lg bg-primary-foreground p-2'>
+              <Image src={icon} alt={name} class='h-full w-full object-contain' />
+            </div>
+          ) : (
+            <Svg src={icon} class='size-10 rounded-lg bg-primary-foreground fill-foreground p-2' />
+          )}
+        </>
+      )
+    }
+    <div class='z-20 flex flex-col'>
+      <div class='flex items-center gap-2'>
+        <div class='font-medium text-foreground'>{name}</div>
+        <div class='flex gap-1'>
+          {
+            tags
+              ?.filter((tag: ToolTag) => Object.values(ToolTag).includes(tag))
+              .map((tag: ToolTag) => (
+                <span class={`text-xs px-1.5 py-0.5 rounded ${tagStyles[tag] ?? ''}`}>{tag}</span>
+              ))
+          }
+        </div>
+      </div>
+      <div class='font-normal'>{description}</div>
+    </div>
+  </div>
+</a>
