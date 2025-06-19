@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets'
-
-import { Svg } from 'astro-pure/user'
+import RenderIcon from './RenderIcon.astro'
 
 export enum ToolTag {
   OpenSource = 'oss',
@@ -33,10 +31,6 @@ export interface ToolProps {
 }
 
 const { name, description, href, icon, darkIcon, tags } = Astro.props
-
-function isImageMetadata(obj: any): obj is ImageMetadata {
-  return obj && typeof obj === 'object' && 'src' in obj
-}
 ---
 
 <a class='group relative text-sm leading-normal no-underline' href={href} id={name} target='_blank'>
@@ -46,38 +40,11 @@ function isImageMetadata(obj: any): obj is ImageMetadata {
     {
       darkIcon ? (
         <>
-          {isImageMetadata(icon) ? (
-            <div class='size-10 rounded-lg bg-primary-foreground p-2 dark:hidden'>
-              <Image src={icon} alt={name} class='h-full w-full object-contain' />
-            </div>
-          ) : (
-            <Svg
-              src={icon}
-              class='size-10 rounded-lg bg-primary-foreground fill-foreground p-2 dark:hidden'
-            />
-          )}
-
-          {isImageMetadata(darkIcon) ? (
-            <div class='size-10 rounded-lg bg-primary-foreground p-2 hidden dark:block'>
-              <Image src={darkIcon} alt={name} class='h-full w-full object-contain' />
-            </div>
-          ) : (
-            <Svg
-              src={darkIcon}
-              class='size-10 rounded-lg bg-primary-foreground fill-foreground p-2 hidden dark:block'
-            />
-          )}
+          <RenderIcon icon={icon} alt={name} hidden='dark:hidden' />
+          <RenderIcon icon={darkIcon} alt={name} hidden='hidden dark:block' />
         </>
       ) : (
-        <>
-          {isImageMetadata(icon) ? (
-            <div class='size-10 rounded-lg bg-primary-foreground p-2'>
-              <Image src={icon} alt={name} class='h-full w-full object-contain' />
-            </div>
-          ) : (
-            <Svg src={icon} class='size-10 rounded-lg bg-primary-foreground fill-foreground p-2' />
-          )}
-        </>
+        <RenderIcon icon={icon} alt={name} />
       )
     }
     <div class='z-20 flex flex-col'>
