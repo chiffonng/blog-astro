@@ -55,6 +55,7 @@ export default {
     },
     {
       files: '*.md',
+      excludeFiles: ['content/blog/**/*.md'],
       options: {
         proseWrap: 'always',
         printWidth: 80,
