@@ -154,17 +154,29 @@ import PageLayout from '@/layouts/CommonPage.astro'
         href: 'https://reclaim.ai/',
         icon: import('@/assets/icons/reclaimai.svg?raw'),
         tags: [ToolTag.Subscription]
-      },
+      }
+    ]}
+  />
+  <ToolSection
+    class='mb-5'
+    title='Setapp Subscription Bundle'
+    tools={[
       {
         name: 'Spark Mail',
         description: 'Email',
         href: 'https://sparkmailapp.com/',
         icon: import('@/assets/icons/sparkmail.svg?raw'),
-        tags: [ToolTag.Subscription]
+        tags: [ToolTag.Bundle]
+      },
+      {
+        name: 'Timing Tracker',
+        description: 'Time Tracking',
+        href: 'https://timingapp.com/',
+        icon: import('@/assets/icons/timingapp.svg?raw'),
+        tags: [ToolTag.Bundle]
       }
     ]}
   />
-
   <ToolSection
     class='mb-5'
     title='Language Learning'

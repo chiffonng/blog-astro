@@ -8,7 +8,8 @@ export enum ToolTag {
   Paid = 'paid',
   Gifted = 'gifted',
   Subscription = 'subscription',
-  Organization = 'org'
+  Organization = 'org',
+  Bundle = 'bundle'
 }
 
 const tagStyles: Record<ToolTag, string> = {
@@ -18,7 +19,8 @@ const tagStyles: Record<ToolTag, string> = {
   [ToolTag.Gifted]: 'bg-muted text-muted-foreground',
   [ToolTag.Paid]: 'bg-destructive/80 text-destructive-foreground',
   [ToolTag.Subscription]: 'bg-primary text-primary-foreground',
-  [ToolTag.Organization]: 'bg-primary text-primary-foreground'
+  [ToolTag.Organization]: 'bg-primary text-primary-foreground',
+  [ToolTag.Bundle]: 'bg-primary text-primary-foreground'
 }
 
 export interface ToolProps {

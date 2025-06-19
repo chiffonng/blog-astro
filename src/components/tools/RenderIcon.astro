@@ -12,13 +12,13 @@ const { icon, alt, className = '', hidden = '' } = Astro.props
 
 {
   isImageMetadata(icon) ? (
-    <div class={`size-11 rounded-lg bg-primary-foreground p-2 ${hidden} ${className}`}>
+    <div class={`size-10 rounded-lg bg-primary-foreground p-2 ${hidden} ${className}`}>
       <Image src={icon} alt={alt} class='h-full w-full object-contain' />
     </div>
   ) : (
     <Svg
       src={icon}
-      class={`size-11 rounded-lg bg-primary-foreground fill-foreground p-2 ${hidden} ${className}`}
+      class={`size-10 rounded-lg bg-primary-foreground fill-foreground p-2 ${hidden} ${className}`}
     />
   )
 }
