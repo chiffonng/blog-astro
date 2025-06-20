@@ -1,26 +1,38 @@
 ---
+import type { ImageMetadata } from 'astro'
+
 import RenderIcon from './RenderIcon.astro'
 
 export enum ToolTag {
   OpenSource = 'oss',
   SelfHosted = 'self-hosted',
+  Favorite = '🩵',
   Free = 'free',
   Paid = 'paid',
   Gifted = 'gifted',
   Subscription = 'subscription',
   Organization = 'org',
-  Bundle = 'bundle'
+  Bundle = 'bundle',
+  SecondHand = 'second-hand',
+  Web = 'web',
+  Mobile = 'mobile',
+  Desktop = 'desktop'
 }
 
 const tagStyles: Record<ToolTag, string> = {
   [ToolTag.OpenSource]: 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400',
   [ToolTag.SelfHosted]: 'bg-green-500/20 text-green-600 dark:text-green-400',
+  [ToolTag.Favorite]: 'bg-light-blue-500/20 text-light-blue-600 dark:text-light-blue-400',
   [ToolTag.Free]: 'bg-muted text-muted-foreground',
   [ToolTag.Gifted]: 'bg-muted text-muted-foreground',
+  [ToolTag.SecondHand]: 'bg-destructive/80 text-destructive-foreground',
   [ToolTag.Paid]: 'bg-destructive/80 text-destructive-foreground',
   [ToolTag.Subscription]: 'bg-primary text-primary-foreground',
   [ToolTag.Organization]: 'bg-primary text-primary-foreground',
-  [ToolTag.Bundle]: 'bg-primary text-primary-foreground'
+  [ToolTag.Bundle]: 'bg-primary text-primary-foreground',
+  [ToolTag.Web]: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
+  [ToolTag.Mobile]: 'bg-green-500/20 text-green-600 dark:text-green-400',
+  [ToolTag.Desktop]: 'bg-purple-500/20 text-purple-600 dark:text-purple-400'
 }
 
 export interface ToolProps {
