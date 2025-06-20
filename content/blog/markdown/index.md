@@ -5,7 +5,6 @@ description: 'Markdown is a lightweight markup language.'
 tags:
   - Markdown
 heroImage: { src: './thumbnail.jpg', color: '#B4C6DA' }
-publish: true
 ---
 
 ## Basic Syntax
