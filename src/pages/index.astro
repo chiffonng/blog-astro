@@ -1,16 +1,16 @@
 ---
 import { Image } from 'astro:assets'
-import { Icon } from 'astro-icon/components'
+import * as about from 'content/about.md'
+import * as misc from 'content/misc.md'
 
 import { PostPreview } from 'astro-pure/components/pages'
 import { sortMDByDate } from 'astro-pure/server'
-import { Button, Card, Label } from 'astro-pure/user'
+import { Button, Card } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import getBlogCollection from '@/utils/blog'
 import avatar from '@/assets/avatar.jpg'
-import config from '@/site-config'
 
 const langs = ['Vietnamese', 'English', 'Mandarin Chinese']
 const programming = ['Python', 'JavaScript', 'SQL', 'Shell', 'R']
@@ -33,7 +33,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
-    <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
+    <div class='animate mb-10 flex flex-col items-center gap-y-5' id='content-header'>
       <Image
         src={avatar}
         alt='profile'
@@ -42,165 +42,64 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       />
 
       <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-bold'>{config.author}</h1>
+        <h1 class='text-3xl font-bold'>{about.frontmatter.name}</h1>
         <p class='text-center text-lg text-muted-foreground max-w-2xl'>
-          Researcher, Developer, Teacher, and Life-long Learner
+          {about.frontmatter.tagline}
         </p>
-        <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          <Icon name='mingcute:map-pin-line' class='size-6' />
-          <Label title='San Francisco, CA, USA' />
-          <Icon name='mingcute:github-line' class='size-6' />
-          <Label title='chiffonng' as='a' href='https://github.com/chiffonng' target='_blank' />
-          <Icon name='mingcute:linkedin-line' class='size-6' />
-          <Label
-            title='chiffonng'
-            as='a'
-            href='https://www.linkedin.com/in/chiffonng/'
-            target='_blank'
-          />
-          <Icon name='mingcute:mail-line' class='size-6' />
-          <Label
-            title='chiffonng136 at gmail.com'
-            as='a'
-            href='mailto:chiffonng136@gmail.com'
-            target='_blank'
-          />
-          <Icon name='mingcute:file-download-line' class='size-6' />
-          <Label title='Resume' as='a' href='/' target='_blank' />
-        </div>
       </div>
-    </section>
 
-    <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-      <Section title='About'>
-        <div class='text-muted-foreground prose dark:prose-invert prose-sm prose-a:text-primary'>
-          <p>
-            I'm My (pronounced as "me"), she/her, Vietnamese. I also go by Chiffon. I graduated in
-            May 2025 from
-            <a href='https://www.minerva.edu/' target='_blank'>Minerva University</a>
-            studying AI & Statistics, while living and engaging civically in 6 cities 🇺🇸🇰🇷🇹🇼🇮🇳🇦🇷🇩🇪 as
-            part of Minerva's global rotation program. I am interested in <strong
-              >supporting collaborative and interactive human learning and reasoning</strong
-            >
-            using <strong
-              >natural language processing, human-computer interaction, data science, and learning
-              sciences</strong
-            >. I currently focus on:
-          </p>
-          <ul>
-            <li>low-resource, multilingual, and multicultural adaptation</li>
-            <li>human-AI collaboration in decision-making</li>
-            <li>knowledge management and reasoning across modalities</li>
-            <li>computer-aided learning, language and technology education</li>
-          </ul>
-        </div>
-        <Button title='More about me' class='w-fit self-end' href='/about' style='ahead' />
-      </Section>
+      <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
+        <Section>
+          <div class='prose dark:prose-invert prose-a:text-primary max-w-none'>
+            <about.Content />
+          </div>
+        </Section>
+        <Section title='Research'>
+          <Card
+            heading='Undergraduate Research Intern @ AI & Mixed Reality Lab, Landshut University of Applied Sciences'
+            subheading='Landshut, Bavaria, Germany'
+            date='Jun 2022 - Aug 2024'
+          >
+            <ul class='ms-4 list-disc text-muted-foreground'>
+              <li>
+                Developed a reproducible pipeline for 3D object detection using LiDAR point cloud
+                data and PointPillars (a machine learning algorithm)
 
-      <Section title='Research'>
-        <Card
-          heading='Undergraduate Research Intern @ AI & Mixed Reality Lab, Landshut University of Applied Sciences'
-          subheading='Landshut, Bavaria, Germany'
-          date='Jun 2022 - Aug 2024'
-        >
-          <ul class='ms-4 list-disc text-muted-foreground'>
-            <li>
-              Developed a reproducible pipeline for 3D object detection using LiDAR point cloud data
-              and PointPillars (a machine learning algorithm)
-
-              <li>Conducted benchmarking analysis on synthetic datasets</li>
-            </li>
-          </ul>
-        </Card>
-      </Section>
-      <Section title='Teaching'>
-        <Card
-          heading='Lead Tutor & Data Analyst, PR51 Programming with Python'
-          subheading='Academics Team, Minerva University'
-          date='Spring 2025'
-        >
-          <ul class='text-muted-foreground list-disc ml-4'>
-            <li>
-              Designed and delivered 10 weekly seminars for 40+ first-year students covering Python
-              programming, OOP, debugging, amd basic data structures
-            </li>
-            <li>
-              Conducted data-driven analysis of course effectiveness using student and tutor
-              surveys, performance trackers (Google Sheets), and Google Colab comments via Google
-              Drive API
-            </li>
-            <li>Produced comprehensive report with actionable, pedagogical recommendations</li>
-          </ul>
-        </Card>
-        <Card
-          as='a'
-          heading='Lead Teaching Assistant, FA50/FA51 Formal Analyses'
-          subheading='Minerva University'
-          date='Fall 2022 - Spring 2024'
-          href='https://my.minerva.edu/academics/course_catalog/other/'
-        >
-          <ul class='ms-4 list-disc'>
-            <li>
-              Mentored 50+ first-year students per semester in formal logic, probability theory, and
-              algorithmic thinking
-            </li>
-            <li>Provided detailed, constructive feedback on 25 quizzes per semester</li>
-            <li>Assisted with grading and feedback for three major assignments per semester</li>
-          </ul>
-        </Card>
-      </Section>
-      <Section title='Education'>
-        <Card
-          as='a'
-          heading='Minerva University'
-          subheading='Bachelor of Science in Computational Science'
-          date='Sep 2021 - May 2025'
-          href='http://minerva.edu/'
-        >
-          <p class='text-muted-foreground mt-2'>
-            Coursework in Machine Learning, AI Ethics, Optimization Methods, Software Engineering,
-            Statistical Modeling and Causal Inference, Bayesian Modeling.
-          </p>
-          <p class='text-muted-foreground'>
-            Global rotation: Sookmyung Women's University (Seoul, South Korea, Spring 2022),
-            National Taiwan University (Taipei, Taiwan, Fall 2022), and three other cities
-            (Hyderabad, India; Buenos Aires, Argentina; Berlin, Germany)
-          </p>
-        </Card>
-      </Section>
-
-      <Section title='Certifications'>
-        <ul>
-          <li>deepLearning.ai Natural Language Processing Specialization (2024)</li>
-          <li>deepLearning.ai Machine Learning Specialization (2024)</li>
-          <li>WorldQuant University Applied Data Science Lab Certificate (2023)</li>
-          <li>Google Data Analytics Professional Certificate (2023)</li>
-        </ul>
-      </Section>
-
-      <Section title='Skills'>
-        <SkillLayout title='Languages' skills={langs} />
-        <SkillLayout title='Programming' skills={programming} />
-        <SkillLayout title='Tools' skills={tools} />
-        <SkillLayout title='ML' skills={machineLearning} />
-        <SkillLayout title='Frameworks' skills={frameworks} />
-        <SkillLayout title='Other' skills={other} />
-      </Section>
-
-      {
-        allPostsByDate.length > 0 && (
-          <Section title='Posts'>
-            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
-              {allPostsByDate.map((p) => (
-                <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} />
-                </li>
-              ))}
+                <li>Conducted benchmarking analysis on synthetic datasets</li>
+              </li>
             </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
-          </Section>
-        )
-      }
+          </Card>
+        </Section>
+
+        <Section title='Skills'>
+          <SkillLayout title='Languages' skills={langs} />
+          <SkillLayout title='Programming' skills={programming} />
+          <SkillLayout title='Tools' skills={tools} />
+          <SkillLayout title='ML' skills={machineLearning} />
+          <SkillLayout title='Frameworks' skills={frameworks} />
+          <SkillLayout title='Other' skills={other} />
+        </Section>
+
+        {
+          allPostsByDate.length > 0 && (
+            <Section title='Posts'>
+              <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
+                {allPostsByDate.map((p) => (
+                  <li class='flex flex-col gap-x-2 sm:flex-row'>
+                    <PostPreview post={p} />
+                  </li>
+                ))}
+              </ul>
+              <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
+            </Section>
+          )
+        }
+        <Section title='Miscellaneous'>
+          <div class='prose dark:prose-invert prose-a:text-primary max-w-none'>
+            <misc.Content />
+          </div>
+        </Section>
+      </div>
     </div>
   </main>
 </PageLayout>
