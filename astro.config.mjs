@@ -1,7 +1,6 @@
 // @ts-check
 
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
-import vercel from '@astrojs/vercel'
 import icon from 'astro-icon'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig } from 'astro/config'
@@ -25,11 +24,6 @@ import {
 } from './src/plugins/shiki-transformers.ts'
 import config from './src/site.config.ts'
 
-// TODO: Install icon sets from iconify-json
-// e.g. bun install @iconify-json/mingcute
-const iconSet = 'mingcute'
-const iconsToInclude = ['map-pin-line', 'github-line', 'linkedin-line', 'mail-line']
-
 // https://astro.build/config
 export default defineConfig({
   // Top-Level Options
@@ -39,14 +33,6 @@ export default defineConfig({
 
   // Adapter
   // https://docs.astro.build/en/guides/deploy/
-  // 1. Vercel (serverless)
-  adapter: vercel(),
-  output: 'server',
-  // 2. Vercel (static)
-  // adapter: vercelStatic(),
-  // 3. Local (standalone)
-  // adapter: node({ mode: 'standalone' }),
-  // output: 'server',
   // ---
 
   image: {
@@ -57,12 +43,11 @@ export default defineConfig({
 
   integrations: [
     // astro-pure will automatically add sitemap, mdx & unocss
+    AstroPureIntegration(config),
     // sitemap(),
     // mdx(),
-    AstroPureIntegration(config),
-    // (await import('@playform/compress')).default({
-    //   SVG: false,
-    //   Exclude: ['index.*.js']
+    // UnoCSS({
+    //   injectReset: true
     // }),
     icon({
       iconDir: 'src/assets/icons'
@@ -70,13 +55,10 @@ export default defineConfig({
       //   [iconSet]: iconsToInclude
       // }
     })
-    // Temporary fix vercel adapter
-    // static build method is not needed
   ],
-  // root: './my-project-directory',
 
-  // Prefetch Options
   prefetch: true,
+
   // Server Options
   server: {
     host: true

@@ -1,52 +1,11 @@
 ---
 import { Image } from 'astro:assets'
 
-import { Collapse } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import config from '@/site-config'
-
-const headings = [
-  { depth: 2, slug: 'theme', text: 'Theme' },
-  { depth: 2, slug: 'programs', text: 'Programs' },
-  { depth: 2, slug: 'learnings', text: 'Learnings' },
-  { depth: 2, slug: 'others', text: 'Others' }
-]
 ---
 
-<PageLayout title='Projects' {headings} info={{ slug: '/projects', hideComment: true }}>
-  <p>Github Activities:</p>
-  <p>
-    <Image
-      src='https://ghchart.rshah.org/659eb9/cworld1'
-      alt='github activities'
-      inferSize
-      loading='lazy'
-    />
-  </p>
-  <p>
-    If you think it would be useful or interesting to collaborate on a project, you can donate to
-    support my work or contact me to discuss a project.
-  </p>
-
-  <h2 id='theme'>Theme</h2>
-  <ProjectSection
-    project={[
-      {
-        name: '🍭 Astro-theme-pure',
-        description: 'A simple, clean but powerful blog theme build by astro.',
-        links: [
-          { type: 'github', href: 'https://github.com/cworld1/astro-theme-pure' },
-          { type: 'site', href: 'https://github.com/cworld1/astro-theme-pure' },
-          {
-            type: 'doc',
-            href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
-          }
-        ]
-      }
-    ]}
-  />
-
+<PageLayout title='Projects'>
   <h2 id='programs'>Programs</h2>
   <ProjectSection
     project={[
@@ -73,78 +32,17 @@ const headings = [
       }
     ]}
   />
-  <Collapse title='Some old projects'>
-    <ProjectSection
-      project={[
-        {
-          name: 'Search Switcher',
-          description: 'Add links to each other in search engines',
-          links: [{ type: 'github', href: 'https://github.com/cworld1/search-switcher' }]
-        },
-        {
-          name: 'Pure Baidu',
-          description: 'Baidu search page beautification module',
-          links: [
-            { type: 'doc', href: 'https://cworld0.com/blog/pure-baidu' },
-            { type: 'site', href: 'https://userstyles.org/styles/173673/pure' }
-          ]
-        }
-      ]}
+  <h2 id='github-activities'>Github Activities</h2>
+  <p>
+    <Image
+      src='https://ghchart.rshah.org/659eb9/cworld1'
+      alt='github activities'
+      inferSize
+      loading='lazy'
     />
-  </Collapse>
-
-  <h2 id='learnings'>Learnings</h2>
-  <ProjectSection
-    class='my-2'
-    project={[
-      {
-        name: 'Rust Learning',
-        description: 'Some notes and code about CWorld learning Rust',
-        links: [{ type: 'github', href: 'https://github.com/cworld1/rust-learning' }]
-      },
-      {
-        name: 'CS 213 Learning',
-        description: 'Notes, code and experiences for Introduction to Computer Systems course',
-        links: [
-          {
-            type: 'github',
-            href: 'https://github.com/zhuozhiyongde/Introduction-To-Computer-System-2023Fall-PKU'
-          }
-        ]
-      }
-    ]}
-  />
-
-  <h2 id='others'>Others</h2>
-  <ProjectSection
-    project={[
-      {
-        name: 'CWorld',
-        description: "CWorld's Github",
-        links: [{ type: 'github', href: 'https://github.com/cworld1' }]
-      },
-      {
-        name: 'Arthals',
-        description: 'Arthals Github',
-        links: [{ type: 'github', href: 'https://github.com/zhuozhiyongde' }]
-      }
-    ]}
-  />
-
-  <script
-    is:inline
-    type='module'
-    data-astro-rerun
-    define:vars={{ npmCDN: config.npmCDN, walineServer: config.integ.waline.server }}
-  >
-    const loadPageviewCount = async () => {
-      const pageview = await import(`${npmCDN}/@waline/client@v3/dist/pageview.js`)
-      pageview.pageviewCount({
-        serverURL: walineServer,
-        path: window.location.pathname
-      })
-    }
-
-    await loadPageviewCount()
-  </script>
+  </p>
+  <p>
+    If you think it would be useful or interesting to collaborate on a project, you can contact me
+    to discuss a project.
+  </p>
 </PageLayout>

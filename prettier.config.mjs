@@ -52,6 +52,15 @@ export default {
       options: {
         parser: 'astro'
       }
+    },
+    {
+      files: '*.md',
+      excludeFiles: ['content/blog/**/*.md'],
+      options: {
+        proseWrap: 'always',
+        printWidth: 80,
+        singleAttributePerLine: true
+      }
     }
   ]
 }
