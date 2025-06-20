@@ -10,19 +10,17 @@
     "sync": "astro sync",
     "check": "astro check",
     "astro": "astro",
-    "pure": "astro-pure",
-    "new": "astro-pure new",
     "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
     "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx,astro}'",
-    "yijiansilian": "bun lint && bun sync && bun check && bun format",
-    "clean": "rm -rf .astro .vercel dist"
+    "routine": "bun lint && bun sync && bun check && bun format",
+    "clean": "rm -rf .astro dist"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/rss": "^4.0.12",
-    "@astrojs/vercel": "^8.1.5",
     "@iconify-json/mingcute": "^1.2.3",
     "@playform/compress": "^0.1.9",
+    "@unocss/preset-icons": "^66.2.3",
     "@unocss/preset-wind3": "^66.2.3",
     "@unocss/reset": "^66.2.3",
     "@waline/client": "^3.5.7",
