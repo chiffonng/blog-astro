@@ -4,4 +4,3 @@ export { default as Section } from './home/Section.astro'
 export { default as SkillLayout } from './home/SkillLayout.astro'
 export { ToolTag } from './tools/Tool.astro'
 export { default as ToolSection } from './tools/ToolSection.astro'
-

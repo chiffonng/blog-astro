@@ -1,4 +1,4 @@
-import { type ImageFunction, z } from 'astro:content'
+import { z, type ImageFunction } from 'astro:content'
 
 import { removeDupsAndLowerCase } from './utils'
 
