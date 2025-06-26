@@ -1,10 +1,11 @@
 ---
+import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 
 import { Svg } from 'astro-pure/user'
 
-function isImageMetadata(obj: any): obj is ImageMetadata {
-  return obj && typeof obj === 'object' && 'src' in obj
+function isImageMetadata(obj: unknown): obj is ImageMetadata {
+  return !!(obj && typeof obj === 'object' && 'src' in obj)
 }
 
 const { icon, alt, className = '', hidden = '' } = Astro.props

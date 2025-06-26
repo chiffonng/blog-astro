@@ -11,20 +11,19 @@ import PageLayout from '@/layouts/CommonPage.astro'
     Favorite)
   </p>
   <ToolSection
-    class='mb-5'
     title='Workstation (+Operating System)'
     tools={[
       {
-        name: 'MacBook M1 Pro 14',
+        name: 'MacBook M1 Pro 14"',
         description: 'MacOS Sequoia 15',
         href: 'https://www.apple.com/mac/',
-        icon: import('@/assets/icons/apple.html?raw')
+        icon: import('@/assets/icons/apple.svg?raw')
       },
       {
         name: 'iPhone 11',
         description: 'iOS 18',
         href: 'https://www.apple.com/iphone/',
-        icon: import('@/assets/icons/apple.html?raw')
+        icon: import('@/assets/icons/apple.svg?raw')
       },
       {
         name: 'Logitech Lift for Mac',
@@ -42,22 +41,28 @@ import PageLayout from '@/layouts/CommonPage.astro'
         name: 'Linux (Virtual Machine)',
         description: 'Ubuntu 24.04 LTS',
         href: 'https://ubuntu.com/',
-        icon: import('@/assets/icons/ubuntu.html?raw'),
+        icon: import('@/assets/icons/ubuntu.svg?raw'),
         tags: [ToolTag.OpenSource]
       }
     ]}
   />
   <ToolSection
-    class='mb-5'
     title='Development'
     tools={[
       {
         name: 'Cursor',
         description: 'AI IDE (Vim mode)',
         href: 'https://www.cursor.com/',
-        icon: import('@/assets/icons/cursor.html?raw'),
-        darkIcon: import('@/assets/icons/cursor-dark.html?raw'),
+        icon: import('@/assets/icons/cursor.svg?raw'),
+        darkIcon: import('@/assets/icons/cursor-dark.svg?raw'),
         tags: [ToolTag.Gifted]
+      },
+      {
+        name: 'Zed',
+        description: 'IDE (Vim mode)',
+        href: 'https://zed.dev/',
+        icon: import('@/assets/icons/zed.svg?raw'),
+        tags: [ToolTag.Free, ToolTag.OpenSource, ToolTag.Favorite]
       },
       {
         name: 'iTerm2',
@@ -67,23 +72,22 @@ import PageLayout from '@/layouts/CommonPage.astro'
         tags: [ToolTag.OpenSource]
       },
       {
-        name: 'Claude Sonnet 4.0',
+        name: 'Claude CLI (Sonnet 4.0)',
         description: 'AI-powered Code Assistant',
         href: 'https://www.anthropic.com/claude',
-        icon: import('@/assets/icons/claude.html?raw'),
+        icon: import('@/assets/icons/claude.svg?raw'),
         tags: [ToolTag.Subscription]
       },
       {
         name: 'Linear',
         description: 'Software Development Tracking',
         href: 'https://linear.app/',
-        icon: import('@/assets/icons/linear.html?raw'),
+        icon: import('@/assets/icons/linear.svg?raw'),
         tags: [ToolTag.Free, ToolTag.Favorite]
       }
     ]}
   />
   <ToolSection
-    class='mb-5'
     title='Research & Knowledge Management'
     tools={[
       {
@@ -97,7 +101,7 @@ import PageLayout from '@/layouts/CommonPage.astro'
         name: 'Obsidian',
         description: 'Knowledge Management',
         href: 'https://obsidian.md/',
-        icon: import('@/assets/icons/obsidian.html?raw'),
+        icon: import('@/assets/icons/obsidian.svg?raw'),
         tags: [ToolTag.Free, ToolTag.Favorite]
       },
       {
@@ -117,27 +121,26 @@ import PageLayout from '@/layouts/CommonPage.astro'
     ]}
   />
   <ToolSection
-    class='mb-5'
     title='Productivity'
     tools={[
       {
         name: 'Zen Browser',
         description: 'Browser (Firefox-based)',
         href: 'https://zen-browser.app/',
-        icon: import('@/assets/icons/zen.html?raw'),
+        icon: import('@/assets/icons/zen.svg?raw'),
         tags: [ToolTag.OpenSource, ToolTag.Free, ToolTag.Favorite]
       },
       {
         name: 'Arc Browser',
         description: 'Browser (Chrominium-based)',
         href: 'https://arc.net/',
-        icon: import('@/assets/icons/arc.html?raw')
+        icon: import('@/assets/icons/arc.svg?raw')
       },
       {
         name: 'Raycast',
         description: 'Launcher / Spotlight alternative',
         href: 'https://www.raycast.com/',
-        icon: import('@/assets/icons/raycast.html?raw'),
+        icon: import('@/assets/icons/raycast.svg?raw'),
         tags: [ToolTag.Free]
       },
 
@@ -145,8 +148,7 @@ import PageLayout from '@/layouts/CommonPage.astro'
         name: 'Notion',
         description: 'Project Management & Calendar',
         href: 'https://www.notion.so/',
-        icon: import('@/assets/icons/notion.html?raw'),
-        darkIcon: import('@/assets/icons/notion-dark.html?raw'),
+        icon: import('@/assets/icons/notion.svg?raw'),
         tags: [ToolTag.Free]
       },
       {
@@ -159,7 +161,6 @@ import PageLayout from '@/layouts/CommonPage.astro'
     ]}
   />
   <ToolSection
-    class='mb-5'
     title='Setapp Subscription Bundle'
     tools={[
       {
@@ -179,7 +180,6 @@ import PageLayout from '@/layouts/CommonPage.astro'
     ]}
   />
   <ToolSection
-    class='mb-5'
     title='Language Learning'
     tools={[
       {

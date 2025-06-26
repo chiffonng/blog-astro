@@ -1,8 +1,8 @@
-import { z } from 'astro:content'
+import { z, type ImageFunction } from 'astro:content'
 
 import { removeDupsAndLowerCase } from './utils'
 
-export const imageSchema = (image: any) =>
+export const imageSchema = (image: ImageFunction) =>
   z.object({
     src: image(),
     alt: z.string().optional(),
@@ -12,7 +12,7 @@ export const imageSchema = (image: any) =>
     color: z.string().optional()
   })
 
-export const blogSchema = ({ image }: { image: any }) =>
+export const blogSchema = ({ image }: { image: ImageFunction }) =>
   z.object({
     title: z.string().max(60),
     description: z.string().max(160),

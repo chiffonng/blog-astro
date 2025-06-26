@@ -34,6 +34,7 @@ export default {
     '',
     '^astro-pure/(.*)$',
     '^@/types/(.*)$',
+    '^@/schemas/(.*)$',
     '^@/layouts/(.*)$',
     '^@/pages/(.*)$',
     '^@/components/(.*)$',
@@ -54,12 +55,10 @@ export default {
       }
     },
     {
-      files: '*.md',
-      excludeFiles: ['content/blog/**/*.md'],
+      files: '*.{md,mdx}',
       options: {
         proseWrap: 'always',
-        printWidth: 80,
-        singleAttributePerLine: true
+        printWidth: 100
       }
     }
   ]

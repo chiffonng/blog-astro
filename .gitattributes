@@ -1,0 +1,3 @@
+content/** merge=ours
+src/assets/** merge=ours
+docs/** merge=ours
