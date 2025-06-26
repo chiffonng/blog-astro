@@ -6,20 +6,21 @@ location: 'San Francisco, CA, USA'
 avatar: 'assets/avatar.jpg'
 ---
 
-I graduated in May 2025 from [Minerva University](https://minerva.edu/)
-studying Machine Learning & Statistics, while living and
-engaging civically in 6 cities 🇺🇸🇰🇷🇹🇼🇮🇳🇦🇷🇩🇪 as part of its global rotation
-program.
-
 I am interested in **making human knowledge work more accessible, productive,
-engaging, and collaborative** using natural language processing, human-computer interaction, data science, and learning sciences:
+collaborative and enjoyable** using natural language processing, human-computer
+interaction, data science, and learning sciences:
 
-- Low-resource, multilingual, and multicultural adaptation (for accessibility)
-- Knowledge management and reasoning across modalities (for accuracy)
-- Human-AI bi-alignment (for collaboration)
-- Interactive learning at scale (for engagement)
+- Accessibility: Low-resource, multilingual, and multicultural adaptation
+- Productivity: Knowledge management and reasoning across modalities
+- Collaboration: Human-AI bi-alignment, human-AI co-creation, human-AI-data
+  relationship
 
-[Knowledge can be broadly defined](./blog/knowledge-diversity),
-and so I care about many ways of accessing and
-producing knowledge: scientific research, education, human-human and human-AI
-conversation and collaboration.
+[Knowledge can be broadly defined](./blog/knowledge-diversity), and so I care
+about many ways of accessing and producing knowledge. In the long term, I
+envision a personalized, self-evolving knowledge system externalized from human
+brain, but collaborate and augment human knowledge capabilities. Like a
+personal, knowledgeable robot!
+
+I graduated in May 2025 from [Minerva University](https://minerva.edu/) studying
+Machine Learning & Statistics, while living and engaging civically in 6 cities
+🇺🇸🇰🇷🇹🇼🇮🇳🇦🇷🇩🇪 as part of its global rotation program. [[What am I doing?](./now)]
