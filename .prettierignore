@@ -1,3 +1,7 @@
 node_modules/**
 src/icons/**
+src/assets/icons/**
+src/pages/**/*.{md,mdx}
+dist/
 public/scripts/*
+content/

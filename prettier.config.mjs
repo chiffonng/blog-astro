@@ -56,9 +56,9 @@ export default {
     },
     {
       files: '*.{md,mdx}',
-      excludeFiles: ['content/**/*.{md,mdx}', 'src/pages/**/*.{md,mdx}'],
       options: {
-        proseWrap: 'always'
+        proseWrap: 'always',
+        printWidth: 100
       }
     }
   ]
