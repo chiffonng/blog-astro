@@ -1,3 +1,4 @@
+export { default as BlogCard } from './blog/BlogCard.astro'
 export { default as Footer } from './common/Footer.astro'
 export { default as Header } from './common/Header.astro'
 export { default as Section } from './home/Section.astro'
