@@ -2,7 +2,7 @@ import { z, type ImageFunction } from 'astro:content'
 
 import { removeDupsAndLowerCase } from './utils'
 
-export const imageSchema = (image: ImageFunction) =>
+export const IMAGE_SCHEMA = (image: ImageFunction) =>
   z.object({
     src: image(),
     alt: z.string().optional(),
@@ -12,7 +12,7 @@ export const imageSchema = (image: ImageFunction) =>
     color: z.string().optional()
   })
 
-export const blogSchema = ({ image }: { image: ImageFunction }) =>
+export const BLOG_SCHEMA = ({ image }: { image: ImageFunction }) =>
   z.object({
     title: z.string().max(60),
     description: z.string().max(160).optional(),
@@ -20,7 +20,7 @@ export const blogSchema = ({ image }: { image: ImageFunction }) =>
     publishDate: z.coerce.date().default(new Date()),
     // Optional
     updatedDate: z.coerce.date().optional(),
-    heroImage: imageSchema(image).optional(),
+    heroImage: IMAGE_SCHEMA(image).optional(),
     tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
     language: z.string().optional().default('en'),
 
@@ -28,4 +28,4 @@ export const blogSchema = ({ image }: { image: ImageFunction }) =>
     comment: z.boolean().default(false)
   })
 
-export default blogSchema
+export default BLOG_SCHEMA

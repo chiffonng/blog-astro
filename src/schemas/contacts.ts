@@ -5,7 +5,7 @@
  * @uses https://unocss.dev/presets/icons
  */
 
-import { z } from 'astro/zod'
+import { z } from 'astro/zod';
 
 /**
  * @constant {Array} contactDefinitions
@@ -83,22 +83,22 @@ export const contactTypes = contactDefinitions.map((d) => d.type) as ContactType
 export const contactIconClasses: string[] = contactDefinitions.map(({ iconClass }) => iconClass)
 
 // Custom validators for special types
-const mailSchema = z
+const MAIL_SCHEMA = z
   .string()
   .refine((val) => val.startsWith('mailto:') || z.string().email().safeParse(val).success, {
     message: 'Must be a valid email or mailto: link'
   })
-const phoneSchema = z.string().regex(/^[+]?[1-9][\d]{0,15}$/, 'Invalid phone number format')
-const locationSchema = z.string().min(1, 'Location cannot be empty')
-const urlSchema = z.string().url({ message: 'Must be a valid URL' })
+const PHONE_SCHEMA = z.string().regex(/^[+]?[1-9][\d]{0,15}$/, 'Invalid phone number format')
+const LOCATION_SCHEMA = z.string().min(1, 'Location cannot be empty')
+const URL_SCHEMA = z.string().url({ message: 'Must be a valid URL' })
 
 // Build the schema record
 const contactSchemaRecord: Record<ContactType, z.ZodTypeAny> = Object.fromEntries(
   contactTypes.map((type) => {
-    if (type === 'mail') return [type, mailSchema.optional()]
-    if (type === 'phone') return [type, phoneSchema.optional()]
-    if (type === 'location') return [type, locationSchema.optional()]
-    return [type, urlSchema.optional()]
+    if (type === 'mail') return [type, MAIL_SCHEMA.optional()]
+    if (type === 'phone') return [type, PHONE_SCHEMA.optional()]
+    if (type === 'location') return [type, LOCATION_SCHEMA.optional()]
+    return [type, URL_SCHEMA.optional()]
   })
 ) as Record<ContactType, z.ZodTypeAny>
 

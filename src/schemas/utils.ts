@@ -8,7 +8,7 @@ export function removeDupsAndLowerCase(array: string[]) {
 }
 
 // Custom date validation that accepts both YYYY-MM and YYYY-MM-DD
-export const dateSchema = z
+export const DATE_SCHEMA = z
   .union([
     // Accept ISO date strings (YYYY-MM-DD)
     z.coerce.date(),
@@ -23,3 +23,7 @@ export const dateSchema = z
   .refine((date) => !isNaN(date.getTime()), {
     message: 'Invalid date format. Must be YYYY-MM-DD or YYYY-MM'
   })
+
+export const AUDIO_SCHEMA = z.instanceof(File).refine((file) => file.type.startsWith('audio/'), {
+  message: 'File must be an audio file'
+})
