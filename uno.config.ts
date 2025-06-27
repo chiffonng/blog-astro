@@ -1,3 +1,4 @@
+import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
 
 import { contactIconClasses } from './src/schemas/contacts'
@@ -178,9 +179,13 @@ export default defineConfig({
     presetIcons({
       collections: {
         mingcute: () => import('@iconify-json/mingcute/icons.json').then((i) => i.default),
-        academicons: () => import('@iconify-json/academicons/icons.json').then((i) => i.default)
+        academicons: () => import('@iconify-json/academicons/icons.json').then((i) => i.default),
+        mycons: FileSystemIconLoader('./src/assets/icons')
       },
-      scale: 1.5
+      scale: 1.5,
+      extraProperties: {
+        filter: 'var(--un-icon-filter, none)'
+      }
     }),
     presetTypography(typographyConfig)
   ],
@@ -196,6 +201,8 @@ export default defineConfig({
     'rounded-b-2xl',
     // Typography
     'text-base',
-    'prose'
+    'prose',
+    'prose-a:text-primary',
+    'prose-a:underline'
   ]
 })

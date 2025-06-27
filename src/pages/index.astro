@@ -1,14 +1,12 @@
 ---
 import { Image } from 'astro:assets'
+import { BlogCard, Card, ContactBar, Section, SkillLayout } from '@/components'
 import * as about from 'content/about.md'
 import * as misc from 'content/misc.md'
 
-import { PostPreview } from 'astro-pure/components/pages'
 import { sortMDByDate } from 'astro-pure/server'
-import { Button, Card } from 'astro-pure/user'
+import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import Section from '@/components/home/Section.astro'
-import SkillLayout from '@/components/home/SkillLayout.astro'
 import getBlogCollection from '@/utils/blog'
 import avatar from '@/assets/avatar.jpg'
 
@@ -47,7 +45,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           {about.frontmatter.tagline}
         </p>
       </div>
-
+      <ContactBar />
       <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
         <Section>
           <div class='prose dark:prose-invert prose-a:text-primary max-w-none'>
@@ -60,14 +58,11 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             subheading='Landshut, Bavaria, Germany'
             date='Jun 2022 - Aug 2024'
           >
-            <ul class='ms-4 list-disc text-muted-foreground'>
-              <li>
-                Developed a reproducible pipeline for 3D object detection using LiDAR point cloud
-                data and PointPillars (a machine learning algorithm)
-
-                <li>Conducted benchmarking analysis on synthetic datasets</li>
-              </li>
-            </ul>
+            <p class='text-muted-foreground'>
+              Developed a reproducible pipeline for 3D object detection using LiDAR point cloud data
+              and <a href='https://arxiv.org/abs/1812.05784' target='_blank'>PointPillars</a>
+              algorithm, and conducted benchmarking analysis on synthetic datasets
+            </p>
           </Card>
         </Section>
 
@@ -86,7 +81,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
               <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
                 {allPostsByDate.map((p) => (
                   <li class='flex flex-col gap-x-2 sm:flex-row'>
-                    <PostPreview post={p} />
+                    <BlogCard post={p} />
                   </li>
                 ))}
               </ul>

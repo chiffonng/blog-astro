@@ -8,18 +8,25 @@ function isImageMetadata(obj: unknown): obj is ImageMetadata {
   return !!(obj && typeof obj === 'object' && 'src' in obj)
 }
 
-const { icon, alt, className = '', hidden = '' } = Astro.props
+const { icon, alt, className = '' } = Astro.props
+
+// Check if it's a CSS icon class (starts with 'i-')
+const isCssIcon = typeof icon === 'string' && icon.startsWith('i-')
 ---
 
 {
-  isImageMetadata(icon) ? (
-    <div class={`size-10 rounded-lg bg-primary-foreground p-2 ${hidden} ${className}`}>
+  isCssIcon ? (
+    <div class={`size-10 rounded-lg bg-primary-foreground p-2 ${className}`}>
+      <span class={`${icon} h-full w-full inline-block dark:invert`} aria-label={alt} />
+    </div>
+  ) : isImageMetadata(icon) ? (
+    <div class={`size-10 rounded-lg bg-primary-foreground p-2 ${className}`}>
       <Image src={icon} alt={alt} class='h-full w-full object-contain' />
     </div>
   ) : (
     <Svg
       src={icon}
-      class={`size-10 rounded-lg bg-primary-foreground fill-foreground p-2 ${hidden} ${className}`}
+      class={`size-10 rounded-lg bg-primary-foreground fill-foreground p-2 ${className}`}
     />
   )
 }

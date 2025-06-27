@@ -1,0 +1,26 @@
+---
+import { contacts } from '@/site.config'
+
+import { getSocialIcons, validateContacts } from '@/schemas/contacts'
+
+const validatedContacts = validateContacts(contacts)
+const contactList = getSocialIcons(validatedContacts)
+---
+
+<div class='flex flex-wrap gap-3 md:gap-6'>
+  {
+    contactList.map(({ type, url, label, iconClass }) => (
+      <a
+        href={url}
+        target='_blank'
+        class='inline-flex items-center gap-2 hover:text-primary transition-colors group'
+        aria-label={type}
+        title={label}
+      >
+        <div class={`${iconClass} group-hover:scale-120 transition-transform`} />
+        {/* Hide icon label on mobile */}
+        <span class='hidden sm:inline text-base'>{label}</span>
+      </a>
+    ))
+  }
+</div>

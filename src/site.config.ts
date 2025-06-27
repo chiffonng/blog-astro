@@ -1,4 +1,20 @@
 import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import type { ContactConfig } from '@/schemas/contacts'
+
+/**
+ * @constant {ContactConfig} contacts
+ * @description The contact configuration for the site
+ * @property {string} - The type of contact
+ * @property {string} - The URL of the contact
+ * @note All values are optional. See {@link ContactConfig} for all possible values. Add new contact types to contactDefinitions.
+ */
+export const contacts: ContactConfig = {
+  googleScholar: 'https://scholar.google.com/citations?user=a25a-rUAAAAJ',
+  github: 'https://github.com/chiffonng',
+  x: 'https://x.com/chiffonng',
+  bluesky: 'https://mychiffonng.bsky.social',
+  mail: 'mailto:chiffonng@gmail.com'
+}
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
@@ -48,6 +64,7 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: 'Projects', link: '/projects' },
+      { title: 'Teaching', link: '/teaching' },
       { title: 'Blog', link: '/blog' },
       { title: 'Tools', link: '/tools' },
       { title: 'Now', link: '/now' }
@@ -108,7 +125,7 @@ export const integ: IntegrationUserConfig = {
   // UnoCSS typography
   // See: https://unocss.dev/presets/typography
   typography: {
-    class: 'prose text-base text-muted-foreground'
+    class: 'text-muted-foreground prose dark:prose-invert prose-a:text-primary'
   },
   // A lightbox library that can add zoom effect
   // See: https://astro-pure.js.org/docs/integrations/others#medium-zoom
@@ -119,24 +136,8 @@ export const integ: IntegrationUserConfig = {
       className: 'zoomable'
     }
   },
-  // Comment system
   waline: {
-    enable: false,
-    // Server service link
-    server: 'https://astro-theme-pure-waline.arthals.ink/',
-    // Refer https://waline.js.org/en/guide/features/emoji.html
-    emoji: ['bmoji', 'weibo'],
-    // Refer https://waline.js.org/en/reference/client/props.html
-    additionalConfigs: {
-      // search: false,
-      pageview: true,
-      comment: true,
-      locale: {
-        reaction0: 'Like',
-        placeholder: 'Welcome to comment. (Email to receive replies. Login is unnecessary)'
-      },
-      imageUploader: false
-    }
+    enable: false
   }
 }
 
@@ -162,5 +163,5 @@ export const terms: CardListData = {
   ]
 }
 
-const config = { ...theme, integ } as Config
+const config = { ...theme, integ, contacts } as Config
 export default config

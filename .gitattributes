@@ -1,3 +1,4 @@
+# Merge strategies
 content/** merge=ours
 packages.json merge=ours
 packages/pure/** merge=ours
@@ -5,3 +6,5 @@ src/assets/** merge=ours
 src/content/docs/** merge=ours
 src/pages/projects/** merge=ours
 src/pages/index.astro merge=ours
+# Ignore files in linguist
+public/scripts/** -linguist-detectable

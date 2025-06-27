@@ -2,8 +2,6 @@
 import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 
-import type { iconsType } from 'astro-pure/types'
-import { Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 
 interface Props {
@@ -22,11 +20,11 @@ const { class: className, project, ...props } = Astro.props
 const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/projects/*.{jpeg,jpg,png,gif}'
 )
-const projectIconSet: Record<string, iconsType> = {
-  github: 'github-circle',
-  site: 'earth',
-  doc: 'document',
-  release: 'package'
+const projectIconSet: Record<string, string> = {
+  repo: 'i-mingcute:github-line',
+  url: 'i-mingcute:link-line',
+  doc: 'i-mingcute:document-line',
+  release: 'i-mingcute:package-2-line'
 }
 ---
 
@@ -83,11 +81,11 @@ const projectIconSet: Record<string, iconsType> = {
                   return (
                     <a
                       href={link.href}
-                      class='rounded-full bg-muted p-1 text-muted-foreground transition-colors sm:p-1.5'
+                      class='flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors h-8 w-8'
                       aria-label={link.type}
                       target='_blank'
                     >
-                      <Icon class='size-5' name={icon} />
+                      <span class={`${icon} size-5`} />
                     </a>
                   )
                 })}
