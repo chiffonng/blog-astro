@@ -39,28 +39,18 @@ export interface ToolProps {
   name: string
   description: string
   href: string
-  icon: Promise<typeof import('*.svg?raw')> | ImageMetadata
-  darkIcon?: Promise<typeof import('*.svg?raw')> | ImageMetadata
+  icon: string | Promise<typeof import('*.svg?raw')> | ImageMetadata
   tags?: ToolTag[]
 }
 
-const { name, description, href, icon, darkIcon, tags } = Astro.props
+const { name, description, href, icon, tags } = Astro.props
 ---
 
 <a class='group relative text-sm leading-normal no-underline' href={href} id={name} target='_blank'>
   <div
     class='flex items-center gap-x-3 rounded-lg border border-transparent px-1.5 py-1 transition-colors hover:border-border hover:bg-muted'
   >
-    {
-      darkIcon ? (
-        <>
-          <RenderIcon icon={icon} alt={name} hidden='dark:hidden' />
-          <RenderIcon icon={darkIcon} alt={name} hidden='hidden dark:block' />
-        </>
-      ) : (
-        <RenderIcon icon={icon} alt={name} />
-      )
-    }
+    <RenderIcon icon={icon} alt={name} />
     <div class='z-20 flex flex-col'>
       <div class='flex items-center gap-2'>
         <div class='font-medium text-foreground'>{name}</div>
