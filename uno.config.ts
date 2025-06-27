@@ -1,4 +1,6 @@
-import { defineConfig, presetTypography, presetWind3 } from 'unocss'
+import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
+
+import { contactIconClasses } from './src/schemas/contacts'
 
 const fg = 'hsl(var(--foreground) / var(--un-text-opacity, 1))'
 const fgMuted = 'hsl(var(--muted-foreground) / var(--un-text-opacity, 1))'
@@ -152,17 +154,43 @@ const themeColors = {
   }
 }
 
+const rules: Rule<object>[] = [
+  // Fix unocss presetMini
+  [
+    'sr-only',
+    {
+      position: 'absolute',
+      width: '1px',
+      height: '1px',
+      padding: '0',
+      margin: '-1px',
+      overflow: 'hidden',
+      clip: 'rect(0,0,0,0)',
+      'white-space': 'nowrap',
+      'border-width': '0'
+    }
+  ]
+]
+
 export default defineConfig({
   presets: [
-    presetWind3(), // required
+    presetMini(), // required
+    presetIcons({
+      collections: {
+        mingcute: () => import('@iconify-json/mingcute/icons.json').then((i) => i.default),
+        academicons: () => import('@iconify-json/academicons/icons.json').then((i) => i.default)
+      },
+      scale: 1.5
+    }),
     presetTypography(typographyConfig)
   ],
-  rules: [],
+  rules,
   theme: {
     colors: themeColors
   },
   // https://unocss.dev/guide/extracting#limitations
   safelist: [
+    ...contactIconClasses,
     // TOC
     'rounded-t-2xl',
     'rounded-b-2xl',

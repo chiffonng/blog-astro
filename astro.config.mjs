@@ -1,7 +1,4 @@
-// @ts-check
-
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
-import icon from 'astro-icon'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
@@ -43,18 +40,12 @@ export default defineConfig({
 
   integrations: [
     // astro-pure will automatically add sitemap, mdx & unocss
-    AstroPureIntegration(config),
+    AstroPureIntegration(config)
     // sitemap(),
     // mdx(),
     // UnoCSS({
     //   injectReset: true
     // }),
-    icon({
-      iconDir: 'src/assets/icons'
-      // include: {
-      //   [iconSet]: iconsToInclude
-      // }
-    })
   ],
 
   prefetch: true,
