@@ -87,6 +87,9 @@ importers:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.4.2
         version: 4.4.2(@vue/compiler-sfc@3.5.17)(prettier@3.6.1)
+      '@iconify/utils':
+        specifier: ^2.3.0
+        version: 2.3.0
       '@types/hast':
         specifier: ^3.0.4
         version: 3.0.4
