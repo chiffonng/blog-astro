@@ -1,6 +1,7 @@
 ---
-import { getSocialIcons, validateContacts } from '@/schemas/contacts'
 import { contacts } from '@/site.config'
+
+import { getSocialIcons, validateContacts } from '@/schemas/contacts'
 
 const validatedContacts = validateContacts(contacts)
 const contactList = getSocialIcons(validatedContacts)
