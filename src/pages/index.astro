@@ -7,6 +7,7 @@ import { PostPreview } from 'astro-pure/components/pages'
 import { sortMDByDate } from 'astro-pure/server'
 import { Button, Card } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import ContactBar from '@/components/home/ContactBar.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import getBlogCollection from '@/utils/blog'
@@ -47,7 +48,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           {about.frontmatter.tagline}
         </p>
       </div>
-
+      <ContactBar />
       <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
         <Section>
           <div class='prose dark:prose-invert prose-a:text-primary max-w-none'>
