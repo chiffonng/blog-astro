@@ -1,3 +1,7 @@
 content/** merge=ours
+packages.json merge=ours
+packages/pure/** merge=ours
 src/assets/** merge=ours
-docs/** merge=ours
+src/content/docs/** merge=ours
+src/pages/projects/** merge=ours
+src/pages/index.astro merge=ours
