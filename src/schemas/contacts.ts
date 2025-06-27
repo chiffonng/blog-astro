@@ -5,7 +5,7 @@
  * @uses https://unocss.dev/presets/icons
  */
 
-import { z } from 'astro/zod';
+import { z } from 'astro/zod'
 
 /**
  * @constant {Array} contactDefinitions
