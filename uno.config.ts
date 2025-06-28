@@ -200,9 +200,6 @@ export default defineConfig({
     'rounded-t-2xl',
     'rounded-b-2xl',
     // Typography
-    'text-base',
-    'prose',
-    'prose-a:text-primary',
-    'prose-a:underline'
+    'text-base'
   ]
 })

@@ -1,0 +1,155 @@
+---
+import config from 'virtual:config'
+
+import { getSocialIcons, validateContacts } from '@/schemas/contacts'
+import { contacts } from '@/site-config'
+
+const year = new Date().getFullYear()
+const footerConf = config.footer
+
+const validatedContacts = validateContacts({
+  ...contacts,
+  rss: '/rss.xml' // Add RSS to contacts
+})
+const socialIcons = getSocialIcons(validatedContacts)
+
+// Shared styles
+const separator = '/'
+const separatorClass = 'text-muted-foreground/50'
+const socialLinkClass =
+  'inline-flex items-center text-muted-foreground transition-all hover:text-primary group'
+const iconSizeClass = 'size-6 group-hover:scale-110 transition-transform'
+const containerClass = 'flex items-center gap-2 whitespace-nowrap'
+const gridRowClass =
+  'flex flex-col items-center gap-4 text-center lg:flex-row lg:items-center lg:gap-4 sm:flex-row sm:justify-center sm:gap-2'
+---
+
+<footer class='mx-0 mb-5 mt-auto'>
+  <div class='border-t pt-3'></div>
+  <div class='space-y-4 text-muted-foreground [&_a]:text-foreground hover:[&_a]:text-primary'>
+    {/* Mobile: stacked and centered */}
+    <div class='flex flex-col items-center gap-y-4 text-center sm:hidden'>
+      <div class='whitespace-nowrap'>© {year} {config.author}</div>
+
+      {
+        footerConf.credits && (
+          <div class='whitespace-nowrap'>
+            Powered by{' '}
+            <a href='https://astro.build/' target='_blank'>
+              Astro
+            </a>
+            ,{' '}
+            <a href='https://unocss.dev/' target='_blank'>
+              UnoCSS
+            </a>
+            ,{' '}
+            <a href='https://astro-pure.js.org/' target='_blank'>
+              Pure
+            </a>{' '}
+            theme
+          </div>
+        )
+      }
+
+      {
+        footerConf.links && footerConf.links.length > 0 && (
+          <div class={containerClass}>
+            {footerConf.links.map(({ title, link, style }, index) => (
+              <>
+                <a href={link} target='_blank' class={style}>
+                  {title}
+                </a>
+                {index < (footerConf.links?.length ?? 0) - 1 && (
+                  <span class={separatorClass}>{separator}</span>
+                )}
+              </>
+            ))}
+          </div>
+        )
+      }
+
+      <div class='flex items-center gap-x-2'>
+        {
+          socialIcons.map(({ url, label, iconClass }) => (
+            <a href={url} target='_blank' class={socialLinkClass} aria-label={label} title={label}>
+              <div class={`${iconClass} ${iconSizeClass}`} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    {/* Medium: 2x2 grid, Large: side-by-side */}
+    <div class='hidden sm:block'>
+      <div class='flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between'>
+        {/* First row: Copyright + Credits */}
+        <div class={gridRowClass}>
+          <div class='whitespace-nowrap'>© {year} {config.author}</div>
+          {
+            footerConf.credits && (
+              <span class={`hidden sm:inline ${separatorClass}`}>{separator}</span>
+            )
+          }
+          {
+            footerConf.credits && (
+              <div class='whitespace-nowrap'>
+                Powered by{' '}
+                <a href='https://astro.build/' target='_blank'>
+                  Astro
+                </a>
+                ,{' '}
+                <a href='https://unocss.dev/' target='_blank'>
+                  UnoCSS
+                </a>{' '}
+                &{' '}
+                <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>
+                  Pure
+                </a>{' '}
+                theme
+              </div>
+            )
+          }
+        </div>
+
+        {/* Second row: Links + Social Icons */}
+        <div class={gridRowClass}>
+          {
+            footerConf.links && footerConf.links.length > 0 && (
+              <>
+                <div class={containerClass}>
+                  {footerConf.links.map(({ title, link, style }, index) => (
+                    <>
+                      <a href={link} target='_blank' class={style}>
+                        {title}
+                      </a>
+                      {index < (footerConf.links?.length ?? 0) - 1 && (
+                        <span class={separatorClass}>{separator}</span>
+                      )}
+                    </>
+                  ))}
+                </div>
+                <span class={`hidden sm:inline ${separatorClass}`}>{separator}</span>
+              </>
+            )
+          }
+
+          <div class='flex items-center gap-x-3'>
+            {
+              socialIcons.map(({ url, label, iconClass }) => (
+                <a
+                  href={url}
+                  target='_blank'
+                  class={socialLinkClass}
+                  aria-label={label}
+                  title={label}
+                >
+                  <div class={`${iconClass} ${iconSizeClass}`} />
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

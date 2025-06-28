@@ -1,5 +1,5 @@
-import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 import type { ContactConfig } from '@/schemas/contacts'
+import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 
 /**
  * @constant {ContactConfig} contacts
@@ -13,13 +13,14 @@ export const contacts: ContactConfig = {
   github: 'https://github.com/chiffonng',
   x: 'https://x.com/chiffonng',
   bluesky: 'https://mychiffonng.bsky.social',
-  mail: 'mailto:chiffonng@gmail.com'
+  mail: 'mailto:chiffonng136@gmail.com',
+  cv: 'cv.pdf' // relative to public/documents/
 }
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'My (Chiffon) Nguyen',
+  title: 'My Chiffon N.',
   /** Will be used in index page & copyright declaration */
   author: 'My (Chiffon) Nguyen',
   /** Description metadata for your website. Can be used in page metadata. */
@@ -74,23 +75,14 @@ export const theme: ThemeUserConfig = {
   /** Configure the footer of your site. */
   footer: {
     links: [
-      // Privacy Policy link
       {
-        title: 'Site Policy',
-        link: '/terms/list',
-        pos: 2 // position set to 2 will be appended to copyright line
+        title: 'Source Code',
+        link: 'https://github.com/chiffonng/blog-astro',
       }
     ],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
-    social: {
-      github: 'https://github.com/chiffonng',
-      x: 'https://x.com/chiffonng',
-      bluesky: 'https://mychiffonng.bsky.social',
-      email: 'mailto:chiffonng@gmail.com',
-      instagram: 'https://www.instagram.com/mychiffonng/'
-    }
   },
 
   content: {

@@ -7,45 +7,41 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.3.0] - 2025-06-27
 
+Based on `git diff upstream/main...fix-layouts`
+
 ### Added
 
-- **LLMs.txt API route** - Added `/llms.txt` endpoint for AI discovery
-- **Contact Bar** - Restored contacts section to homepage with improved layout
-- **Tool tagging system** - Added tag support for tools in ToolSection component (#1)
-- **CSS icon classes** - Implemented UnoCSS PresetIcons for better performance (#3)
-- Added new SVG assets in src/assets/icons
+- Moved from `src/content` to `content` directory with new blog posts, projects, and pages
+- Added Now, Teaching, Tools, and custom error pages
+- Copied and customized Hero, BlogCard, Card, Footer components from astro-pure-theme
+- Complete `Tools` page with tagging, categories, and icon rendering system
+- New project entries with detailed descriptions and metadata
+- `ContactBar` component with social links and CV download
+- Added `/llms.txt` endpoint for AI discovery
+- New schemas for blog, projects, contacts, and utilities
 
 ### Changed
 
-- **Schema refactoring** - Renamed schemas for consistency and clarity across the project
-- **Content structure** - Moved `src/content` to `content` directory (non-Astro convention)
-- **Package management** - Switched from Bun to pnpm for dependency management (#2)
-- **Merge strategy** - Updated git merge strategy and added pnpm workspace configuration
-
-### Performance Improvements
-
-- **Icon optimization** - Replaced SVG components with CSS classes for better performance
+- Migrated from Bun to pnpm with workspace configuration
+- Updated branding, URLs, contact information, and favicon
+- Enhanced CommonPage and ContentLayout with better metadata handling
+- Replaced PostPreview with BlogCard, added publish property to frontmatter
+- Updated ProjectSection with new icons and improved layout
+- Migrated from SVG components to CSS classes using UnoCSS PresetIcons
 
 ### Fixed
 
-- **ContactBar imports** - Corrected import path for contacts configuration
-- **Linter issues** - Updated .prettierignore and resolved linting errors
-- **Sidebar overflow** - Fixed right sidebar scroll behavior (`overflow-y-scroll` to
-  `overflow-y-auto`) in ContentLayout.astro
-- **Non-blog pages** - Removed unnecessary headings and right sidebar for non-blog pages in
-  ContentLayout
+- Improved ContentLayout sidebar rendering and toggle behavior
+- Resolved ESLint, TypeScript, and formatting issues
+- TEMP Fixed FormattedDate font styling in Hero component
+- TEMP Only render sidebar toggle and scroll shade when there is sidebar slot
 
-### Refactored
+### Removed
 
-- **Components organization** - Added components to index export for better structure
-- **Array utilities** - Improved array manipulation and custom date validation schema
-- **Card and Sponsorship** - Customized Card and Sponsorship components for better UI
-- **Tools page** - Moved tools to dedicated page with improved organization
-- **Blog drafts** - Added "publish" property to frontmatter with default draft status
-
-### Developer Experience
-
-- **Git attributes** - Configured linguist to ignore certain file types
+- Completely removed packages/pure theme dependency
+- Cleaned up obsolete images, icons, and components
+- Removed docs, links, and about pages from original theme
+- Removed bun.lock and legacy configuration files
 
 ---
 
