@@ -2,20 +2,62 @@
 import PageLayout from '@/layouts/ContentLayout.astro'
 
 interface Props {
-  title: string
+  title?: string
+  lastUpdated?: string
+  description?: string
   frontmatter?: {
     title?: string
+    description?: string
+    lastUpdated?: string
   }
 }
 
-const { title, frontmatter, ...props } = Astro.props
+const { title, frontmatter, description, lastUpdated, ...props } = Astro.props
+const pageTitle = frontmatter?.title || title || 'Untitled'
+const pageDescription = frontmatter?.description || description
+const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated
 ---
 
-<PageLayout meta={{ title }} {...props}>
+<PageLayout
+  meta={{
+    title: pageTitle,
+    description: pageDescription,
+    articleDate: pageLastUpdated
+  }}
+  {...props}
+>
   <Fragment slot='header'>
+    {/* Title */}
     <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>
-      {title || frontmatter?.title}
+      {pageTitle}
     </h1>
+
+    {/* Last updated */}
+    {
+      pageLastUpdated && (
+        <div class='mb-6'>
+          <div class='flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground'>
+            {/* Date */}
+            {pageLastUpdated && (
+              <div class='flex items-center gap-1'>
+                <span class='i-mingcute:calendar-line size-4' />
+                <time datetime={pageLastUpdated} class='text-sm'>
+                  Last updated:
+                  {new Date(pageLastUpdated || '').toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </time>
+              </div>
+            )}
+          </div>
+        </div>
+      )
+    }
+
+    {/* Description */}
+    {pageDescription && <p class='text-muted-foreground italic'>{pageDescription}</p>}
   </Fragment>
 
   <slot />
