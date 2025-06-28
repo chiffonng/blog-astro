@@ -4,12 +4,11 @@ import { ToolSection, ToolTag } from '@/components'
 import PageLayout from '@/layouts/CommonPage.astro'
 ---
 
-<PageLayout title='Tools'>
-  <p>
-    A collection of tools that I use on a daily basis. It is a work in progress and will be updated
-    as I update my setup. Except for the hardware, I use free versions of most tools. (Note: 🩵 =
-    Favorite)
-  </p>
+<PageLayout
+  title='Tools'
+  lastUpdated='2025-06-27'
+  description='A collection of tools that I use on a daily basis. It is a work in progress and will be updated as I update my setup. Except for the hardware, I use free versions of most tools. (Note: 🩵 = Favorite)'
+>
   <ToolSection
     title='Workstation (+Operating System)'
     tools={[
@@ -17,13 +16,14 @@ import PageLayout from '@/layouts/CommonPage.astro'
         name: 'MacBook M1 Pro 14"',
         description: 'MacOS Sequoia 15',
         href: 'https://www.apple.com/mac/',
-        icon: 'i-mycons-apple'
+        icon: 'i-mingcute:apple-fill'
       },
       {
-        name: 'iPhone 11',
-        description: 'iOS 18',
-        href: 'https://www.apple.com/iphone/',
-        icon: 'i-mycons-apple'
+        name: 'Linux (Virtual Machine)',
+        description: 'Ubuntu 24.04 LTS',
+        href: 'https://ubuntu.com/',
+        icon: 'i-mycons-ubuntu',
+        tags: [ToolTag.OpenSource]
       },
       {
         name: 'Logitech Lift for Mac',
@@ -36,13 +36,6 @@ import PageLayout from '@/layouts/CommonPage.astro'
         description: 'Wireless Ergonomic Keyboard',
         href: 'https://www.logitech.com/en-us/shop/p/wave-keys-mac.920-012402',
         icon: 'i-mycons-logitech'
-      },
-      {
-        name: 'Linux (Virtual Machine)',
-        description: 'Ubuntu 24.04 LTS',
-        href: 'https://ubuntu.com/',
-        icon: 'i-mycons-ubuntu',
-        tags: [ToolTag.OpenSource]
       }
     ]}
   />
@@ -133,7 +126,7 @@ import PageLayout from '@/layouts/CommonPage.astro'
         name: 'Arc Browser',
         description: 'Browser (Chrominium-based)',
         href: 'https://arc.net/',
-        icon: 'i-mycons-arc'
+        icon: 'i-mingcute:arc-browser-line'
       },
       {
         name: 'Raycast',
@@ -154,7 +147,7 @@ import PageLayout from '@/layouts/CommonPage.astro'
         name: 'Reclaim.ai',
         description: 'AI Calendar',
         href: 'https://reclaim.ai/',
-        icon: import('@/assets/icons/reclaimai.svg?raw'),
+        icon: 'i-mycons-reclaim',
         tags: [ToolTag.Subscription, ToolTag.Favorite]
       }
     ]}
