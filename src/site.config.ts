@@ -20,7 +20,7 @@ export const contacts: ContactConfig = {
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'My (Chiffon) N.',
+  title: 'My Chiffon N.',
   /** Will be used in index page & copyright declaration */
   author: 'My (Chiffon) Nguyen',
   /** Description metadata for your website. Can be used in page metadata. */
