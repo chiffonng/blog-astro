@@ -13,13 +13,14 @@ export const contacts: ContactConfig = {
   github: 'https://github.com/chiffonng',
   x: 'https://x.com/chiffonng',
   bluesky: 'https://mychiffonng.bsky.social',
-  mail: 'mailto:chiffonng136@gmail.com'
+  mail: 'mailto:chiffonng136@gmail.com',
+  cv: 'cv.pdf' // relative to public/documents/
 }
 
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'My (Chiffon) Nguyen',
+  title: 'My (Chiffon) N.',
   /** Will be used in index page & copyright declaration */
   author: 'My (Chiffon) Nguyen',
   /** Description metadata for your website. Can be used in page metadata. */

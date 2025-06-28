@@ -6,6 +6,8 @@
  */
 
 import { z } from 'astro/zod';
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  * @constant {Array} contactDefinitions
@@ -21,6 +23,8 @@ export const contactDefinitions: { type: string; label: string; iconClass: strin
   { type: 'behance', label: 'Behance', iconClass: 'i-mingcute-behance-line' },
   { type: 'bioxiv', label: 'bioRxiv', iconClass: 'i-academicons-biorxiv' },
   { type: 'bluesky', label: 'Bluesky', iconClass: 'i-mingcute-bluesky-social-line' },
+  { type: 'bilibili', label: 'Bilibili', iconClass: 'i-mingcute-bilibili-line' },
+  { type: 'cv', label: 'CV', iconClass: 'i-mingcute-file-info-line' },
   { type: 'discord', label: 'Discord', iconClass: 'i-mingcute-discord-line' },
   { type: 'facebook', label: 'Facebook', iconClass: 'i-mingcute-facebook-line' },
   { type: 'instagram', label: 'Instagram', iconClass: 'i-mingcute-instagram-line' },
@@ -92,12 +96,22 @@ const PHONE_SCHEMA = z.string().regex(/^[+]?[1-9][\d]{0,15}$/, 'Invalid phone nu
 const LOCATION_SCHEMA = z.string().min(1, 'Location cannot be empty')
 const URL_SCHEMA = z.string().url({ message: 'Must be a valid URL' })
 
+// CV must be a file path routed in public/documents/
+const CV_SCHEMA = z.string().refine((val) => {
+  // Concatenate with public/documents/ and check if file exists
+  const fullPath = path.join(process.cwd(), 'public', 'documents', val)
+  return fs.existsSync(fullPath)
+}, {
+  message: 'CV file must exist in public/documents/ directory'
+})
+
 // Build the schema record
 const contactSchemaRecord: Record<ContactType, z.ZodTypeAny> = Object.fromEntries(
   contactTypes.map((type) => {
     if (type === 'mail') return [type, MAIL_SCHEMA.optional()]
     if (type === 'phone') return [type, PHONE_SCHEMA.optional()]
     if (type === 'location') return [type, LOCATION_SCHEMA.optional()]
+    if (type === 'cv') return [type, CV_SCHEMA.optional()]
     if (type === 'rss') return [type, z.string().optional()]
     return [type, URL_SCHEMA.optional()]
   })
@@ -131,9 +145,13 @@ export function getSocialIcons(validatedContacts: ContactConfig) {
       if (!definition) {
         throw new Error(`Unknown contact type: ${type}`)
       }
+      
+      // Transform CV filename to proper URL path
+      const transformedUrl = type === 'cv' ? `/documents/${url}` : url!
+      
       return {
         type: type as ContactType,
-        url: url!,
+        url: transformedUrl,
         label: definition.label,
         iconClass: definition.iconClass
       }
