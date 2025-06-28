@@ -1,7 +1,8 @@
 ---
-import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
+import { Header, ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
+import Footer from '@/components/common/Footer.astro'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
@@ -26,7 +27,7 @@ const {
     <ThemeProvider />
   </head>
 
-  <body class='flex justify-center bg-background text-foreground' {...props}>
+  <body class='flex min-h-screen justify-center bg-background text-foreground' {...props}>
     {
       highlightColor && (
         <div
@@ -36,10 +37,12 @@ const {
         />
       )
     }
-    <div class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10'>
-      <Header />
-      <slot />
-      <Footer />
+    <div class='flex min-h-screen w-full flex-col px-4 sm:px-7 lg:px-10'>
+      <Header slot='header' />
+      <main class='flex-1'>
+        <slot />
+      </main>
+      <Footer slot='footer' />
     </div>
 
     {/* Set highlight color */}

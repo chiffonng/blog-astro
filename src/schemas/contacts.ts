@@ -5,7 +5,7 @@
  * @uses https://unocss.dev/presets/icons
  */
 
-import { z } from 'astro/zod'
+import { z } from 'astro/zod';
 
 /**
  * @constant {Array} contactDefinitions
@@ -43,7 +43,7 @@ export const contactDefinitions: { type: string; label: string; iconClass: strin
   { type: 'phone', label: 'Phone', iconClass: 'i-mingcute-phone-line' },
   { type: 'podcast', label: 'Podcast', iconClass: 'i-mingcute-mic-line' },
   { type: 'reddit', label: 'Reddit', iconClass: 'i-mingcute-reddit-line' },
-  { type: 'rss', label: 'RSS', iconClass: 'i-mingcute-rss-line' },
+  { type: 'rss', label: 'RSS', iconClass: 'i-mingcute-rss-2-fill' },
   {
     type: 'semanticScholar',
     label: 'Semantic Scholar',
@@ -98,6 +98,7 @@ const contactSchemaRecord: Record<ContactType, z.ZodTypeAny> = Object.fromEntrie
     if (type === 'mail') return [type, MAIL_SCHEMA.optional()]
     if (type === 'phone') return [type, PHONE_SCHEMA.optional()]
     if (type === 'location') return [type, LOCATION_SCHEMA.optional()]
+    if (type === 'rss') return [type, z.string().optional()]
     return [type, URL_SCHEMA.optional()]
   })
 ) as Record<ContactType, z.ZodTypeAny>
