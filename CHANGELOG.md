@@ -5,40 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2025-06-27
+## [0.3.0] - 2025-06-28
 
-Based on `git diff upstream/main...fix-layouts`
+Based on `git diff upstream/main...origin/main`, excluding personal configuration and content.
 
 ### Added
 
 - Moved from `src/content` to `content` directory with new blog posts, projects, and pages
-- Added Now, Teaching, Tools, and custom error pages
-- Copied and customized Hero, BlogCard, Card, Footer components from astro-pure-theme
-- Complete `Tools` page with tagging, categories, and icon rendering system
-- New project entries with detailed descriptions and metadata
-- `ContactBar` component with social links and CV download
+- Added [505](/src/pages/500.astro) error page
+- Added UnoCSS PresetIcons to render icons in CSS, and replaced almost all svg components with icon
+  CSS from iconify/mingcute and iconify/academicons
+- Added tagging system to [Tools](src/components/tools/ToolSection.astro)
 - Added `/llms.txt` endpoint for AI discovery
-- New schemas for blog, projects, contacts, and utilities
+- New [schemas](src/schemas/) for blog, projects, and contacts
 
 ### Changed
 
 - Migrated from Bun to pnpm with workspace configuration
-- Updated branding, URLs, contact information, and favicon
-- Enhanced CommonPage and ContentLayout with better metadata handling
-- Replaced PostPreview with BlogCard, added publish property to frontmatter
-- Updated ProjectSection with new icons and improved layout
-- Migrated from SVG components to CSS classes using UnoCSS PresetIcons
+- Migrated most SVG components to CSS classes using UnoCSS PresetIcons
+- Refactored `Tools` section in About page to the new page: [Tool](src/pages/tools/index.astro)
+- Handled frontmatter as metadata similar to `SiteMeta` in
+  [CommonPage](src/layouts/CommonPage.astro) layout
+- Flushed `Footer` down to the bottom in [BaseLayout](src/layouts/BaseLayout.astro)
+- Redesigned [Footer](src/components/common/Footer.astro) by grouping links, rendering
+  socials/contacts from site.config.ts
+- Redesigned [ContactBar] on home page with new icons and styling (accept socials/contacts from
+  site.config.ts)
+- Replaced PostPreview with [BlogCard](src/components/blog/BlogCard.astro)
+  - Replaced `draft` property with `publish`
+  - Move published date to the same line as other info like reading time and language
 
 ### Fixed
 
-- Improved ContentLayout sidebar rendering and toggle behavior
+- In [ContentLayout](src/layouts/ContentLayout.astro) only renders sidebar, scroll shade, and menu
+  toggle (on mobile) when there is sidebar slot (temp fix, since we actually want to render when
+  there is at least one Markdown heading - need TOC component)
 - Resolved ESLint, TypeScript, and formatting issues
-- TEMP Fixed FormattedDate font styling in Hero component
-- TEMP Only render sidebar toggle and scroll shade when there is sidebar slot
+- [Render Tools icon](src/components/tools/RenderIcon.astro) with either CSS or SVG components
+- In [Hero](src/components/blog/Hero.astro) component, fixed `FormattedDate` with `!font-sans` to
+  undo `font-mono` styling
 
 ### Removed
 
-- Completely removed packages/pure theme dependency
 - Cleaned up obsolete images, icons, and components
 - Removed docs, links, and about pages from original theme
 - Removed bun.lock and legacy configuration files
