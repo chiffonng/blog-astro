@@ -1,22 +1,11 @@
-import type { ContactConfig } from '@/schemas/contacts'
 import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import type { ProfileLinkConfig } from '@/types/contacts'
 
 /**
- * @constant {ContactConfig} contacts
- * @description The contact configuration for the site
- * @property {string} - The type of contact
- * @property {string} - The URL of the contact
- * @note All values are optional. See {@link ContactConfig} for all possible values. Add new contact types to contactDefinitions.
+ * @constant {ThemeUserConfig} theme
+ * @description Theme configuration for the site
+ * @see https://astro-pure.js.org/docs/themes/user-config
  */
-export const contacts: ContactConfig = {
-  googleScholar: 'https://scholar.google.com/citations?user=a25a-rUAAAAJ',
-  github: 'https://github.com/chiffonng',
-  x: 'https://x.com/chiffonng',
-  bluesky: 'https://mychiffonng.bsky.social',
-  mail: 'mailto:chiffonng136@gmail.com',
-  cv: 'cv.pdf' // relative to public/documents/
-}
-
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
@@ -77,11 +66,11 @@ export const theme: ThemeUserConfig = {
     links: [
       {
         title: 'Source Code',
-        link: 'https://github.com/chiffonng/blog-astro',
+        link: 'https://github.com/chiffonng/blog-astro'
       }
     ],
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
-    credits: true,
+    credits: true
     /** Optional details about the social media accounts for this site. */
   },
 
@@ -93,6 +82,21 @@ export const theme: ThemeUserConfig = {
     // Currently support weibo, x, bluesky
     share: ['weibo', 'x', 'bluesky']
   }
+}
+
+/**
+ * @description Profile links configuration for the site
+ * @property {string} - The type of profile link 
+ * @property {string} - The URL or value for the profile link
+ * @note All values are optional. See {@link ProfileLinkConfig} for all possible values. 
+ * @note Add new link types to src/types/profileLinkDefinitions, or extend the object with new properties.
+ */
+export const profileLinks: ProfileLinkConfig = {
+  mail: 'chiffonng136@gmail.com',
+  github: 'https://github.com/chiffonng',
+  googleScholar: 'https://scholar.google.com/citations?user=a25a-rUAAAAJ',
+  cv: 'doc/cv.pdf', // relative to public/
+  x: 'https://x.com/chiffonng',
 }
 
 export const integ: IntegrationUserConfig = {
@@ -155,5 +159,5 @@ export const terms: CardListData = {
   ]
 }
 
-const config = { ...theme, integ, contacts } as Config
+const config = { ...theme, integ, profileLinks } as Config
 export default config
