@@ -5,7 +5,6 @@ import { BackToTop, TOC } from 'astro-pure/components/pages'
 import { Button } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { themeIcons } from '@/utils/const'
 import { integ } from '@/site-config'
 
 type Props = MarkdownLayoutProps<{
@@ -45,7 +44,7 @@ const socialImage = heroImage?.src ?? '/images/social-card.png'
             // Language
             language && (
               <span class='flex items-center gap-1'>
-                <span class={themeIcons.language} />
+                <span class='i-mingcute:earth-line' />
                 {language}
               </span>
             )
