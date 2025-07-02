@@ -102,5 +102,10 @@ export const profileLinkDefinitions = {
   // Documents & Info
   cv: { label: 'CV', iconClass: 'i-mingcute:file-info-line' },
   web: { label: 'Website', iconClass: themeIcons.link }
-}
+} as const
 
+/**
+ * @constant {string[]} profileIconClasses  
+ * @description Array of all icon classes for UnoCSS safelist
+ */
+export const profileIconClasses = Object.values(profileLinkDefinitions).map(({ iconClass }) => iconClass) as string[]

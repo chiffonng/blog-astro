@@ -2,7 +2,7 @@
  * @fileoverview TypeScript types for profile links system
  */
 
-import { profileLinkDefinitions } from '@/utils/const'
+import { profileLinkDefinitions } from '../utils/const'
 
 /**
  * @description All available profile link types
@@ -25,11 +25,5 @@ export type ProcessedProfileLink = {
   label: string
   iconClass: string
 }
-
-/**
- * @constant {string[]} profileIconClasses  
- * @description Array of all icon classes for UnoCSS safelist
- */
-export const profileIconClasses = Object.values(profileLinkDefinitions).map(({ iconClass }) => iconClass)
 
 export default profileLinkDefinitions
