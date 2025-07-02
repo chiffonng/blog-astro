@@ -1,13 +1,13 @@
 import { z } from 'astro:content'
 
-import { DATE_SCHEMA, removeDupsAndLowerCase } from './utils'
+import { dateSchema, removeDupsAndLowerCase } from './utils'
 
 export const PROJECTS_SCHEMA = z
   .object({
     title: z.string(),
     isHighlighted: z.boolean().default(false),
-    fromDate: DATE_SCHEMA.optional(),
-    toDate: DATE_SCHEMA.optional(),
+    fromDate: dateSchema.optional(),
+    toDate: dateSchema.optional(),
     repo: z.string().url().optional(),
     doc: z.string().url().optional(),
     url: z.string().url().optional(),
