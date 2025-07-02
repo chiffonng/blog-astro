@@ -1,5 +1,5 @@
 ---
-layout: ../../layouts/CommonPage.astro
+layout: ../layouts/CommonPage.astro
 title: Teaching
 ---
 
