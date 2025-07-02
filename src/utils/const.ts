@@ -2,45 +2,7 @@
  * @fileoverview Constants for icon class definitions and labels
  */
 
-export const themeIcons = {
-  light: 'i-mingcute:sun-line',
-  dark: 'i-mingcute:moon-line',
-  system: 'i-mingcute:computer-line',
-  search: 'i-mingcute:search-line',
-  file: 'i-mingcute:file-line',
-  link: 'i-mingcute:link-line',
-  language: 'i-mingcute:earth-line',
-  date: 'i-mingcute:calendar-2-line',
-  menu: 'i-mingcute:menu-line',
-  tocToggle: 'i-mingcute:list-check-line',
-}
-
-export const aboutIcons = {
-  avatar: 'i-mingcute:user-line',
-  location: 'i-mingcute:map-pin-line',
-  phone: 'i-mingcute:phone-line',
-  pronouns: 'i-mingcute:speaker-line',
-}
-
-export const blogIcons = {
-  date: themeIcons.date,
-  language: themeIcons.language,
-  permalink: themeIcons.link,
-  arrow: 'i-mingcute:arrow-right-line',
-  arrowHover: 'i-mingcute:book-line',
-  updatedDate: 'i-mingcute:clock-line',
-  minutesRead: 'i-mingcute:time-duration-line',
-  tag: 'i-mingcute:hashtag-line',
-  tags: 'i-mingcute:tag-2-line',
-  comment: 'i-mingcute:chat-line',
-}
-
-export const projectIcons = {
-  repo: 'i-mingcute:github-line',
-  url: themeIcons.link,
-  doc: 'i-mingcute:document-line',
-  release: 'i-mingcute:package-line',
-}
+import { profileLinks } from '../site.config'
 
 /**
  * @constant {Object} profileLinkDefinitions
@@ -100,12 +62,12 @@ export const profileLinkDefinitions = {
   rss: { label: 'RSS', iconClass: 'i-mingcute:rss-2-fill' },
   
   // Documents & Info
-  cv: { label: 'CV', iconClass: 'i-mingcute:file-info-line' },
-  web: { label: 'Website', iconClass: themeIcons.link }
+  cv: { label: 'CV', iconClass: 'i-academicons-cv' },
+  resume: { label: 'Resume', iconClass: 'i-mingcute:file-info-line' },
+  web: { label: 'Website', iconClass: 'i-mingcute:link-line' }
 } as const
 
-/**
- * @constant {string[]} profileIconClasses  
- * @description Array of all icon classes for UnoCSS safelist
- */
-export const profileIconClasses = Object.values(profileLinkDefinitions).map(({ iconClass }) => iconClass) as string[]
+// Only include icons for used profile links from site.config.ts
+export const profileIconClasses = Object.keys(profileLinks).map(key => 
+  profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass
+).filter(Boolean) as string[]
