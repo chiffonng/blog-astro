@@ -28,6 +28,8 @@ export default {
   // Prettier plugins
   plugins: ['prettier-plugin-astro', '@ianvs/prettier-plugin-sort-imports'],
   importOrder: [
+    '<BUILTIN_MODULES>',
+    '',
     '^(astro$)|^(astro:(.*)$)',
     '^@astrojs/(.*)$',
     '<THIRD_PARTY_MODULES>',
@@ -37,14 +39,18 @@ export default {
     '^@/schemas/(.*)$',
     '^@/layouts/(.*)$',
     '^@/pages/(.*)$',
+    '^@/components$',
     '^@/components/(.*)$',
     '^@/utils$',
     '^@/utils/(.*)$',
     '^@/plugins/(.*)$',
-    '^@/assets/(.*)$',
     '^@/site-config$',
+    '^@/assets/(.*)$',
     '',
-    '^[./]'
+    '^[./]',
+    '.css$',
+    '^content/(.*)$',
+    '.*\\.md$'
   ],
   importOrderParserPlugins: ['astro', 'typescript', 'jsx', 'decorators-legacy'],
   overrides: [

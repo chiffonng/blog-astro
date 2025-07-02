@@ -1,7 +1,7 @@
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
 
-import { contactIconClasses } from './src/schemas/contacts'
+import { contactIconClasses } from './src/schemas/socials'
 
 const fg = 'hsl(var(--foreground) / var(--un-text-opacity, 1))'
 const fgMuted = 'hsl(var(--muted-foreground) / var(--un-text-opacity, 1))'
