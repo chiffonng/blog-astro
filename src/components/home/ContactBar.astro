@@ -1,9 +1,8 @@
 ---
-import { getSocialIcons, validateContacts } from '@/schemas/contacts'
-import { contacts } from '@/site-config'
+import processProfileLinks from '@/schemas/contacts'
+import { profileLinks } from '@/site-config'
 
-const validatedContacts = validateContacts(contacts)
-const contactList = getSocialIcons(validatedContacts)
+const contactList = processProfileLinks(profileLinks)
 ---
 
 <div class='flex flex-wrap gap-3 md:gap-6'>
