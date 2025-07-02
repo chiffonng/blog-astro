@@ -4,7 +4,7 @@ import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 import type { HTMLTag, Polymorphic } from 'astro/types'
 
 import { Button, FormattedDate } from 'astro-pure/user'
-import { cn } from 'astro-pure/utils'
+import { blogIcons } from '@/utils/const'
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   post: CollectionEntry<CollectionKey>
@@ -20,22 +20,14 @@ const { remarkPluginFrontmatter } = await render(post)
 ---
 
 <li
-  class={cn(
-    'post-preview group/card flex flex-col relative rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted',
-    detailed && 'max-sm:px-4 sm:py-5',
-    className
-  )}
+  class={`post-preview group/card flex flex-col relative rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted ${detailed && 'max-sm:px-4 sm:py-5'} ${className}`}
   style={detailed &&
     data.heroImage?.color &&
     `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
     --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
 >
   <a
-    class={cn(
-      'group/link w-full flex flex-col transition-all hover:text-primary',
-      !detailed && 'sm:flex-row',
-      detailed && data.heroImage && 'max-md:pt-24'
-    )}
+    class={`group/link w-full flex flex-col transition-all hover:text-primary ${!detailed && 'sm:flex-row'} ${detailed && data.heroImage && 'max-md:pt-24'}`}
     href={`/blog/${id}`}
     data-astro-prefetch
   >
@@ -58,7 +50,7 @@ const { remarkPluginFrontmatter } = await render(post)
           {data.title}
         </div>
         <span
-          class='i-mingcute:arrow-right-line transition-all duration-300 group-hover/link:i-mingcute-book-line'
+          class={`${blogIcons.arrow} transition-all duration-300 group-hover/link:${blogIcons.arrowHover}`}
         ></span>
       </div>
       {
@@ -66,17 +58,14 @@ const { remarkPluginFrontmatter } = await render(post)
           <>
             {/* desc */}
             <p
-              class={cn(
-                'line-clamp-2 pt-1 text-sm text-muted-foreground sm:line-clamp-3',
-                data.heroImage && 'sm:me-24'
-              )}
+              class={`line-clamp-2 pt-1 text-sm text-muted-foreground sm:line-clamp-3 ${data.heroImage && 'sm:me-24'}`}
             >
               {data.description}
             </p>
             <div class='flex items-center gap-2 py-1.5 text-sm text-muted-foreground sm:py-3'>
               {/* published date */}
               <span class='flex items-center gap-1'>
-                <span class='i-mingcute:calendar-2-line size-5' />
+                <span class={blogIcons.date} />
                 {/* TEMP FIX: font-sans to revert font-mono in FormattedDate */}
                 <FormattedDate date={data.publishDate} class='!font-sans' />
               </span>
@@ -84,7 +73,7 @@ const { remarkPluginFrontmatter } = await render(post)
               {data.updatedDate && (
                 <>
                   <span class='flex items-center gap-1'>
-                    <span class='i-mingcute:clock-line size-5' />
+                    <span class={blogIcons.updatedDate} />
                     {/* TEMP FIX: font-sans to revert font-mono in FormattedDate */}
                     <FormattedDate date={data.updatedDate} class='!font-sans' />
                   </span>
@@ -93,13 +82,13 @@ const { remarkPluginFrontmatter } = await render(post)
               {/* language */}
               {data.language && (
                 <span class='flex items-center gap-1'>
-                  <span class='i-mingcute:earth-line size-5' />
+                  <span class={blogIcons.language} />
                   {data.language}
                 </span>
               )}
               {/* reading time */}
               <span class='flex items-center gap-1'>
-                <span class='i-mingcute:time-duration-line size-5' />
+                <span class={blogIcons.minutesRead} />
                 {remarkPluginFrontmatter.minutesRead}
               </span>
             </div>

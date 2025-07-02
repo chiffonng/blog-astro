@@ -2,7 +2,7 @@
 import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 
-import { cn } from 'astro-pure/utils'
+import { projectIcons } from '@/utils/const'
 
 interface Props {
   class?: string
@@ -21,10 +21,10 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/projects/*.{jpeg,jpg,png,gif}'
 )
 const projectIconSet: Record<string, string> = {
-  repo: 'i-mingcute:github-line',
-  url: 'i-mingcute:link-line',
-  doc: 'i-mingcute:document-line',
-  release: 'i-mingcute:package-2-line'
+  repo: projectIcons.repo,
+  url: projectIcons.url,
+  doc: projectIcons.doc,
+  release: projectIcons.release
 }
 ---
 
@@ -60,10 +60,7 @@ const projectIconSet: Record<string, string> = {
               />
             )}
             <div
-              class={cn(
-                'relative z-10 flex flex-col gap-y-2 px-3 py-1.5 sm:px-4 sm:py-3',
-                imagePath && 'me-20'
-              )}
+              class={`relative z-10 flex flex-col gap-y-2 px-3 py-1.5 sm:px-4 sm:py-3 ${imagePath && 'me-20'}`}
             >
               <a
                 class='line-clamp-1 font-medium text-foreground no-underline transition-colors'

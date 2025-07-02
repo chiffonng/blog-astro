@@ -1,5 +1,6 @@
 ---
 import PageLayout from '@/layouts/ContentLayout.astro'
+import { themeIcons } from '@/utils/const'
 
 interface Props {
   title?: string
@@ -40,7 +41,7 @@ const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated
             {/* Date */}
             {pageLastUpdated && (
               <div class='flex items-center gap-1'>
-                <span class='i-mingcute:calendar-line size-4' />
+                <span class={themeIcons.date} />
                 <time datetime={pageLastUpdated} class='text-sm'>
                   Last updated:
                   {new Date(pageLastUpdated || '').toLocaleDateString('en-US', {

@@ -4,6 +4,7 @@ import type { InferEntrySchema } from 'astro:content'
 
 import { PageInfo } from 'astro-pure/components/pages'
 import { FormattedDate } from 'astro-pure/user'
+import { blogIcons } from '@/utils/const'
 
 interface Props {
   data: InferEntrySchema<'blog'>
@@ -58,7 +59,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
   <div class='flex flex-wrap gap-x-4 gap-y-2 text-xs leading-6 text-muted-foreground'>
     {/* Article date */}
     <div class='flex items-center gap-1'>
-      <span class='i-mingcute:calendar-line' aria-label='Published date'></span>
+      <span class={blogIcons.date} aria-label='Published date'></span>
       {/* TEMP FIX: font-sans to revert font-mono in FormattedDate */}
       <FormattedDate date={publishDate} dateTimeOptions={dateTimeOptions} class='font-sans' />
       {
@@ -75,14 +76,14 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
     </div>
     {/* Times read */}
     <div class='flex items-center gap-1'>
-      <span class='i-mingcute:time-duration-line' aria-label='Minutes read'></span>
+      <span class={blogIcons.minutesRead} aria-label='Minutes read'></span>
       {remarkPluginFrontmatter.minutesRead}
     </div>
     {
       // Language
       language && (
         <span class='flex items-center gap-1'>
-          <span class='i-mingcute:earth-line' aria-label='Language' />
+          <span class={blogIcons.language} aria-label='Language' />
           {language}
         </span>
       )
@@ -91,7 +92,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
       // Tags
       !!tags?.length && (
         <span class='flex items-center gap-1'>
-          <span class='i-mingcute:hashtag-line' aria-label='Tags' />
+          <span class={blogIcons.tags} aria-label='Tags' />
           {tags.map((tag: string, i: number) => (
             <div>
               <a
