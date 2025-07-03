@@ -1,9 +1,8 @@
 export { default as BlogCard } from './blog/BlogCard.astro'
-export { default as Card } from './common/Card.astro'
-export { default as Footer } from './common/Footer.astro'
+export { default as Card } from './base/Card.astro'
+export { default as Footer } from './layout/Footer.astro'
 export { default as ContactBar } from './home/ContactBar.astro'
 export { default as Section } from './home/Section.astro'
 export { default as SkillLayout } from './home/SkillLayout.astro'
 export { ToolTag } from './tools/Tool.astro'
 export { default as ToolSection } from './tools/ToolSection.astro'
-

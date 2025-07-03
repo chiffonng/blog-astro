@@ -89,6 +89,13 @@ export default defineConfig({
     contentIntellisense: true
   },
   vite: {
+    // astro-pure package in node_modules ship .ts files,
+    // which are not supported by Node.js 24
+    // either exclude them from the optimization or
+    // disable Node.js TypeScript stripping with --no-experimental-strip-types
+    optimizeDeps: {
+      exclude: ['astro-pure']
+    },
     plugins: [
       //   visualizer({
       //     emitFile: true,

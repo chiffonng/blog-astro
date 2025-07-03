@@ -1,14 +1,15 @@
 ---
 import { Image } from 'astro:assets'
-import { BlogCard, Card, ContactBar, Section, SkillLayout } from '@/components'
-import * as about from 'content/about.md'
-import * as misc from 'content/misc.md'
 
 import { sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { BlogCard, Card, ContactBar, Section, SkillLayout } from '@/components'
 import getBlogCollection from '@/utils/blog'
 import avatar from '@/assets/avatar.jpg'
+
+import * as about from 'content/about.md'
+import * as misc from 'content/misc.md'
 
 const langs = ['Vietnamese', 'English', 'Mandarin Chinese']
 const programming = ['Python', 'JavaScript', 'SQL', 'Shell', 'R']

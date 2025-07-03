@@ -1,7 +1,7 @@
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
-import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
 
-import { contactIconClasses } from './src/schemas/contacts'
+import { profileIconClasses } from './src/constants/icons'
+import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
 
 const fg = 'hsl(var(--foreground) / var(--un-text-opacity, 1))'
 const fgMuted = 'hsl(var(--muted-foreground) / var(--un-text-opacity, 1))'
@@ -195,11 +195,11 @@ export default defineConfig({
   },
   // https://unocss.dev/guide/extracting#limitations
   safelist: [
-    ...contactIconClasses,
+    ...profileIconClasses,
     // TOC
     'rounded-t-2xl',
     'rounded-b-2xl',
     // Typography
-    'text-base'
+    'text-base',
   ]
 })

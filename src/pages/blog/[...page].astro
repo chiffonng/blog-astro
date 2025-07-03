@@ -1,12 +1,12 @@
 ---
 import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
-import { BlogCard } from '@/components'
 
 import { Paginator } from 'astro-pure/components/pages'
 import { getUniqueTags, sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { BlogCard } from '@/components'
 import { getBlogCollection } from '@/utils/blog'
 import config from '@/site-config'
 
@@ -85,7 +85,7 @@ const paginationProps = {
           {!!uniqueTags.length && (
             <aside class='animate' id='sidebar'>
               <h2 class='mb-4 flex items-center text-lg font-semibold'>
-                <span class='i-mingcute:tag-2-line size-5 me-2' />
+                <span class='i-mingcute:tag-2-line' />
                 Tags
               </h2>
               <ul class='text-bgColor flex flex-wrap gap-2'>

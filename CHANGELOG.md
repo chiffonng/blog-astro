@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2025-06-28
+## [0.3.0] - 2025-07-01
 
 Based on `git diff upstream/main...origin/main`, excluding personal configuration and content.
 
@@ -27,10 +27,10 @@ Based on `git diff upstream/main...origin/main`, excluding personal configuratio
 - Handled frontmatter as metadata similar to `SiteMeta` in
   [CommonPage](src/layouts/CommonPage.astro) layout
 - Flushed `Footer` down to the bottom in [BaseLayout](src/layouts/BaseLayout.astro)
-- Redesigned [Footer](src/components/common/Footer.astro) by grouping links, rendering
-  socials/contacts from site.config.ts
-- Redesigned [ContactBar] on home page with new icons and styling (accept socials/contacts from
-  site.config.ts)
+- Redesigned [Footer](src/components/layout/Footer.astro) by grouping links, rendering profile links
+  from site.config.ts
+- Redesigned [ContactBar](src/components/home/ContactBar.astro) on home page with new icons and
+  styling (accept profile links from site.config.ts)
 - Replaced PostPreview with [BlogCard](src/components/blog/BlogCard.astro)
   - Replaced `draft` property with `publish`
   - Move published date to the same line as other info like reading time and language
