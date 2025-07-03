@@ -129,33 +129,6 @@ span.katex-display {
     top: 0.75rem;
     right: 0.75rem;
     user-select: none;
-
-    & .success::before {
-      content: 'Copied!';
-      position: absolute;
-      right: 100%;
-      top: 0;
-      bottom: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.75rem;
-      padding: 0.5rem;
-      margin-right: 0.5rem;
-      border-radius: 0.25rem;
-      color: hsl(var(--muted-foreground) / var(--un-text-opacity, 1));
-      background-color: hsl(var(--primary-foreground) / var(--un-bg-opacity, 1));
-      border: 1px solid hsl(var(--border) / var(--un-border-opacity, 1));
-    }
-    &.copied {
-      & .success {
-        display: block;
-      }
-
-      & .ready {
-        display: none;
-      }
-    }
   }
   &:hover {
     button.copy {

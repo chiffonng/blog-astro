@@ -1,4 +1,4 @@
-import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
 import type { ProfileLinkConfig } from '@/types/contacts'
 
 /**
@@ -57,7 +57,6 @@ export const theme: ThemeUserConfig = {
       { title: 'Teaching', link: '/teaching' },
       { title: 'Blog', link: '/blog' },
       { title: 'Tools', link: '/tools' },
-      { title: 'Now', link: '/now' }
     ]
   },
 
@@ -135,28 +134,6 @@ export const integ: IntegrationUserConfig = {
   waline: {
     enable: false
   }
-}
-
-export const terms: CardListData = {
-  title: 'Terms content',
-  list: [
-    {
-      title: 'Privacy Policy',
-      link: '/terms/privacy-policy'
-    },
-    {
-      title: 'Terms and Conditions',
-      link: '/terms/terms-and-conditions'
-    },
-    {
-      title: 'Copyright',
-      link: '/terms/copyright'
-    },
-    {
-      title: 'Disclaimer',
-      link: '/terms/disclaimer'
-    }
-  ]
 }
 
 const config = { ...theme, integ, profileLinks } as Config

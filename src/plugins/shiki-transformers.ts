@@ -100,42 +100,16 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
       const button = h(
         'button',
         {
-          class: 'copy text-muted-foreground p-1 box-content border rounded bg-primary-foreground',
+          class:
+            'copy text-muted-foreground text-sm p-1 box-content border rounded bg-primary-foreground',
           'data-code': this.source,
           onclick: `
           navigator.clipboard.writeText(this.dataset.code);
-          this.classList.add('copied');
-          setTimeout(() => this.classList.remove('copied'), ${toggleMs})
+          this.textContent = '✅';
+          setTimeout(() => this.textContent = '📋', ${toggleMs})
         `
         },
-        [
-          h('div', { class: 'ready' }, [
-            h(
-              'svg',
-              {
-                class: 'size-5'
-              },
-              [
-                h('use', {
-                  href: '/icons/code.svg#mingcute-clipboard-line'
-                })
-              ]
-            )
-          ]),
-          h('div', { class: 'success hidden' }, [
-            h(
-              'svg',
-              {
-                class: 'size-5'
-              },
-              [
-                h('use', {
-                  href: '/icons/code.svg#mingcute-file-check-line'
-                })
-              ]
-            )
-          ])
-        ]
+        '📋'
       )
 
       node.children.push(button)
