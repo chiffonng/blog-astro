@@ -8,7 +8,7 @@ import * as path from 'path'
 
 import { z } from 'astro/zod'
 import { type ProfileLinkType, type ProfileLinkConfig, type ProcessedProfileLink } from '@/types/contacts'
-import { profileLinkDefinitions } from '../utils/const'
+import { profileLinkDefinitions } from '../constants/icons'
 
 
 // Validation schemas for different link types

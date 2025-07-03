@@ -2,7 +2,7 @@
  * @fileoverview TypeScript types for profile links system
  */
 
-import { profileLinkDefinitions } from '../utils/const'
+import type { profileLinkDefinitions } from "@/constants/icons"
 
 /**
  * @description All available profile link types
@@ -25,5 +25,3 @@ export type ProcessedProfileLink = {
   label: string
   iconClass: string
 }
-
-export default profileLinkDefinitions

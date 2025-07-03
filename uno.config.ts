@@ -1,7 +1,7 @@
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
 
-import { profileIconClasses } from './src/utils/const'
+import { profileIconClasses } from './src/constants/icons'
 
 const fg = 'hsl(var(--foreground) / var(--un-text-opacity, 1))'
 const fgMuted = 'hsl(var(--muted-foreground) / var(--un-text-opacity, 1))'
@@ -200,6 +200,9 @@ export default defineConfig({
     'rounded-t-2xl',
     'rounded-b-2xl',
     // Typography
-    'text-base'
+    'text-base',
+    // Copy button
+    'w-5',
+    'h-5'
   ]
 })
