@@ -37,7 +37,7 @@ const {
         />
       )
     }
-    <div class='flex flex-col px-4 sm:px-7 lg:px-10'>
+    <div class='content-container flex flex-col px-4 lg:px-10 sm:px-7 w-full'>
       <Header slot='header' />
       <main class='flex-1'>
         <slot />
@@ -55,6 +55,13 @@ const {
           --highlightColor,
           hsl(var(--primary) / var(--un-text-opacity))
         ) !important;
+      }
+
+      /* Match original theme width constraints */
+      @media (min-width: 800px) {
+        .content-container {
+          margin-inline: 8%;
+        }
       }
     </style>
   </body>
