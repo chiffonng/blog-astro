@@ -21,7 +21,7 @@ export const profileLinkDefinitions = {
   philpapers: { label: 'PhilPapers', iconClass: 'i-academicons-philpapers' },
   semanticScholar: { label: 'Semantic Scholar', iconClass: 'i-academicons-semantic-scholar' },
   stackOverflow: { label: 'Stack Overflow', iconClass: 'i-academicons-stackoverflow' },
-  
+
   // Social media platforms
   behance: { label: 'Behance', iconClass: 'i-mingcute:behance-line' },
   bluesky: { label: 'Bluesky', iconClass: 'i-mingcute:bluesky-social-line' },
@@ -45,22 +45,22 @@ export const profileLinkDefinitions = {
   x: { label: 'X/Twitter', iconClass: 'i-mingcute:social-x-line' },
   youtube: { label: 'YouTube', iconClass: 'i-mingcute:youtube-line' },
   zhihu: { label: 'Zhihu', iconClass: 'i-mingcute:zhihu-line' },
-  
+
   // Professional platforms
   github: { label: 'GitHub', iconClass: 'i-mingcute:github-line' },
   gitlab: { label: 'GitLab', iconClass: 'i-mingcute:gitlab-line' },
   notion: { label: 'Notion', iconClass: 'i-mingcute:notion-line' },
-  
+
   // Communication
   mail: { label: 'Email', iconClass: 'i-mingcute:mail-line' },
   messenger: { label: 'Messenger', iconClass: 'i-mingcute:messenger-line' },
   telegram: { label: 'Telegram', iconClass: 'i-mingcute:telegram-line' },
-  
+
   // Content & Media
   newsletter: { label: 'Newsletter', iconClass: 'i-mingcute:rss-line' },
   podcast: { label: 'Podcast', iconClass: 'i-mingcute:mic-line' },
   rss: { label: 'RSS', iconClass: 'i-mingcute:rss-2-fill' },
-  
+
   // Documents & Info
   cv: { label: 'CV', iconClass: 'i-academicons-cv' },
   resume: { label: 'Resume', iconClass: 'i-mingcute:file-info-line' },
@@ -68,6 +68,6 @@ export const profileLinkDefinitions = {
 } as const
 
 // Only include icons for used profile links from site.config.ts
-export const profileIconClasses = Object.keys(profileLinks).map(key => 
-  profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass
-).filter(Boolean) as string[]
+export const profileIconClasses = Object.keys(profileLinks)
+  .map((key) => profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass)
+  .filter(Boolean) as string[]
