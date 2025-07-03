@@ -2,7 +2,7 @@
  * @fileoverview TypeScript types for profile links system
  */
 
-import type { profileLinkDefinitions } from "@/constants/icons"
+import type { profileLinkDefinitions } from '@/constants/icons'
 
 /**
  * @description All available profile link types

@@ -16,6 +16,7 @@
       "content/*": ["content/*"],
       "@/*": ["src/*"],
       "@/assets/*": ["src/assets/*"],
+      "@/constants/*": ["src/constants/*"],
       "@/components/*": ["src/components/*"],
       "@/layouts/*": ["src/layouts/*"],
       "@/utils": ["src/utils/index.ts"],

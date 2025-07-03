@@ -86,9 +86,9 @@ export const theme: ThemeUserConfig = {
 
 /**
  * @description Profile links configuration for the site
- * @property {string} - The type of profile link 
+ * @property {string} - The type of profile link
  * @property {string} - The URL or value for the profile link
- * @note All values are optional. See {@link ProfileLinkConfig} for all possible values. 
+ * @note All values are optional. See {@link ProfileLinkConfig} for all possible values.
  * @note Add new link types to src/types/profileLinkDefinitions, or extend the object with new properties.
  */
 export const profileLinks: ProfileLinkConfig = {
@@ -96,7 +96,7 @@ export const profileLinks: ProfileLinkConfig = {
   github: 'https://github.com/chiffonng',
   googleScholar: 'https://scholar.google.com/citations?user=a25a-rUAAAAJ',
   cv: 'doc/cv.pdf', // relative to public/
-  x: 'https://x.com/chiffonng',
+  x: 'https://x.com/chiffonng'
 }
 
 export const integ: IntegrationUserConfig = {
