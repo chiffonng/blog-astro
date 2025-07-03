@@ -15,7 +15,7 @@ export const imageSchema = (image: ImageFunction) =>
 export const blogSchema = ({ image }: { image: ImageFunction }) =>
   z.object({
     title: z.string().max(60),
-    
+
     publish: z.boolean().default(false),
     publishDate: z.coerce.date().default(new Date()),
     description: z.string().max(160).optional(),

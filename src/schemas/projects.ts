@@ -2,7 +2,7 @@ import { z } from 'astro:content'
 
 import { dateSchema, removeDupsAndLowerCase } from './utils'
 
-export const PROJECTS_SCHEMA = z
+export const projectsSchema = z
   .object({
     title: z.string(),
     isHighlighted: z.boolean().default(false),
@@ -25,3 +25,5 @@ export const PROJECTS_SCHEMA = z
       message: 'End date must be after or equal to start date'
     }
   )
+
+export default projectsSchema
