@@ -1,6 +1,7 @@
 # Merge strategies
 content/** merge=ours
 packages.json merge=union
+packages/pure/** merge=ours
 src/assets/** merge=ours
 src/content/docs/** merge=ours
 src/pages/projects/** merge=ours

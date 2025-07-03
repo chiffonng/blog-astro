@@ -201,8 +201,5 @@ export default defineConfig({
     'rounded-b-2xl',
     // Typography
     'text-base',
-    // Copy button
-    'w-5',
-    'h-5'
   ]
 })
