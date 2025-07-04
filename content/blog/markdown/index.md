@@ -1,10 +1,11 @@
 ---
-title: Markdown Syntax Support
-publishDate: 2024-07-26 08:00:00
+title: Test Markdown, Code Blocks, Math, and TOC
+publishDate: 2024-07-26 08:00:01
 description: 'Markdown is a lightweight markup language.'
 tags:
   - Markdown
 heroImage: { src: './thumbnail.jpg', color: '#B4C6DA' }
+publish: true
 ---
 
 ## Basic Syntax

@@ -1,8 +1,9 @@
 ---
+import type { MarkdownHeading } from 'astro'
+
 import { BackToTop } from 'astro-pure/components/pages'
 import type { SiteMeta } from 'astro-pure/types'
 import { Button } from 'astro-pure/user'
-import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { integ } from '@/site-config'
 
@@ -10,31 +11,41 @@ interface Props {
   meta: SiteMeta
   highlightColor?: string
   back?: string
+  headings?: MarkdownHeading[]
 }
 
-const { meta, highlightColor, back = '/', ...props } = Astro.props
-const hasSidebarContent = Astro.slots.has('sidebar') || Astro.slots.has('bottom-sidebar')
+const { meta, highlightColor, back = '/', headings, ...props } = Astro.props
+const hasTOC = headings && headings.length > 0
 ---
 
 <PageLayout {meta} {highlightColor} {...props}>
   <Button title='Back' href={back} style='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
-    {/* Sidebar - only render if there's content */}
+    {/* Desktop Sidebar */}
+    <aside
+      class='animate top-20 min-w-48 basis-60 overflow-y-auto max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 h-[50vh]'
+      id='sidebar'
+    >
+      <slot name='sidebar' />
+    </aside>
+
+    {/* TOC Overlay */}
     {
-      hasSidebarContent && (
+      hasTOC && (
         <>
-          <aside
-            class='animate top-20 min-w-48 basis-60 overflow-y-auto max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 max-md:border max-md:px-4 max-md:py-3 max-md:bg-muted max-md:rounded-xl'
-            style='height:calc(100vh - 7rem);'
-            id='sidebar'
-          >
-            <slot name='sidebar' />
-          </aside>
           <div
-            id='sidebar-shade'
-            class='fixed top-0 start-0 w-full h-full'
-            style='display:none;background-color:#00000091;z-index:31'
+            id='mobile-toc-shade'
+            class='md:hidden fixed top-0 left-0 w-full h-full transition-opacity duration-300 opacity-0 pointer-events-none'
+            style='background-color:#00000091;z-index:40'
           />
+          <div
+            id='mobile-toc'
+            class='md:hidden fixed top-0 right-0 w-80 sm:w-64 h-full bg-background border-l z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl'
+          >
+            <div class='flex-1 overflow-y-auto p-4'>
+              <slot name='mobile-sidebar' />
+            </div>
+          </div>
         </>
       )
     }
@@ -48,10 +59,7 @@ const hasSidebarContent = Astro.slots.has('sidebar') || Astro.slots.has('bottom-
       {/* Content */}
       <div
         id='content'
-        class={cn(
-          'max-w-none animate mt-8 md:min-w-[45ch] overflow-x-hidden',
-          integ.typography.class
-        )}
+        class={`max-w-none animate mt-8 overflow-x-hidden ${integ.typography.class}`}
       >
         <slot />
       </div>
@@ -60,7 +68,7 @@ const hasSidebarContent = Astro.slots.has('sidebar') || Astro.slots.has('bottom-
 
   <div class='bottom mt-6 items-start gap-x-10 md:flex'>
     {/* Bottom */}
-    <div class='mt-8 flex-1 text-muted-foreground md:min-w-[50ch]'>
+    <div class='mt-8 flex-1 text-muted-foreground'>
       <slot name='bottom' />
     </div>
     <div class='min-w-48 basis-60'>
@@ -70,12 +78,12 @@ const hasSidebarContent = Astro.slots.has('sidebar') || Astro.slots.has('bottom-
 
   <BackToTop header='content-header' content='content'>
     {
-      hasSidebarContent && (
+      hasTOC && (
         <button
           slot='other-icons'
-          aria-label='Toggle sidebar'
-          class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
-          id='sidebar-btn'
+          aria-label='Toggle table of contents'
+          class='size-10 flex items-center justify-center rounded-full border-2 bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
+          id='mobile-toc-btn'
         >
           <span class='i-mingcute:list-check-line' />
         </button>
@@ -85,85 +93,69 @@ const hasSidebarContent = Astro.slots.has('sidebar') || Astro.slots.has('bottom-
 </PageLayout>
 
 <script>
-  // Toggle sidebar visibility on button click
-  const sidebarButton = document.getElementById('sidebar-btn')
-  const sidebar = document.getElementById('sidebar')
-  const sidebarShade = document.getElementById('sidebar-shade') as HTMLElement
+  // Toggle mobile TOC visibility
+  const mobileTocButton = document.getElementById('mobile-toc-btn')
+  const mobileToc = document.getElementById('mobile-toc')
+  const mobileTocShade = document.getElementById('mobile-toc-shade')
 
-  if (sidebarShade) {
-    sidebarShade.addEventListener('click', () => {
-      toggleSidebar()
-    })
-  }
-
-  function toggleSidebar() {
-    if (!sidebar || !sidebarShade) {
-      console.warn('Sidebar or sidebar shade not found')
+  function toggleMobileToc() {
+    if (!mobileToc || !mobileTocShade) {
+      console.warn('Mobile TOC or shade not found')
       return
     }
 
-    if (sidebar.classList.contains('show')) {
-      sidebar.classList.remove('show')
-      sidebarShade.style.display = 'none'
+    if (mobileToc.classList.contains('show')) {
+      // Close
+      mobileToc.classList.remove('show')
+      mobileToc.style.transform = 'translateX(100%)'
+      mobileTocShade.style.opacity = '0'
+      mobileTocShade.style.pointerEvents = 'none'
     } else {
-      sidebar.classList.add('show')
-      sidebarShade.style.display = 'block'
+      // Open
+      mobileToc.classList.add('show')
+      mobileToc.style.transform = 'translateX(0)'
+      mobileTocShade.style.opacity = '1'
+      mobileTocShade.style.pointerEvents = 'auto'
     }
   }
 
-  sidebarButton?.addEventListener('click', () => {
-    toggleSidebar()
+  function closeMobileToc() {
+    if (mobileToc?.classList.contains('show')) {
+      mobileToc.classList.remove('show')
+      mobileToc.style.transform = 'translateX(100%)'
+      if (mobileTocShade) {
+        mobileTocShade.style.opacity = '0'
+        mobileTocShade.style.pointerEvents = 'none'
+      }
+    }
+  }
+
+  mobileTocButton?.addEventListener('click', () => {
+    toggleMobileToc()
+  })
+
+  // Close mobile TOC when clicking on shade
+  mobileTocShade?.addEventListener('click', () => {
+    closeMobileToc()
+  })
+
+  // Close mobile TOC when clicking outside (but not on the button)
+  document.addEventListener('click', (e) => {
+    if (!mobileToc?.contains(e.target as Node) && !mobileTocButton?.contains(e.target as Node)) {
+      if (mobileToc?.classList.contains('show')) {
+        closeMobileToc()
+      }
+    }
   })
 </script>
 <style>
-  @media (min-width: 769px) {
-    #sidebar-shade {
-      display: none !important;
-    }
+  /* Mobile TOC scrollbar styling */
+  #mobile-toc .overflow-y-auto::-webkit-scrollbar {
+    width: 6px;
   }
-  @media (max-width: 769px) {
-    aside.show {
-      display: block !important;
-      opacity: 1;
-    }
 
-    @keyframes fade-in-side {
-      0% {
-        transform: translateX(50%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    @keyframes fade-in {
-      0% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
-    }
-    aside {
-      animation: 300ms fade-in-side !important;
-      animation-fill-mode: forwards;
-      right: 0;
-      top: 0 !important;
-      height: 100vh !important;
-      min-width: 40vw !important;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      padding-top: 1.5rem !important;
-      padding-bottom: 1.5rem !important;
-    }
-    #sidebar-shade {
-      animation: 300ms fade-in;
-    }
-  }
-  @media (max-width: 640px) {
-    aside {
-      min-width: 55vw !important;
-    }
+  #mobile-toc .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground));
+    border-radius: 3px;
   }
 </style>
