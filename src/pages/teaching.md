@@ -1,6 +1,7 @@
 ---
-layout: ../layouts/CommonPage.astro
+layout: ../layouts/CommonLayout.astro
 title: Teaching
+lastUpdated: 2025-05-06
 ---
 
 ## Minerva University

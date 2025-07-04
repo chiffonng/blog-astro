@@ -17,7 +17,7 @@ const isCssIcon = typeof icon === 'string' && icon.startsWith('i-')
 {
   isCssIcon ? (
     <div class={`size-10 rounded-lg bg-primary-foreground p-2 ${className}`}>
-      <span class={`${icon} h-full w-full inline-block dark:invert`} aria-label={alt} />
+      <span class={`${icon} h-full w-full inline-block`} aria-label={alt} />
     </div>
   ) : isImageMetadata(icon) ? (
     <div class={`size-10 rounded-lg bg-primary-foreground p-2 ${className}`}>

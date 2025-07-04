@@ -54,7 +54,7 @@ Based on `git diff upstream/main...origin/main`, excluding personal configuratio
 - Migrated most SVG components to CSS classes using UnoCSS PresetIcons
 - Refactored `Tools` section in About page to the new page: [Tool](src/pages/tools/index.astro)
 - Handled frontmatter as metadata similar to `SiteMeta` in
-  [CommonPage](src/layouts/CommonPage.astro) layout
+  [CommonLayout](src/layouts/CommonLayout.astro) layout
 - Flushed `Footer` down to the bottom in [BaseLayout](src/layouts/BaseLayout.astro)
 - Redesigned [Footer](src/components/layout/Footer.astro) by grouping links, rendering profile links
   from site.config.ts
@@ -70,7 +70,7 @@ Based on `git diff upstream/main...origin/main`, excluding personal configuratio
   toggle (on mobile) when there is sidebar slot (temp fix, since we actually want to render when
   there is at least one Markdown heading - need TOC component)
 - Resolved ESLint, TypeScript, and formatting issues
-- [Render Tools icon](src/components/tools/RenderIcon.astro) with either CSS or SVG components
+- [Render Tools icon](src/components/base/IconRenderer.astro) with either CSS or SVG components
 - In [Hero](src/components/blog/Hero.astro) component, fixed `FormattedDate` with `!font-sans` to
   undo `font-mono` styling
 

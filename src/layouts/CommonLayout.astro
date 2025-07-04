@@ -1,0 +1,89 @@
+---
+// Original: https://github.com/cworld1/astro-theme-pure/blob/main/src/layouts/IndividualPage.astro
+import type { MarkdownLayoutProps } from 'astro'
+
+import { BackToTop } from 'astro-pure/components/pages'
+import { Button } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import { integ } from '@/site-config'
+
+type DirectProps = {
+  title?: string
+  description?: string
+  heroImage?: { src: string }
+  language?: string
+  back?: string
+  lastUpdated?: string
+}
+
+type Props = DirectProps & Partial<MarkdownLayoutProps<DirectProps>>
+
+const { frontmatter, title, description, heroImage, language, back, lastUpdated, ...props } =
+  Astro.props
+
+const pageTitle = frontmatter?.title || title || 'Untitled'
+const pageDescription = frontmatter?.description || description
+const pageHeroImage = frontmatter?.heroImage || heroImage
+const pageLanguage = frontmatter?.language || language || 'English'
+const pageBack = frontmatter?.back || back || '/'
+const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated || new Date().toISOString()
+---
+
+<PageLayout
+  meta={{ title: pageTitle, description: pageDescription, ogImage: pageHeroImage?.src }}
+  {...props}
+>
+  <Button title='Back' href={pageBack} style='back' />
+  <main class='mt-6'>
+    <article class='min-w-0 grow'>
+      <div id='content-header' class='animate'>
+        <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>
+          {pageTitle}
+        </h1>
+
+        {/* Meta information */}
+        <div class='mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground'>
+          {
+            pageLastUpdated && (
+              <div class='flex items-center gap-1'>
+                <span class='i-mingcute:calendar-2-line' />
+                <time datetime={pageLastUpdated}>
+                  Last updated:
+                  {new Date(pageLastUpdated || '').toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </time>
+              </div>
+            )
+          }
+          {
+            pageLanguage && (
+              <span class='flex items-center gap-1'>
+                <span class='i-mingcute:earth-line' />
+                {pageLanguage}
+              </span>
+            )
+          }
+        </div>
+
+        {/* Description */}
+        {
+          pageDescription && (
+            <blockquote class='text-muted-foreground mt-4'>{pageDescription}</blockquote>
+          )
+        }
+      </div>
+
+      <div
+        id='content'
+        class={`animate mt-8 max-w-none overflow-x-hidden ${integ.typography.class}`}
+      >
+        <slot />
+      </div>
+    </article>
+  </main>
+
+  <BackToTop header='content-header' content='content' />
+</PageLayout>
