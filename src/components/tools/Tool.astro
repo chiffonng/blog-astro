@@ -1,7 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro'
 
-import RenderIcon from './RenderIcon.astro'
+import IconRenderer from '@/components/base/IconRenderer.astro'
 
 export enum ToolTag {
   OpenSource = 'oss',
@@ -50,7 +50,7 @@ const { name, description, href, icon, tags } = Astro.props
   <div
     class='flex items-center gap-x-3 rounded-lg border border-transparent px-1.5 py-1 transition-colors hover:border-border hover:bg-muted'
   >
-    <RenderIcon icon={icon} alt={name} />
+    <IconRenderer icon={icon} alt={name} />
     <div class='z-20 flex flex-col'>
       <div class='flex items-center gap-2'>
         <div class='font-medium text-foreground'>{name}</div>

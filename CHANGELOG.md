@@ -70,7 +70,7 @@ Based on `git diff upstream/main...origin/main`, excluding personal configuratio
   toggle (on mobile) when there is sidebar slot (temp fix, since we actually want to render when
   there is at least one Markdown heading - need TOC component)
 - Resolved ESLint, TypeScript, and formatting issues
-- [Render Tools icon](src/components/tools/RenderIcon.astro) with either CSS or SVG components
+- [Render Tools icon](src/components/base/IconRenderer.astro) with either CSS or SVG components
 - In [Hero](src/components/blog/Hero.astro) component, fixed `FormattedDate` with `!font-sans` to
   undo `font-mono` styling
 
