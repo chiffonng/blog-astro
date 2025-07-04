@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-07-03
+
+### Added
+
+- [TOC](src/components/blog/TOC.astro): Table of Contents component with smooth scrolling and
+  progress tracking (original by cworld1 from astro-theme-pure)
+- [Collapse](src/components/base/Collapse.astro): Collapsible component for expandable content
+  sections (original by cworld1 from astro-theme-pure)
+- [TOC Plugin](src/plugins/toc.ts): Table of contents generation utilities and TOCScrollManager
+  class (original by cworld1 from astro-theme-pure)
+- [TOC](src/plugins/toc.ts) auto-scroll functionality to keep highlighted headings visible in
+  sidebar as users scroll
+
+### Changed
+
+- [Collapse](src/components/base/Collapse.astro): Added `isExpanded` prop to control expanded state
+  and improved visual styling
+- [TOC](src/components/blog/TOC.astro): Enhanced with mobile/desktop responsive design and wrapping
+  Collapse component. TOC Desktop version redesigned with sticky text, toggleable interface, and
+  improved user experience
+- Refactored script code from [TOC component](src/components/blog/TOC.astro) to
+  [plugins/toc](src/plugins/toc.ts)
+- Shiki copy button in [shiki-transformers.ts](src/plugins/shiki-transformers.ts) and related styles
+
+### Fixed
+
+- Fixed sidebar overlay and rounded border of TOC on mobile in
+  [ContentLayout](src/layouts/ContentLayout.astro)
+
 ## [0.3.0] - 2025-07-01
 
 Based on `git diff upstream/main...origin/main`, excluding personal configuration and content.
