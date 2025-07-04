@@ -1,0 +1,75 @@
+---
+import type { MarkdownHeading } from 'astro'
+
+import { TOCHeading } from 'astro-pure/components/pages'
+import { Collapse } from '@/components'
+import { generateToc } from '@/plugins/toc'
+
+interface Props {
+  headings: MarkdownHeading[]
+  class?: string
+  id?: string
+  isMobile?: boolean
+}
+
+const { headings, class: className, isMobile = false, ...props } = Astro.props
+
+const toc = generateToc(headings)
+const tocText = 'TABLE OF CONTENTS'
+---
+
+<toc-content class={className} {...props}>
+  {
+    isMobile ? (
+      <div class='toc-mobile'>
+        <h3 class='font-medium text-sm mb-4 text-foreground sticky top-0 bg-background'>
+          {tocText}
+        </h3>
+        <ul class='text-card-foreground space-y-1'>
+          {toc.map((heading) => (
+            <TOCHeading heading={heading} />
+          ))}
+        </ul>
+      </div>
+    ) : (
+      <Collapse title={tocText} isExpanded={true}>
+        <ul class='text-card-foreground'>
+          {toc.map((heading) => (
+            <TOCHeading heading={heading} />
+          ))}
+        </ul>
+      </Collapse>
+    )
+  }
+</toc-content>
+
+<script>
+  import { TOCScrollManager } from '@/plugins/toc'
+
+  class TOCContent extends HTMLElement {
+    private scrollManager: TOCScrollManager | null = null
+
+    connectedCallback() {
+      // Determine which container this TOC is in
+      const isInMobileToc = this.closest('#mobile-toc') !== null
+
+      this.scrollManager = new TOCScrollManager(this)
+      this.scrollManager.init()
+
+      // Set the container ID for auto-scroll
+      if (isInMobileToc) {
+        this.scrollManager.setContainerId('mobile-toc')
+      } else {
+        this.scrollManager.setContainerId('sidebar')
+      }
+    }
+  }
+
+  customElements.define('toc-content', TOCContent)
+</script>
+
+<style>
+  toc-content :global(.toc-item) {
+    display: flow-root;
+  }
+</style>

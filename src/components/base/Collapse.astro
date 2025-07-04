@@ -1,0 +1,54 @@
+---
+interface Props {
+  class?: string
+  title: string
+  isExpanded?: boolean
+}
+const { class: className, title, isExpanded = false, ...props } = Astro.props
+---
+
+<collapse-component class={`group/expand ${isExpanded ? 'expanded' : ''}`}>
+  <div
+    class={`rounded-xl border px-3 my-4 sm:px-4 group-[.expanded]/expand:bg-muted ${className}`}
+    {...props}
+  >
+    <slot name='before' />
+    <div
+      class='expand-title group/highlight sticky top-0 z-20 flex cursor-pointer items-center justify-between py-1.5 group-[.expanded]/expand:bg-muted sm:py-2'
+    >
+      <p class='group-hover/highlight:text-primary'>{title}</p>
+      <span
+        class='expand-button i-mingcute:up-line size-4 transition-transform group-hover/highlight:text-primary group-[.expanded]/expand:rotate-180'
+      ></span>
+    </div>
+    <div class='expand-content group-[.expanded]/expand:block'>
+      <slot />
+    </div>
+  </div>
+</collapse-component>
+
+<script>
+  class Collapse extends HTMLElement {
+    constructor() {
+      super()
+    }
+
+    connectedCallback() {
+      const expandTitle = this.querySelector('.expand-title')
+      // const expandable = this.querySelector('.expandable')
+      expandTitle?.addEventListener('click', () => {
+        this.classList.toggle('expanded')
+      })
+    }
+  }
+  customElements.define('collapse-component', Collapse)
+</script>
+
+<style>
+  .expand-content {
+    display: none;
+  }
+  .expanded .expand-content {
+    display: block;
+  }
+</style>
