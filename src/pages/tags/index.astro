@@ -1,7 +1,6 @@
 ---
 import { getUniqueTagsWithCount } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
-import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { getBlogCollection } from '@/utils/blog'
 
@@ -30,19 +29,16 @@ const meta = {
                 <Button
                   href={`/tags/${tag}`}
                   style='pill'
-                  class={cn(
-                    'items-start gap-x-1',
-                    val > 2 ? 'rounded-xl px-3 py-1 text-xl' : val > 1 && 'text-lg'
-                  )}
+                  class='items-start gap-x-1 rounded-xl px-3 py-1 text-lg'
                 >
                   {tag}
-                  <span class={val > 2 ? 'text-base' : 'text-xs'}>{val}</span>
+                  <span class='text-base'> - {val}</span>
                 </Button>
               </li>
             ))}
           </ul>
         ) : (
-          <p>Any tag yet.</p>
+          <p>No tags yet.</p>
         )
       }
     </div>
