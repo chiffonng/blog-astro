@@ -67,7 +67,31 @@ export const profileLinkDefinitions = {
   web: { label: 'Website', iconClass: 'i-mingcute:link-line' }
 } as const
 
-// Only include icons for used profile links from site.config.ts
-export const profileIconClasses = Object.keys(profileLinks)
-  .map((key) => profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass)
-  .filter(Boolean) as string[]
+export const themeIcons = {
+  sun: 'i-mingcute:sun-line',
+  moon: 'i-mingcute:moon-line',
+  computer: 'i-mingcute:computer-line',
+  menu: 'i-mingcute:menu-line'
+} as const
+
+export const sponsorIconDefinitions = {
+  patreon: { label: 'Patreon', iconClass: 'i-mycons-patreon' },
+  github: { label: 'GitHub', iconClass: 'i-mingcute:github-line' },
+  paypal: { label: 'PayPal', iconClass: 'i-mingcute:paypal-line' },
+  koFi: { label: 'Ko-Fi', iconClass: 'i-mycons-kofi' },
+  buyMeACoffee: { label: 'Buy Me a Coffee', iconClass: 'i-mycons-buymeacoffee' }
+} as const
+
+/**
+ * @description All dynamic icon classes to be used in uno.config.ts
+ * @note Only include icons that are used in the theme
+ */
+export const allDynamicIconClasses = [
+  ...Object.values(themeIcons),
+  ...Object.keys(profileLinks)
+    .map((key) => profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass)
+    .filter(Boolean),
+  profileLinkDefinitions.rss.iconClass
+] as string[]
+
+export default allDynamicIconClasses
