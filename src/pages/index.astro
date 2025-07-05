@@ -4,7 +4,7 @@ import { Image } from 'astro:assets'
 import { sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { BlogCard, Card, ContactBar, Section, SkillLayout } from '@/components'
+import { BlogCard, Card, LinkNav, Section, SkillLayout } from '@/components'
 import getBlogCollection from '@/utils/blog'
 import avatar from '@/assets/avatar.jpg'
 
@@ -46,7 +46,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           {about.frontmatter.tagline}
         </p>
       </div>
-      <ContactBar />
+      <LinkNav showLabels={true} ariaLabel='Contact information' />
       <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
         <Section>
           <div class='prose dark:prose-invert prose-a:text-primary max-w-none'>
@@ -61,7 +61,11 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           >
             <p class='text-muted-foreground'>
               Developed a reproducible pipeline for 3D object detection using LiDAR point cloud data
-              and <a href='https://arxiv.org/abs/1812.05784' target='_blank'>PointPillars</a>
+              and <a
+                href='https://arxiv.org/abs/1812.05784'
+                target='_blank'
+                rel='noopener noreferrer'>PointPillars</a
+              >
               algorithm, and conducted benchmarking analysis on synthetic datasets
             </p>
           </Card>

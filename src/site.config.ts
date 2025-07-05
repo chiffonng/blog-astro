@@ -56,7 +56,7 @@ export const theme: ThemeUserConfig = {
       { title: 'Projects', link: '/projects' },
       { title: 'Teaching', link: '/teaching' },
       { title: 'Blog', link: '/blog' },
-      { title: 'Tools', link: '/tools' },
+      { title: 'Tools', link: '/tools' }
     ]
   },
 
@@ -68,7 +68,7 @@ export const theme: ThemeUserConfig = {
         link: 'https://github.com/chiffonng/blog-astro'
       }
     ],
-    /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
+    /** Enable displaying a "Astro & Pure theme powered" link in your site's footer. */
     credits: true
     /** Optional details about the social media accounts for this site. */
   },
