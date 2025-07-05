@@ -1,5 +1,5 @@
 import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
-import type { ProfileLinkConfig } from '@/types/contacts'
+import type { ProfileLinkConfig } from '@/types/links'
 
 /**
  * @constant {ThemeUserConfig} theme

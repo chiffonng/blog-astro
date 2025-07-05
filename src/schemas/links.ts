@@ -13,7 +13,7 @@ import {
   type ProcessedProfileLink,
   type ProfileLinkConfig,
   type ProfileLinkType
-} from '@/types/contacts'
+} from '@/types/links'
 
 // Validation schemas for different link types
 const emailSchema = z.string().email({ message: 'Must be a valid email address' })
@@ -55,7 +55,7 @@ const ProfileLinkConfigSchema = z
 /**
  * @description Validates and processes profile links into renderable format
  * @param {unknown} profileLinks - Raw profile links object to validate and process
- * @returns {ProcessedProfileLink[]} Array of processed profile links with metadata
+ * @returns {ProcessedProfileLink[]} Array of processed links with metadata: url. type, label, iconClass
  * @throws {z.ZodError} If validation fails
  */
 export function processProfileLinks(profileLinks: unknown): ProcessedProfileLink[] {
@@ -87,5 +87,3 @@ export function processProfileLinks(profileLinks: unknown): ProcessedProfileLink
       } satisfies ProcessedProfileLink
     })
 }
-
-export default processProfileLinks
