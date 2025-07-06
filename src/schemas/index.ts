@@ -1,5 +1,5 @@
 export { default as aboutSchema } from './about'
 export { default as blogSchema } from './blog'
-export { default as profileLinkSchema, processProfileLinks } from './links'
+export { processProfileLinks } from './links'
 export { default as educationSchema } from './education'
 export { default as projectsSchema } from './projects'

@@ -48,10 +48,15 @@ import '@pagefind/default-ui/css/ui.css'
           <div>Start typing to search...</div>
         </div>
       </div>
-      
+
       <!-- Footer with instructions -->
-      <div class='px-4 py-3 border-t border-border bg-muted/30 text-xs text-muted-foreground text-center'>
-        Press <kbd class='px-1.5 py-0.5 bg-background border border-border rounded text-xs font-mono'>Esc</kbd> or click outside to close
+      <div
+        class='px-4 py-3 border-t border-border bg-muted/30 text-xs text-muted-foreground text-center'
+      >
+        Press <kbd
+          class='px-1.5 py-0.5 bg-background border border-border rounded text-xs font-mono'
+          >Esc</kbd
+        > or click outside to close
       </div>
     </div>
   </div>
@@ -77,7 +82,6 @@ import '@pagefind/default-ui/css/ui.css'
   }
 
   class SearchModal extends HTMLElement {
-    private pagefind: any = null
     private searchTimeout: number | null = null
     private isInitialized = false
     private modal: HTMLElement | null = null
@@ -90,7 +94,7 @@ import '@pagefind/default-ui/css/ui.css'
     async connectedCallback() {
       this.modal = document.getElementById('search-modal')
       this.input = document.getElementById('modal-search-input') as HTMLInputElement
-      
+
       // Show appropriate keyboard shortcut based on OS
       this.setupKeyboardDisplay()
 
@@ -112,16 +116,16 @@ import '@pagefind/default-ui/css/ui.css'
     }
 
     private setupKeyboardDisplay() {
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.userAgent.includes('Mac')
+      const isMac = /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent)
       const macKeys = document.querySelectorAll('.mac-key')
       const pcKeys = document.querySelectorAll('.pc-key')
-      
+
       if (isMac) {
-        macKeys.forEach(el => el.classList.remove('hidden'))
-        pcKeys.forEach(el => el.classList.add('hidden'))
+        macKeys.forEach((el) => el.classList.remove('hidden'))
+        pcKeys.forEach((el) => el.classList.add('hidden'))
       } else {
-        macKeys.forEach(el => el.classList.add('hidden'))
-        pcKeys.forEach(el => el.classList.remove('hidden'))
+        macKeys.forEach((el) => el.classList.add('hidden'))
+        pcKeys.forEach((el) => el.classList.remove('hidden'))
       }
     }
 
@@ -132,7 +136,9 @@ import '@pagefind/default-ui/css/ui.css'
 
         // @ts-expect-error — Missing types for @pagefind/default-ui package.
         const { PagefindUI } = await import('@pagefind/default-ui')
-        this.pagefind = new PagefindUI({
+
+        // Initialize PagefindUI (set up window.pagefind)
+        new PagefindUI({
           element: '#temp-pagefind', // We won't actually use this element
           baseUrl: import.meta.env.BASE_URL,
           bundlePath: import.meta.env.BASE_URL.replace(/\/$/, '') + '/pagefind/',
@@ -203,35 +209,55 @@ import '@pagefind/default-ui/css/ui.css'
       document.body.style.overflow = ''
       if (this.input) {
         this.input.value = ''
-        this.resetSearchResults()
+        this.setSearchState('empty')
       }
     }
 
-    private resetSearchResults() {
-      const loadingEl = document.getElementById('modal-search-loading')
-      const noResultsEl = document.getElementById('modal-search-no-results')
-      const resultsListEl = document.getElementById('modal-search-results-list')
-      const emptyEl = document.getElementById('modal-search-empty')
+    private getSearchElements() {
+      return {
+        loading: document.getElementById('modal-search-loading'),
+        noResults: document.getElementById('modal-search-no-results'),
+        resultsList: document.getElementById('modal-search-results-list'),
+        empty: document.getElementById('modal-search-empty')
+      }
+    }
 
-      loadingEl?.classList.add('hidden')
-      noResultsEl?.classList.add('hidden')
-      resultsListEl && (resultsListEl.innerHTML = '')
-      emptyEl?.classList.remove('hidden')
+    private setSearchState(state: 'empty' | 'loading' | 'results' | 'no-results') {
+      const elements = this.getSearchElements()
+
+      // Hide all states first
+      elements.loading?.classList.add('hidden')
+      elements.noResults?.classList.add('hidden')
+      elements.empty?.classList.add('hidden')
+
+      // Clear results
+      if (elements.resultsList) {
+        elements.resultsList.innerHTML = ''
+      }
+
+      // Show the requested state
+      switch (state) {
+        case 'loading':
+          elements.loading?.classList.remove('hidden')
+          break
+        case 'no-results':
+          elements.noResults?.classList.remove('hidden')
+          break
+        case 'empty':
+          elements.empty?.classList.remove('hidden')
+          break
+        // 'results' state shows nothing initially, results are added to resultsList
+      }
     }
 
     private async handleSearch(query: string) {
-      const loadingEl = document.getElementById('modal-search-loading')
-      const noResultsEl = document.getElementById('modal-search-no-results')
-      const resultsListEl = document.getElementById('modal-search-results-list')
-      const emptyEl = document.getElementById('modal-search-empty')
-
       // Clear previous timeout
       if (this.searchTimeout) {
         clearTimeout(this.searchTimeout)
       }
 
       if (!query) {
-        this.resetSearchResults()
+        this.setSearchState('empty')
         return
       }
 
@@ -239,11 +265,8 @@ import '@pagefind/default-ui/css/ui.css'
         return
       }
 
-      // Show loading state
-      loadingEl?.classList.remove('hidden')
-      noResultsEl?.classList.add('hidden')
-      emptyEl?.classList.add('hidden')
-      resultsListEl && (resultsListEl.innerHTML = '')
+      // Show loading state immediately
+      this.setSearchState('loading')
 
       // Debounce search
       this.searchTimeout = window.setTimeout(async () => {
@@ -251,53 +274,53 @@ import '@pagefind/default-ui/css/ui.css'
           await this.performSearch(query)
         } catch (error) {
           console.error('Search error:', error)
-          loadingEl?.classList.add('hidden')
-          noResultsEl?.classList.remove('hidden')
+          this.setSearchState('no-results')
         }
       }, 300)
     }
 
     private async performSearch(query: string) {
-      const loadingEl = document.getElementById('modal-search-loading')
-      const noResultsEl = document.getElementById('modal-search-no-results')
-      const resultsListEl = document.getElementById('modal-search-results-list')
-
       try {
         // Use pagefind's search method directly
         const results = await window.pagefind?.search(query)
 
-        loadingEl?.classList.add('hidden')
-
         if (!results || results.results.length === 0) {
-          noResultsEl?.classList.remove('hidden')
+          this.setSearchState('no-results')
           return
         }
 
-        noResultsEl?.classList.add('hidden')
+        // Set to results state (hides loading, shows results area)
+        this.setSearchState('results')
 
         // Process and display results
         const resultsHtml = await Promise.all(
-          results.results.slice(0, 10).map(async (result: any) => {
-            const data = await result.data()
-            const url = this.formatURL(data.url)
-            const excerpt = data.excerpt || ''
+          results.results
+            .slice(0, 10)
+            .map(
+              async (result: {
+                data: () => Promise<{ url: string; meta?: { title?: string }; excerpt?: string }>
+              }) => {
+                const data = await result.data()
+                const url = this.formatURL(data.url)
+                const excerpt = data.excerpt || ''
 
-            return `
+                return `
               <a href="${url}" class="block p-4 hover:bg-muted transition-colors border-b border-border last:border-b-0" onclick="document.querySelector('search-modal').closeModal()">
                 <div class="font-medium text-foreground mb-2">${data.meta?.title || 'Untitled'}</div>
                 <div class="text-sm text-muted-foreground line-clamp-2">${excerpt}</div>
               </a>
             `
-          })
+              }
+            )
         )
 
-        if (resultsListEl) {
-          resultsListEl.innerHTML = resultsHtml.join('')
+        const elements = this.getSearchElements()
+        if (elements.resultsList) {
+          elements.resultsList.innerHTML = resultsHtml.join('')
         }
       } catch (error) {
         console.error('Search failed:', error)
-        loadingEl?.classList.add('hidden')
-        noResultsEl?.classList.remove('hidden')
+        this.setSearchState('no-results')
       }
     }
 
