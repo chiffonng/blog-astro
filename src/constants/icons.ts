@@ -1,7 +1,13 @@
 /**
+ * @author My (Chiffon) Nguyen
+ * @copyright Apache 2.0
  * @fileoverview Constants for icon class definitions and labels
+ * @note Add or remove iconClass by either 1) add package iconify-json/<icon-set>
+ * or 2) add icon SVGs to src/assets/icons/
  */
 
+// Do not change to @site-config because unocss loads first
+// without checking tsconfig.json
 import { profileLinks } from '../site.config'
 
 /**
@@ -67,13 +73,6 @@ export const profileLinkDefinitions = {
   web: { label: 'Website', iconClass: 'i-mingcute:link-line' }
 } as const
 
-export const themeIcons = {
-  sun: 'i-mingcute:sun-line',
-  moon: 'i-mingcute:moon-line',
-  computer: 'i-mingcute:computer-line',
-  menu: 'i-mingcute:menu-line'
-} as const
-
 export const sponsorIconDefinitions = {
   patreon: { label: 'Patreon', iconClass: 'i-mycons-patreon' },
   github: { label: 'GitHub', iconClass: 'i-mingcute:github-line' },
@@ -87,7 +86,6 @@ export const sponsorIconDefinitions = {
  * @note Only include icons that are used in the theme
  */
 export const allDynamicIconClasses = [
-  ...Object.values(themeIcons),
   ...Object.keys(profileLinks)
     .map((key) => profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass)
     .filter(Boolean),

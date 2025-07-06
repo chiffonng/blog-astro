@@ -183,6 +183,7 @@ export default defineConfig({
         mycons: FileSystemIconLoader('./src/assets/icons')
       },
       scale: 1.5,
+      warn: true,
       extraProperties: {
         filter: 'var(--un-icon-filter, none)'
       }
