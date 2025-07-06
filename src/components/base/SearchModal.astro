@@ -1,0 +1,363 @@
+---
+import '@pagefind/default-ui/css/ui.css'
+---
+
+<!-- Search Modal Overlay -->
+<search-modal id='search-modal' class='fixed inset-0 z-[9999] hidden'>
+  <!-- Backdrop -->
+  <div class='absolute inset-0 bg-black/50 backdrop-blur-sm' id='search-backdrop'></div>
+
+  <!-- Modal Content -->
+  <div class='relative flex min-h-full items-start justify-center p-4 pt-[10vh]'>
+    <div
+      class='w-full max-w-2xl bg-background rounded-xl border border-border shadow-2xl overflow-hidden'
+    >
+      <!-- Search Input -->
+      <div class='flex items-center gap-3 p-4 border-b border-border'>
+        <span class='i-mingcute:search-2-line text-muted-foreground flex-shrink-0'></span>
+        <input
+          type='text'
+          id='modal-search-input'
+          placeholder='Search...'
+          class='flex-1 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-lg'
+          autocomplete='off'
+        />
+        <kbd
+          class='hidden sm:inline-flex items-center gap-1 rounded border border-border bg-muted px-2 py-1 text-xs font-mono text-muted-foreground'
+        >
+          <span class='text-xs mac-key'>⌘</span><span class='text-xs pc-key hidden'>Ctrl+</span>K
+        </kbd>
+      </div>
+
+      <!-- Search Results -->
+      <div class='max-h-[60vh] overflow-y-auto'>
+        <div id='modal-search-loading' class='p-8 text-center text-muted-foreground hidden'>
+          <div class='i-mingcute:loading-line animate-spin text-2xl mb-2'></div>
+          <div>Searching...</div>
+        </div>
+
+        <div id='modal-search-no-results' class='p-8 text-center text-muted-foreground hidden'>
+          <div class='i-mingcute:search-2-line text-4xl mb-2 opacity-50'></div>
+          <div>No results found</div>
+        </div>
+
+        <div id='modal-search-results-list'></div>
+
+        <div id='modal-search-empty' class='p-8 text-center text-muted-foreground'>
+          <div class='i-mingcute:search-2-line text-4xl mb-2 opacity-50'></div>
+          <div>Start typing to search...</div>
+        </div>
+      </div>
+      
+      <!-- Footer with instructions -->
+      <div class='px-4 py-3 border-t border-border bg-muted/30 text-xs text-muted-foreground text-center'>
+        Press <kbd class='px-1.5 py-0.5 bg-background border border-border rounded text-xs font-mono'>Esc</kbd> or click outside to close
+      </div>
+    </div>
+  </div>
+</search-modal>
+
+<script>
+  // Type declarations for global objects
+  declare global {
+    interface Window {
+      pagefind?: {
+        search: (query: string) => Promise<{
+          results: Array<{
+            data: () => Promise<{
+              url: string
+              meta?: { title?: string }
+              excerpt?: string
+            }>
+          }>
+        }>
+      }
+      openSearchModal?: () => void
+    }
+  }
+
+  class SearchModal extends HTMLElement {
+    private pagefind: any = null
+    private searchTimeout: number | null = null
+    private isInitialized = false
+    private modal: HTMLElement | null = null
+    private input: HTMLInputElement | null = null
+
+    constructor() {
+      super()
+    }
+
+    async connectedCallback() {
+      this.modal = document.getElementById('search-modal')
+      this.input = document.getElementById('modal-search-input') as HTMLInputElement
+      
+      // Show appropriate keyboard shortcut based on OS
+      this.setupKeyboardDisplay()
+
+      if (import.meta.env.DEV) {
+        // In dev mode, show disabled message
+        if (this.input) {
+          this.input.placeholder = 'Search disabled in dev mode'
+          this.input.disabled = true
+        }
+        this.setupModalControls()
+        this.setupKeyboardShortcuts()
+        return
+      }
+
+      await this.initializePagefind()
+      this.setupEventListeners()
+      this.setupModalControls()
+      this.setupKeyboardShortcuts()
+    }
+
+    private setupKeyboardDisplay() {
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.userAgent.includes('Mac')
+      const macKeys = document.querySelectorAll('.mac-key')
+      const pcKeys = document.querySelectorAll('.pc-key')
+      
+      if (isMac) {
+        macKeys.forEach(el => el.classList.remove('hidden'))
+        pcKeys.forEach(el => el.classList.add('hidden'))
+      } else {
+        macKeys.forEach(el => el.classList.add('hidden'))
+        pcKeys.forEach(el => el.classList.remove('hidden'))
+      }
+    }
+
+    private async initializePagefind() {
+      try {
+        const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
+        await new Promise((resolve) => onIdle(resolve))
+
+        // @ts-expect-error — Missing types for @pagefind/default-ui package.
+        const { PagefindUI } = await import('@pagefind/default-ui')
+        this.pagefind = new PagefindUI({
+          element: '#temp-pagefind', // We won't actually use this element
+          baseUrl: import.meta.env.BASE_URL,
+          bundlePath: import.meta.env.BASE_URL.replace(/\/$/, '') + '/pagefind/',
+          showImages: false,
+          showSubResults: true
+        })
+
+        // Wait a bit for pagefind to initialize
+        await new Promise((resolve) => setTimeout(resolve, 100))
+        this.isInitialized = true
+      } catch (error) {
+        console.warn('Failed to initialize pagefind:', error)
+      }
+    }
+
+    private setupEventListeners() {
+      if (!this.input) return
+
+      this.input.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value.trim()
+        this.handleSearch(query)
+      })
+
+      this.input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.closeModal()
+        }
+      })
+    }
+
+    private setupModalControls() {
+      if (!this.modal) return
+
+      // Close on backdrop click
+      const backdrop = document.getElementById('search-backdrop')
+      backdrop?.addEventListener('click', () => this.closeModal())
+
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !this.modal?.classList.contains('hidden')) {
+          this.closeModal()
+        }
+      })
+    }
+
+    private setupKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        // Cmd+K or Ctrl+K
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+          e.preventDefault()
+          this.openModal()
+        }
+      })
+    }
+
+    public openModal() {
+      if (!this.modal) return
+
+      this.modal.classList.remove('hidden')
+      this.input?.focus()
+      document.body.style.overflow = 'hidden'
+    }
+
+    public closeModal() {
+      if (!this.modal) return
+
+      this.modal.classList.add('hidden')
+      document.body.style.overflow = ''
+      if (this.input) {
+        this.input.value = ''
+        this.resetSearchResults()
+      }
+    }
+
+    private resetSearchResults() {
+      const loadingEl = document.getElementById('modal-search-loading')
+      const noResultsEl = document.getElementById('modal-search-no-results')
+      const resultsListEl = document.getElementById('modal-search-results-list')
+      const emptyEl = document.getElementById('modal-search-empty')
+
+      loadingEl?.classList.add('hidden')
+      noResultsEl?.classList.add('hidden')
+      resultsListEl && (resultsListEl.innerHTML = '')
+      emptyEl?.classList.remove('hidden')
+    }
+
+    private async handleSearch(query: string) {
+      const loadingEl = document.getElementById('modal-search-loading')
+      const noResultsEl = document.getElementById('modal-search-no-results')
+      const resultsListEl = document.getElementById('modal-search-results-list')
+      const emptyEl = document.getElementById('modal-search-empty')
+
+      // Clear previous timeout
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout)
+      }
+
+      if (!query) {
+        this.resetSearchResults()
+        return
+      }
+
+      if (!this.isInitialized) {
+        return
+      }
+
+      // Show loading state
+      loadingEl?.classList.remove('hidden')
+      noResultsEl?.classList.add('hidden')
+      emptyEl?.classList.add('hidden')
+      resultsListEl && (resultsListEl.innerHTML = '')
+
+      // Debounce search
+      this.searchTimeout = window.setTimeout(async () => {
+        try {
+          await this.performSearch(query)
+        } catch (error) {
+          console.error('Search error:', error)
+          loadingEl?.classList.add('hidden')
+          noResultsEl?.classList.remove('hidden')
+        }
+      }, 300)
+    }
+
+    private async performSearch(query: string) {
+      const loadingEl = document.getElementById('modal-search-loading')
+      const noResultsEl = document.getElementById('modal-search-no-results')
+      const resultsListEl = document.getElementById('modal-search-results-list')
+
+      try {
+        // Use pagefind's search method directly
+        const results = await window.pagefind?.search(query)
+
+        loadingEl?.classList.add('hidden')
+
+        if (!results || results.results.length === 0) {
+          noResultsEl?.classList.remove('hidden')
+          return
+        }
+
+        noResultsEl?.classList.add('hidden')
+
+        // Process and display results
+        const resultsHtml = await Promise.all(
+          results.results.slice(0, 10).map(async (result: any) => {
+            const data = await result.data()
+            const url = this.formatURL(data.url)
+            const excerpt = data.excerpt || ''
+
+            return `
+              <a href="${url}" class="block p-4 hover:bg-muted transition-colors border-b border-border last:border-b-0" onclick="document.querySelector('search-modal').closeModal()">
+                <div class="font-medium text-foreground mb-2">${data.meta?.title || 'Untitled'}</div>
+                <div class="text-sm text-muted-foreground line-clamp-2">${excerpt}</div>
+              </a>
+            `
+          })
+        )
+
+        if (resultsListEl) {
+          resultsListEl.innerHTML = resultsHtml.join('')
+        }
+      } catch (error) {
+        console.error('Search failed:', error)
+        loadingEl?.classList.add('hidden')
+        noResultsEl?.classList.remove('hidden')
+      }
+    }
+
+    private formatURL(path: string): string {
+      return path.replace(/(.)\/(#.*)?$/, '$1$2')
+    }
+  }
+
+  customElements.define('search-modal', SearchModal)
+
+  // Global function to open search modal
+  window.openSearchModal = () => {
+    const searchModal = document.querySelector('search-modal') as SearchModal
+    searchModal?.openModal()
+  }
+</script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Modal animations */
+  search-modal {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  search-modal.hidden {
+    animation: fadeOut 0.15s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* Hide temp pagefind element if it exists */
+  #temp-pagefind {
+    display: none !important;
+  }
+
+  /* Smooth backdrop blur */
+  search-modal .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+</style>

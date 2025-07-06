@@ -1,6 +1,7 @@
 export { default as BlogCard } from './blog/BlogCard.astro'
 export { default as Card } from './base/Card.astro'
 export { default as Collapse } from './base/Collapse.astro'
+export { default as SearchModal } from './base/SearchModal.astro'
 export { default as BaseHead } from './layout/BaseHead.astro'
 export { default as Footer } from './layout/Footer.astro'
 export { default as MenuNav } from './layout/MenuNav.astro'

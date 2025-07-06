@@ -30,14 +30,32 @@ import config from 'virtual:config'
           ))
         }
         <div class='flex w-full grow flex-row justify-end gap-x-2 sm:w-fit sm:gap-x-5'>
-          <a
-            class='p-2 transition-none flex items-center justify-center'
-            href='/search'
-            title='Search'
+          {/* Search bar for large screens */}
+          <button
+            id='search-trigger-large'
+            class='hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors text-sm'
+            onclick='openSearchModal()'
+          >
+            <span class='i-mingcute:search-2-line'></span>
+            <span>Search...</span>
+            <kbd
+              class='inline-flex items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 text-xs font-mono'
+            >
+              <span class='text-xs mac-key'>⌘</span><span class='text-xs pc-key hidden'>Ctrl+</span
+              >K
+            </kbd>
+          </button>
+
+          {/* Search icon for smaller screens */}
+          <button
+            id='search-trigger-small'
+            class='lg:hidden p-2 transition-none flex items-center justify-center'
+            onclick='openSearchModal()'
+            title='Search (⌘K)'
           >
             <span class='sr-only'>Search</span>
             <span class='i-mingcute:search-2-line'></span>
-          </a>
+          </button>
         </div>
       </div>
     </div>

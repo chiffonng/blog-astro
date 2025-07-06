@@ -1,7 +1,7 @@
 ---
 import { ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
-import { BaseHead, Footer, MenuNav } from '@/components'
+import { BaseHead, Footer, MenuNav, SearchModal } from '@/components'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
@@ -43,6 +43,9 @@ const {
       </main>
       <Footer slot='footer' />
     </div>
+
+    <!-- Global Search Modal -->
+    <SearchModal />
 
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
