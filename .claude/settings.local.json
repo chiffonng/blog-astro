@@ -21,7 +21,8 @@
       "WebFetch(domain:localhost)",
       "WebFetch(domain:astro-pure.js.org)",
       "WebFetch(domain:context7.com)",
-      "Bash(npx pagefind:*)"
+      "Bash(npx pagefind:*)",
+      "Bash(tree:*)"
     ],
     "deny": []
   }
