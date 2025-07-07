@@ -1,4 +1,4 @@
-import { z } from 'astro:content'
+import { z } from 'astro/zod'
 
 export function removeDupsAndLowerCase(array: string[]) {
   if (!array.length) return array

@@ -1,6 +1,6 @@
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 
-import allDynamicIconClasses from './src/constants/icons'
+import profileDynamicIconClasses from './src/theme'
 import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
 
 const fg = 'hsl(var(--foreground) / var(--un-text-opacity, 1))'
@@ -196,7 +196,7 @@ export default defineConfig({
   },
   // https://unocss.dev/guide/extracting#limitations
   safelist: [
-    ...allDynamicIconClasses,
+    ...profileDynamicIconClasses,
     // TOC
     'rounded-t-2xl',
     'rounded-b-2xl',

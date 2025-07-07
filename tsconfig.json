@@ -23,8 +23,7 @@
       "@/utils/*": ["src/utils/*"],
       "@/plugins/*": ["src/plugins/*"],
       "@/pages/*": ["src/pages/*"],
-      "@/schemas/*": ["src/schemas/*"],
-      "@/types": ["src/types/index.ts"],
+      "@/types/*": ["src/types/*"],
       "@/site-config": ["src/site.config.ts"]
     }
   },

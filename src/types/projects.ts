@@ -2,7 +2,7 @@ import { z } from 'astro:content'
 
 import { dateSchema, removeDupsAndLowerCase } from './utils'
 
-export const projectsSchema = z
+export const projectSchema = z
   .object({
     title: z.string(),
     isHighlighted: z.boolean().default(false),
@@ -26,4 +26,4 @@ export const projectsSchema = z
     }
   )
 
-export default projectsSchema
+export type ProjectType = z.infer<typeof projectSchema>

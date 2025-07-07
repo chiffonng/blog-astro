@@ -1,7 +1,6 @@
 ---
-import { processProfileLinks } from '@/schemas'
-
-import { profileLinks } from '@/site-config'
+import { processProfileLinks } from '@/utils/process-links'
+import { profile } from '@/site-config'
 
 interface Props {
   /**
@@ -36,9 +35,9 @@ const {
   ariaLabel = 'Contact links'
 } = Astro.props
 
-const contactData = includeRss ? { ...profileLinks, rss: '/rss.xml' } : profileLinks
+const contactLinksData = includeRss ? { ...profile.links, rss: '/rss.xml' } : profile.links
 
-const contactList = processProfileLinks(contactData)
+const profileLinkList = processProfileLinks(contactLinksData)
 
 const defaultContainerClass = showLabels
   ? 'flex flex-wrap gap-3 md:gap-6'
@@ -54,7 +53,7 @@ const finalLinkClass = linkClass || defaultLinkClass
 
 <nav class={finalContainerClass} aria-label={ariaLabel}>
   {
-    contactList.map(({ type, url, label, iconClass }) => (
+    profileLinkList.map(({ type, url, label, iconClass }) => (
       <a
         href={url}
         target='_blank'
