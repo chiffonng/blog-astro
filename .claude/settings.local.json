@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*):",
+      "Bash(find:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(pnpm info:*)",
+      "Bash(pnpm format:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm routine:*)",
+      "Bash(pnpm check:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:astro-pure.js.org)",
+      "WebFetch(domain:context7.com)",
+      "Bash(npx pagefind:*)",
+      "Bash(tree:*)"
+    ],
+    "deny": []
+  }
+}

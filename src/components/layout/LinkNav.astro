@@ -1,0 +1,70 @@
+---
+import { processProfileLinks } from '@/utils/process-links'
+import { profile } from '@/site-config'
+
+interface Props {
+  /**
+   * Include RSS feed link in the contact list
+   * @default false
+   */
+  includeRss?: boolean
+  /**
+   * Show text labels alongside icons
+   * @default false
+   */
+  showLabels?: boolean
+  /**
+   * Custom CSS classes for the container
+   */
+  class?: string
+  /**
+   * Custom CSS classes for individual links
+   */
+  linkClass?: string
+  /**
+   * ARIA label for the navigation
+   */
+  ariaLabel?: string
+}
+
+const {
+  includeRss = false,
+  showLabels = false,
+  class: containerClass = '',
+  linkClass = '',
+  ariaLabel = 'Contact links'
+} = Astro.props
+
+const contactLinksData = includeRss ? { ...profile.links, rss: '/rss.xml' } : profile.links
+
+const profileLinkList = processProfileLinks(contactLinksData)
+
+const defaultContainerClass = showLabels
+  ? 'flex flex-wrap gap-3 md:gap-6'
+  : 'flex items-center gap-x-2'
+
+const defaultLinkClass = showLabels
+  ? 'inline-flex items-center gap-2 hover:text-primary transition-colors group'
+  : 'inline-flex'
+
+const finalContainerClass = containerClass || defaultContainerClass
+const finalLinkClass = linkClass || defaultLinkClass
+---
+
+<nav class={finalContainerClass} aria-label={ariaLabel}>
+  {
+    profileLinkList.map(({ type, url, label, iconClass }) => (
+      <a
+        href={url}
+        target='_blank'
+        class={finalLinkClass}
+        rel='noopener noreferrer'
+        aria-label={type}
+        title={label}
+      >
+        <div class:list={[iconClass, 'group-hover:scale-110 transition-transform']} />
+        {showLabels && <span class='hidden sm:inline text-base'>{label}</span>}
+      </a>
+    ))
+  }
+</nav>

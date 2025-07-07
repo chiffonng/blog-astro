@@ -7,9 +7,12 @@ interface Props {
 const { class: className, title, isExpanded = false, ...props } = Astro.props
 ---
 
-<collapse-component class={`group/expand ${isExpanded ? 'expanded' : ''}`}>
+<collapse-component class:list={['group/expand', isExpanded && 'expanded']}>
   <div
-    class={`rounded-xl border px-3 my-4 sm:px-4 group-[.expanded]/expand:bg-muted ${className}`}
+    class:list={[
+      'rounded-xl border px-3 my-4 sm:px-4 group-[.expanded]/expand:bg-muted',
+      className
+    ]}
     {...props}
   >
     <slot name='before' />

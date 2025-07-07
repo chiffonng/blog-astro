@@ -3,9 +3,11 @@ const { as: Tag = 'div', class: className, href, heading, subheading, date } = A
 ---
 
 <Tag
-  class={`block relative rounded-2xl border bg-muted px-5 py-3 prose-a:text-primary prose-a:underline prose-a:decoration-primary ${
-    href && 'transition-all hover:border-foreground/25 hover:shadow-sm'
-  } ${className}`}
+  class:list={[
+    'block relative rounded-2xl border bg-muted px-5 py-3 prose-a:text-primary prose-a:underline prose-a:decoration-primary',
+    href && 'transition-all hover:border-foreground/25 hover:shadow-sm',
+    className
+  ]}
   href={href}
 >
   <div class='flex flex-col gap-y-1.5'>

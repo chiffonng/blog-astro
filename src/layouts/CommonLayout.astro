@@ -78,7 +78,7 @@ const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated || new Date().to
 
       <div
         id='content'
-        class={`animate mt-8 max-w-none overflow-x-hidden ${integ.typography.class}`}
+        class:list={['animate mt-8 max-w-none overflow-x-hidden', integ.typography.class]}
       >
         <slot />
       </div>

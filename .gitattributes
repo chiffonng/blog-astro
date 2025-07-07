@@ -1,10 +1,16 @@
-# Merge strategies
+# Merge strategies for merge conflicts (git merge, git pull)
 content/** merge=ours
-packages.json merge=union
+package.json merge=union
 packages/pure/** merge=ours
+public/favicon/** merge=ours
+public/doc/** merge=ours
+public/img/** merge=ours
 src/assets/** merge=ours
 src/content/docs/** merge=ours
+src/constants/** merge=ours
 src/pages/projects/** merge=ours
 src/pages/index.astro merge=ours
+src/pages/*.md merge=ours
+src/pages/**/*.md merge=ours
 # Ignore files in linguist
 *.xsl -linguist-detectable

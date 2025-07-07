@@ -1,165 +1,88 @@
 ---
 import config from 'virtual:config'
 
-import processProfileLinks from '@/schemas/contacts'
-import { profileLinks } from '@/site-config'
+import { LinkNav } from '@/components'
 
-const year = new Date().getFullYear()
-const footerConf = config.footer
-
-const socialIcons = processProfileLinks({
-  ...profileLinks,
-  rss: '/rss.xml' // Add RSS to contacts
-})
-
-// Shared styles
-const separator = '/'
-const separatorClass = 'text-muted-foreground/50'
-const socialLinkClass = 'inline-flex'
-const iconStyleClass = 'group-hover:scale-110 transition-transform'
-const gridRowClass =
-  'flex flex-col items-center gap-3 text-center lg:flex-row lg:items-center lg:gap-4 sm:flex-row sm:justify-center sm:gap-2'
+const fc = config.footer
+const verticalGap = 'gap-2'
 ---
 
 <footer class='mx-0 mb-5 mt-auto'>
   <div class='border-t pt-3'></div>
+  {/* On medium screen, the footer is stacked, each section is one row */}
+  {/* On large screen, the footer is one line since sections are col by col on one row*/}
   <div
-    class='items-center text-muted-foreground text-sm [&_a]:text-foreground hover:[&_a]:text-primary'
+    class:list={[
+      'flex flex-col items-center',
+      verticalGap,
+      'text-center text-muted-foreground text-sm [&_a]:text-foreground hover:[&_a]:text-primary md:flex-col lg:flex-row lg:justify-between lg:text-left'
+    ]}
   >
-    {/* Mobile: stacked and centered */}
-    <div class='flex flex-col items-center gap-y-4 text-center sm:hidden'>
-      <div class='whitespace-nowrap'>© {year} {config.author}</div>
-
+    {/* Copyright + Credits */}
+    <div
+      class:list={[
+        'flex flex-col items-center',
+        verticalGap,
+        'lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0'
+      ]}
+    >
+      <span class='whitespace-nowrap'>
+        Copyright &copy; <time id='footer-year'></time>
+        {config.author}
+      </span>
       {
-        footerConf.credits && (
-          <div class='whitespace-nowrap'>
+        fc.credits && (
+          <span class='whitespace-nowrap'>
             Powered by{' '}
-            <a href='https://astro.build/' target='_blank'>
+            <a href='https://astro.build/' target='_blank' rel='noopener noreferrer'>
               Astro
             </a>
             ,{' '}
-            <a href='https://unocss.dev/' target='_blank'>
+            <a href='https://unocss.dev/' target='_blank' rel='noopener noreferrer'>
               UnoCSS
-            </a>
-            ,{' '}
-            <a href='https://astro-pure.js.org/' target='_blank'>
+            </a>{' '}
+            &{' '}
+            <a
+              href='https://github.com/cworld1/astro-theme-pure'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               Pure
             </a>{' '}
             theme
-          </div>
+          </span>
         )
       }
+    </div>
 
+    {/* Links + Social Icons, with divider | between parts on large screen */}
+    <div
+      class:list={[
+        'flex flex-col items-center',
+        verticalGap,
+        'lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0'
+      ]}
+    >
       {
-        footerConf.links && footerConf.links.length > 0 && (
-          <div>
-            {footerConf.links.map(
-              (
-                { title, link, style = '' }: { title: string; link: string; style?: string },
-                index: number
-              ) => (
-                <>
-                  <a href={link} target='_blank' class={style}>
-                    {title}
-                  </a>
-                  {index < (footerConf.links?.length ?? 0) - 1 && (
-                    <span class={separatorClass}>{separator}</span>
-                  )}
-                </>
+        fc.links && fc.links.length > 0 && (
+          <div class='flex items-center gap-1 [&>a:not(:last-child)]:after:content-["/"] [&>a:not(:last-child)]:after:text-muted-foreground/50 [&>a:not(:last-child)]:after:ml-1'>
+            {fc.links.map(
+              ({ title, link, style = '' }: { title: string; link: string; style?: string }) => (
+                <a href={link} target='_blank' rel='noopener noreferrer' class={style}>
+                  {title}
+                </a>
               )
             )}
           </div>
         )
       }
 
-      <div class='flex items-center gap-x-2'>
-        {
-          socialIcons.map(({ url, label, iconClass }) => (
-            <a href={url} target='_blank' aria-label={label} title={label}>
-              <div class={`${iconClass} ${iconStyleClass}`} />
-            </a>
-          ))
-        }
-      </div>
-    </div>
-
-    {/* Medium: 2x2 grid, Large: side-by-side */}
-    <div class='hidden sm:block'>
-      <div class='flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between'>
-        {/* First row: Copyright + Credits */}
-        <div class={gridRowClass}>
-          <div class='whitespace-nowrap'>© {year} {config.author}</div>
-          {
-            footerConf.credits && (
-              <span class={`hidden sm:inline ${separatorClass}`}>{separator}</span>
-            )
-          }
-          {
-            footerConf.credits && (
-              <div class='whitespace-nowrap'>
-                Powered by{' '}
-                <a href='https://astro.build/' target='_blank'>
-                  Astro
-                </a>
-                ,{' '}
-                <a href='https://unocss.dev/' target='_blank'>
-                  UnoCSS
-                </a>{' '}
-                &{' '}
-                <a href='https://github.com/cworld1/astro-theme-pure' target='_blank'>
-                  Pure
-                </a>{' '}
-                theme
-              </div>
-            )
-          }
-        </div>
-
-        {/* Second row: Links + Social Icons */}
-        <div class={gridRowClass}>
-          {
-            footerConf.links && footerConf.links.length > 0 && (
-              <>
-                <div>
-                  {footerConf.links.map(
-                    (
-                      { title, link, style = '' }: { title: string; link: string; style?: string },
-                      index: number
-                    ) => (
-                      <>
-                        <a href={link} target='_blank' class={style}>
-                          {title}
-                        </a>
-                        {index < (footerConf.links?.length ?? 0) - 1 && (
-                          <span class={separatorClass}>{separator}</span>
-                        )}
-                      </>
-                    )
-                  )}
-                </div>
-                {/* Hidden separator for medium screen */}
-                <span class={`hidden sm:inline ${separatorClass}`}>{separator}</span>
-              </>
-            )
-          }
-
-          <div class='flex items-center gap-x-2'>
-            {
-              socialIcons.map(({ url, label, iconClass }) => (
-                <a
-                  href={url}
-                  target='_blank'
-                  class={socialLinkClass}
-                  aria-label={label}
-                  title={label}
-                >
-                  <div class={`${iconClass} ${iconStyleClass}`} />
-                </a>
-              ))
-            }
-          </div>
-        </div>
-      </div>
+      <LinkNav includeRss={true} ariaLabel='Social links' />
     </div>
   </div>
 </footer>
+
+{/* Use client-side JavaScript to get current year when page loads */}
+<script is:inline>
+  document.getElementById('footer-year').innerText = new Date().getFullYear()
+</script>

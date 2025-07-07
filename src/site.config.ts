@@ -1,5 +1,5 @@
 import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
-import type { ProfileLinkConfig } from '@/types/contacts'
+import type { ProfileConfig } from '@/types'
 
 /**
  * @constant {ThemeUserConfig} theme
@@ -56,7 +56,8 @@ export const theme: ThemeUserConfig = {
       { title: 'Projects', link: '/projects' },
       { title: 'Teaching', link: '/teaching' },
       { title: 'Blog', link: '/blog' },
-      { title: 'Tools', link: '/tools' },
+      { title: 'Uses', link: '/uses' },
+      { title: 'Now', link: '/now' }
     ]
   },
 
@@ -68,7 +69,7 @@ export const theme: ThemeUserConfig = {
         link: 'https://github.com/chiffonng/blog-astro'
       }
     ],
-    /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
+    /** Enable displaying a "Astro & Pure theme powered" link in your site's footer. */
     credits: true
     /** Optional details about the social media accounts for this site. */
   },
@@ -84,18 +85,24 @@ export const theme: ThemeUserConfig = {
 }
 
 /**
- * @description Profile links configuration for the site
- * @property {string} - The type of profile link
- * @property {string} - The URL or value for the profile link
- * @note All values are optional. See {@link ProfileLinkConfig} for all possible values.
- * @note Add new link types to src/types/profileLinkDefinitions, or extend the object with new properties.
+ * @description Profile configuration for the site
+ * @property {ProfileLinkConfig} links - Profile links configuration
+ * @property {ProfileLabelMode} labelMode - How to display labels: 'platform' or 'username'
+ * @note All link values are optional. Add new link types to src/constants/icons profileLinkDefinitions.
  */
-export const profileLinks: ProfileLinkConfig = {
-  mail: 'chiffonng136@gmail.com',
-  github: 'https://github.com/chiffonng',
-  googleScholar: 'https://scholar.google.com/citations?user=a25a-rUAAAAJ',
-  cv: 'doc/cv.pdf', // relative to public/
-  x: 'https://x.com/chiffonng'
+export const profile: ProfileConfig = {
+  links: {
+    // Simple string format
+    mail: 'chiffonng136@gmail.com', // Will show full email: chiffonng136@gmail.com
+    github: 'https://github.com/chiffonng', // Will show username: chiffonng
+    // Object format
+    googleScholar: {
+      url: 'https://scholar.google.com/citations?user=a25a-rUAAAAJ',
+      label: 'platform' // Override: will show "Google Scholar" instead of "a25a-rUAAAAJ"
+    },
+    cv: 'doc/cv.pdf', // Will show type cv
+    x: 'https://x.com/chiffonng' // Will show username: chiffonng
+  }
 }
 
 export const integ: IntegrationUserConfig = {
@@ -136,5 +143,5 @@ export const integ: IntegrationUserConfig = {
   }
 }
 
-const config = { ...theme, integ, profileLinks } as Config
+const config = { ...theme, integ, profile } as Config
 export default config

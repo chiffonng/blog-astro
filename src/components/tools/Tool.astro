@@ -59,7 +59,7 @@ const { name, description, href, icon, tags } = Astro.props
             tags
               ?.filter((tag: ToolTag) => Object.values(ToolTag).includes(tag))
               .map((tag: ToolTag) => (
-                <span class={`text-xs px-1.5 py-0.5 rounded ${tagStyles[tag] ?? ''}`}>{tag}</span>
+                <span class:list={['text-xs px-1.5 py-0.5 rounded', tagStyles[tag]]}>{tag}</span>
               ))
           }
         </div>

@@ -1,0 +1,15 @@
+---
+import { keyMap } from '@/constants/keyMap'
+import type { KbdProps } from '@/types/kbd'
+
+type Props = KbdProps
+
+const { keys, className } = Astro.props
+
+const classes = [
+  'px-1.5 py-0.5 bg-background border border-border rounded text-xs font-mono',
+  className
+]
+---
+
+<kbd class:list={classes}>{keys?.map((key) => keyMap[key])}<slot /></kbd>

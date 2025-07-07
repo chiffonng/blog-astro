@@ -59,7 +59,7 @@ const hasTOC = headings && headings.length > 0
       {/* Content */}
       <div
         id='content'
-        class={`max-w-none animate mt-8 overflow-x-hidden ${integ.typography.class}`}
+        class:list={['max-w-none animate mt-8 overflow-x-hidden', integ.typography.class]}
       >
         <slot />
       </div>

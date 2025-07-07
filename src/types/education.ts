@@ -10,4 +10,4 @@ export const educationSchema = z.object({
   toDate: dateSchema.or(z.string()).optional()
 })
 
-export default educationSchema
+export type EducationType = z.infer<typeof educationSchema>
