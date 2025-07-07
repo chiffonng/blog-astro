@@ -5,10 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
-    "dev:search": "pnpm build:site && pagefind",
-    "build": "pnpm build:site && pnpm build:search",
-    "build:site": "astro check && astro build",
-    "build:search": "pagefind --site dist",
+    "dev:search": "pnpm build:site && npx pagefind",
+    "build": "astro check && astro build",
     "preview": "astro preview",
     "sync": "astro sync",
     "check": "astro check",
