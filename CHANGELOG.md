@@ -5,10 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 2025-07-03
+## [0.4.0] - 2025-07-05
 
 ### Added
 
+- [LinkNav](src/components/layout/LinkNav.astro): Customizable navigation component for displaying
+  contact/social links with configurable label visibility
 - [TOC](src/components/blog/TOC.astro): Table of Contents component with smooth scrolling and
   progress tracking (original by cworld1 from astro-theme-pure)
 - [Collapse](src/components/base/Collapse.astro): Collapsible component for expandable content
@@ -20,6 +22,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Complete overhaul of [MenuNav](src/components/layout/MenuNav.astro) with improved responsive
+  behavior
+  - Search functionality integrated into navigation (search bar on large screens, icon on mobile)
+  - Smoother scrolling animations and CSS optimizations
+  - Better mobile menu interaction and sticky header behavior
+- Simplified [Footer](src/components/layout/Footer.astro) using new LinkNav component for better
+  maintainability
+- Renamed `contacts` schema to `links` schema for broader link management
 - [Collapse](src/components/base/Collapse.astro): Added `isExpanded` prop to control expanded state
   and improved visual styling
 - [TOC](src/components/blog/TOC.astro): Enhanced with mobile/desktop responsive design and wrapping
@@ -27,10 +37,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   improved user experience
 - Refactored script code from [TOC component](src/components/blog/TOC.astro) to
   [plugins/toc](src/plugins/toc.ts)
-- Shiki copy button in [shiki-transformers.ts](src/plugins/shiki-transformers.ts) and related styles
+- Shiki copy button in [shiki-transformers.ts](src/plugins/shiki-transformers.ts) to use unicode
+  emojis instead of svg icons
+- Moved Section component from `home/` to `layout/` directory for better categorization
+- Update assets: favicon, social media preview image, and new icon definitions
+
+### Removed
+
+- [ContactBar](src/components/home/ContactBar.astro): Replaced with LinkNav component
+- [Sponsors](src/components/projects/Sponsors.astro) and
+  [Sponsorship](src/components/projects/Sponsorship.astro): Removed sponsor-related components
+- Legacy contact schema and types
 
 ### Fixed
 
+- Improved CSS class handling and fixed styling inconsistencies
 - Fixed sidebar overlay and rounded border of TOC on mobile in
   [ContentLayout](src/layouts/ContentLayout.astro)
 
@@ -82,6 +103,5 @@ Based on `git diff upstream/main...origin/main`, excluding personal configuratio
 
 ---
 
-**Author:** My Chiffon Nguyen  
-**Project:** Astro Academic Blog - A personal website built on Astro 5 with components from
-astro-pure-theme and inspiration from astro-cv-esquelete.
+**Author:** My Chiffon Nguyen **Project:** Astro Academic Blog - A personal website built on Astro 5
+with components from astro-pure-theme and inspiration from astro-cv-esquelete.
