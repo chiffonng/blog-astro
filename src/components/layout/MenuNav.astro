@@ -1,8 +1,11 @@
 ---
 import config from 'virtual:config'
+
+import SearchBox from '@/components/search/SearchBox.astro'
 ---
 
 <header-component
+  data-pagefind-ignore='all'
   class='group sticky top-4 z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
   <a
@@ -29,47 +32,21 @@ import config from 'virtual:config'
             </a>
           ))
         }
-        <div class='flex w-full grow flex-row justify-end gap-x-2 sm:w-fit sm:gap-x-5'>
-          {/* Search bar for large screens */}
-          <button
-            id='search-trigger-large'
-            class='hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors text-sm'
-            onclick='openSearchModal()'
-          >
-            <span class='i-mingcute:search-2-line'></span>
-            <span>Search...</span>
-            <kbd
-              class='inline-flex items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 text-xs font-mono'
-            >
-              <span class='text-xs mac-key'>⌘</span><span class='text-xs pc-key hidden'>Ctrl+</span
-              >K
-            </kbd>
-          </button>
-
-          {/* Search icon for smaller screens */}
-          <button
-            id='search-trigger-small'
-            class='lg:hidden p-2 transition-none flex items-center justify-center'
-            onclick='openSearchModal()'
-            title='Search (⌘K)'
-          >
-            <span class='sr-only'>Search</span>
-            <span class='i-mingcute:search-2-line'></span>
-          </button>
-        </div>
       </div>
     </div>
 
     {/* buttons */}
     <div class='z-30 flex gap-x-4 group-[.not-top]:gap-x-2 transition-gap'>
+      <SearchBox />
       <button
         id='changeTheme'
         class='group box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl flex items-center justify-center'
+        aria-label='Change Theme'
       >
         <span class='sr-only'>Change theme</span>
-        <span class='i-mingcute:computer-line system group-hover:text-primary'></span>
-        <span class='i-mingcute:sun-line light hidden group-hover:text-primary'></span>
-        <span class='i-mingcute:moon-line dark hidden group-hover:text-primary'></span>
+        <span class='system i-mingcute:computer-line hover:text-primary'></span>
+        <span class='light i-mingcute:sun-line hidden hover:text-primary'></span>
+        <span class='dark i-mingcute:moon-line hidden hover:text-primary'></span>
       </button>
       <button
         id='toggleMenu'
@@ -82,7 +59,6 @@ import config from 'virtual:config'
   </div>
 </header-component>
 
-{/* Use inline to load icon quicker firstly */}
 <script is:inline>
   const changeThemeElement = document.getElementById('changeTheme')
   if (changeThemeElement) {

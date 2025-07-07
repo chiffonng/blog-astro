@@ -1,0 +1,11 @@
+# https://pagefind.app/docs/config-options/
+# globally search "data-pagefind" to search for inline config
+# WARNING: Must build the site before running "npx pagefind"
+site: 'dist'
+serve: true
+verbose: true
+# test glob pattern: https://toools.cloud/files-and-folders/glob-pattern-tester/
+glob: '**/*.html'
+exclude-selectors:
+  - header-component
+  - search-modal

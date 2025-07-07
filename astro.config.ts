@@ -96,6 +96,11 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ['astro-pure']
     },
+    build: {
+      rollupOptions: {
+        external: ['/pagefind/pagefind.js', '/pagefind/pagefind.js?url']
+      }
+    },
     plugins: [
       //   visualizer({
       //     emitFile: true,

@@ -6,38 +6,28 @@ interface Props {
 const { class: className } = Astro.props
 ---
 
-<!-- Responsive search trigger that adapts to screen size -->
-<button
+<!-- Responsive search link that adapts to screen size -->
+<a
   id='search-trigger'
+  href='/search'
   class:list={[
-    // Base styles
-    'flex items-center gap-2 rounded-md border border-border bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors text-sm',
-    // Responsive sizing and content - fit content only
+    'flex items-center gap-2 rounded-md border border-border bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors text-sm no-underline',
     'px-2 py-1.5 sm:px-3 w-fit',
     'relative',
     className
   ]}
-  onclick='openSearchModal()'
   title='Search'
 >
   <span class='i-mingcute:search-2-line flex-shrink-0'></span>
 
-  <!-- Placeholder text - hidden on small screens, shows on medium+, full text on large+ -->
-  <span class='hidden md:inline lg:inline'>
-    <span class='md:hidden lg:inline'>Search...</span>
-    <span class='hidden md:inline lg:hidden'>Search</span>
-  </span>
-
-  <!-- Keyboard shortcut - hidden on small screens, shows on medium+ -->
-  <div class='hidden md:flex'>
-    <kbd>hotkey</kbd>
-  </div>
-</button>
+  <span class='md:hidden lg:inline'>Search...</span>
+  <kbd class='hidden md:flex'></kbd>
+</a>
 
 <script>
   import { modifierKey } from '@/utils/keyboard'
 
-  // Update keyboard shortcut display and title based on platform
+  // Handle keyboard shortcut navigation to search page
   document.addEventListener('DOMContentLoaded', () => {
     const searchTrigger = document.getElementById('search-trigger')
     const kbd = searchTrigger?.querySelector('kbd')
@@ -49,5 +39,13 @@ const { class: className } = Astro.props
     if (searchTrigger) {
       searchTrigger.title = `Search (${modifierKey}K)`
     }
+
+    // TEMP: Handle Cmd+K / Ctrl+K navigation to search page
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        window.location.href = '/search'
+      }
+    })
   })
 </script>
