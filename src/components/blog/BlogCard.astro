@@ -19,14 +19,22 @@ const { remarkPluginFrontmatter } = await render(post)
 ---
 
 <li
-  class={`post-preview group/card flex flex-col relative rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted ${detailed && 'max-sm:px-4 sm:py-5'} ${className}`}
+  class:list={[
+    'post-preview group/card flex flex-col relative rounded-2xl border bg-background transition-colors ease-in-out px-5 py-2.5 hover:bg-muted',
+    detailed && 'max-sm:px-4 sm:py-5',
+    className
+  ]}
   style={detailed &&
     data.heroImage?.color &&
     `--preview-highlight:color-mix(in srgb,${data.heroImage.color} 40%,hsl(var(--foreground)/var(--un-text-opacity,1)));
     --preview-highlight-bg:hsl(from ${data.heroImage.color} h s l/20%)`}
 >
   <a
-    class={`group/link w-full flex flex-col transition-all hover:text-primary ${!detailed && 'sm:flex-row'} ${detailed && data.heroImage && 'max-md:pt-24'}`}
+    class:list={[
+      'group/link w-full flex flex-col transition-all hover:text-primary',
+      !detailed && 'sm:flex-row',
+      detailed && data.heroImage && 'max-md:pt-24'
+    ]}
     href={`/blog/${id}`}
     data-astro-prefetch
   >
@@ -57,7 +65,10 @@ const { remarkPluginFrontmatter } = await render(post)
           <>
             {/* desc */}
             <p
-              class={`line-clamp-2 pt-1 text-sm text-muted-foreground sm:line-clamp-3 ${data.heroImage && 'sm:me-24'}`}
+              class:list={[
+                'line-clamp-2 pt-1 text-sm text-muted-foreground sm:line-clamp-3',
+                data.heroImage && 'sm:me-24'
+              ]}
             >
               {data.description}
             </p>

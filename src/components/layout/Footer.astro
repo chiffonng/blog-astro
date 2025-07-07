@@ -12,12 +12,19 @@ const verticalGap = 'gap-2'
   {/* On medium screen, the footer is stacked, each section is one row */}
   {/* On large screen, the footer is one line since sections are col by col on one row*/}
   <div
-    class={`flex flex-col items-center ${verticalGap} text-center text-muted-foreground text-sm [&_a]:text-foreground hover:[&_a]:text-primary
-           md:flex-col lg:flex-row lg:justify-between lg:text-left`}
+    class:list={[
+      'flex flex-col items-center',
+      verticalGap,
+      'text-center text-muted-foreground text-sm [&_a]:text-foreground hover:[&_a]:text-primary md:flex-col lg:flex-row lg:justify-between lg:text-left'
+    ]}
   >
     {/* Copyright + Credits */}
     <div
-      class={`flex flex-col items-center ${verticalGap} lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0`}
+      class:list={[
+        'flex flex-col items-center',
+        verticalGap,
+        'lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0'
+      ]}
     >
       <span class='whitespace-nowrap'>
         Copyright &copy; <time id='footer-year'></time>
@@ -48,9 +55,13 @@ const verticalGap = 'gap-2'
       }
     </div>
 
-    {/* Links + Social Icons */}
+    {/* Links + Social Icons, with divider | between parts on large screen */}
     <div
-      class={`flex flex-col items-center ${verticalGap} lg:flex-row lg:items-center lg:divide-y lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0`}
+      class:list={[
+        'flex flex-col items-center',
+        verticalGap,
+        'lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0'
+      ]}
     >
       {
         fc.links && fc.links.length > 0 && (

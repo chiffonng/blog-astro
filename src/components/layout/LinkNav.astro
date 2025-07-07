@@ -63,7 +63,7 @@ const finalLinkClass = linkClass || defaultLinkClass
         aria-label={type}
         title={label}
       >
-        <div class={`${iconClass} group-hover:scale-110 transition-transform`} />
+        <div class:list={[iconClass, 'group-hover:scale-110 transition-transform']} />
         {showLabels && <span class='hidden sm:inline text-base'>{label}</span>}
       </a>
     ))
