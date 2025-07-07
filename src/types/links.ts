@@ -5,8 +5,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { profileLinkDefinitions } from '@/theme'
 import { z } from 'astro/zod'
+
+import { profileLinkDefinitions } from '@/theme'
 
 /**
  * @description Profile link type inferred from theme definitions

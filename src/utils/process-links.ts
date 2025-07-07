@@ -1,5 +1,5 @@
-import { profileLinkDefinitions } from '@/theme'
 import { ProfileLinkConfigSchema, type ProcessedProfileLink, type ProfileLinkType } from '@/types'
+import { profileLinkDefinitions } from '@/theme'
 
 /**
  * @description Extract username from URL for different platforms

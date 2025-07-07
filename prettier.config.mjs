@@ -44,6 +44,7 @@ export default {
     '^@/utils/(.*)$',
     '^@/plugins/(.*)$',
     '^@/site-config$',
+    '^@/theme$',
     '^@/assets/(.*)$',
     '',
     '^[./]',
