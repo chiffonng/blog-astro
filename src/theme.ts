@@ -6,10 +6,6 @@
  * or 2) add icon SVGs to src/assets/icons/
  */
 
-// Do not change to @site-config because unocss loads first
-// without checking tsconfig.json
-import { profile } from './site.config'
-
 /**
  * @constant {Object} profileLinkDefinitions
  * @description Single source of truth for all profile link definitions
@@ -218,14 +214,15 @@ export const sponsorIconDefinitions = {
 } as const
 
 /**
- * @description All dynamic icon classes to be used in uno.config.ts
- * @note Only include icons that are used in the theme
+ * @description Generate dynamic icon classes for UnoCSS safelist
+ * @param profileLinks - The profile links configuration object
+ * @returns Array of icon classes that are actually used
  */
-export const profileDynamicIconClasses = [
-  ...Object.keys(profile.links)
-    .map((key) => profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass)
-    .filter(Boolean),
-  profileLinkDefinitions.rss.iconClass
-] as string[]
-
-export default profileDynamicIconClasses
+export function getProfileIconClasses(profileLinks: Record<string, any>): string[] {
+  return [
+    ...Object.keys(profileLinks)
+      .map((key) => profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass)
+      .filter(Boolean),
+    profileLinkDefinitions.rss.iconClass // Always include RSS
+  ] as string[]
+}
