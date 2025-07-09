@@ -36,6 +36,7 @@ export default {
     '',
     '^astro-pure/(.*)$',
     '^@/plugins/(.*)$',
+    '^@/server$',
     '^@/server/(.*)$',
     '^@/types$',
     '^@/site-config$',

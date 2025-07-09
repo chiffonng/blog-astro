@@ -1,4 +1,5 @@
 //Base
+export { default as Button } from './base/Button.astro'
 export { default as Card } from './base/Card.astro'
 export { default as Collapse } from './base/Collapse.astro'
 export { default as Kbd } from './base/Kbd.astro'
@@ -18,6 +19,8 @@ export { default as TOC } from './blog/TOC.astro'
 export { default as SearchBox } from './search/SearchBox.astro'
 
 // Home
+export { default as About } from './home/About.astro'
+export { default as Pronunciation } from './home/Pronunciation.astro'
 export { default as SkillLayout } from './home/SkillLayout.astro'
 
 // Tools/Uses

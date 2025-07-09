@@ -1,9 +1,9 @@
 ---
 import { groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
 import { Button } from 'astro-pure/user'
+import { getBlogCollection } from '@/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import BlogCard from '@/components/blog/BlogCard.astro'
-import { getBlogCollection } from '@/utils/blog'
 
 export const prerender = true
 

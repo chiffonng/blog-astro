@@ -37,7 +37,7 @@ export const audioPathSchema = z.string().refine(
     } catch {
       // For local files, just validate path format and extension
       const startPaths = ['public/audio/', '/audio/', 'audio/', './', '../']
-      return startPaths.some(path => value.startsWith(path)) && isValidAudioExtension(value)
+      return startPaths.some((path) => value.startsWith(path)) && isValidAudioExtension(value)
     }
   },
   {
