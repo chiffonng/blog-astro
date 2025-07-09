@@ -1,6 +1,9 @@
 {
   "name": "astro-academic-blog",
   "type": "module",
+  "author": "My Chiffon Nguyen",
+  "license": "Apache-2.0",
+  "homepage": "https://mychiffonn.com/",
   "version": "0.4.0",
   "scripts": {
     "dev": "astro dev",
@@ -57,5 +60,11 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "typescript-eslint": "^8.35.1"
   },
-  "packageManager": "pnpm@10.12.4"
+  "packageManager": "pnpm@10.12.4",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
 }
