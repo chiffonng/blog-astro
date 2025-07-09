@@ -218,7 +218,7 @@ export const sponsorIconDefinitions = {
  * @param profileLinks - The profile links configuration object
  * @returns Array of icon classes that are actually used
  */
-export function getProfileIconClasses(profileLinks: Record<string, any>): string[] {
+export function getProfileIconClasses(profileLinks: Record<string, unknown>): string[] {
   return [
     ...Object.keys(profileLinks)
       .map((key) => profileLinkDefinitions[key as keyof typeof profileLinkDefinitions]?.iconClass)
