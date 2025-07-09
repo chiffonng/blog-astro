@@ -1,0 +1,129 @@
+---
+interface Props {
+  pronounce?: string
+  pronounceAudio?: string
+  class?: string
+}
+
+const { pronounce, pronounceAudio, class: containerClass = '' } = Astro.props
+
+const processedAudioPath = pronounceAudio
+  ? (() => {
+      // Handle local file paths - convert to public URL
+      if (!pronounceAudio.startsWith('http')) {
+        // If it's a simple filename, assume it's in public/audio/
+        if (!pronounceAudio.includes('/')) {
+          return `/audio/${pronounceAudio}`
+        }
+        if (pronounceAudio.startsWith('/audio/')) {
+          return pronounceAudio
+        }
+        return `/audio/${pronounceAudio.replace(/^\//, '')}`
+      }
+      return pronounceAudio
+    })()
+  : undefined
+
+const hasAudio = !!processedAudioPath
+const hasText = !!pronounce
+const buttonTitle = hasText ? `Pronunciation guide: ${pronounce}` : 'Play pronunciation'
+---
+
+{
+  (hasText || hasAudio) && (
+    <div class={containerClass}>
+      {/* HTML audio element for pronunciation */}
+      {hasAudio && (
+        <audio
+          preload='metadata'
+          class='pronunciation-audio sr-only'
+          data-pronunciation-id={`pronunciation-${Math.random().toString(36).substring(2, 11)}`}
+        >
+          <source src={processedAudioPath} type='audio/mpeg' />
+          <source src={processedAudioPath} type='audio/wav' />
+          <source src={processedAudioPath} type='audio/ogg' />
+          <source src={processedAudioPath} type='audio/webm' />
+          <source src={processedAudioPath} type='audio/m4a' />
+          Your browser does not support the audio element.
+        </audio>
+      )}
+
+      <button
+        type='button'
+        class='pronunciation-button bg-muted hover:bg-muted/80 p-1.5 rounded-full shadow-lg transition-all duration-200 border-2 border-background hover:scale-110 active:scale-95'
+        title={buttonTitle}
+        data-pronunciation={pronounce}
+        data-has-audio={hasAudio}
+        data-has-text={hasText}
+        aria-label={buttonTitle}
+      >
+        <div class='i-mingcute:volume-line size-4 text-muted-foreground group-hover:text-foreground transition-colors' />
+      </button>
+
+      {/* Pronunciation text tooltip - positioned absolutely to the left of button */}
+      {hasText && (
+        <div class='pronunciation-tooltip hidden absolute bg-popover border rounded-md px-2 py-1 shadow-lg text-xs whitespace-nowrap z-20 pointer-events-none opacity-0 transition-all duration-200 right-full mr-2 top-1/2 transform -translate-y-1/2'>
+          {pronounce}
+        </div>
+      )}
+    </div>
+  )
+}
+
+<script>
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.pronunciation-button')
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const htmlButton = button as HTMLButtonElement
+        const hasAudio = htmlButton.dataset.hasAudio === 'true'
+        const hasText = htmlButton.dataset.hasText === 'true'
+
+        // Add visual feedback
+        htmlButton.classList.add('scale-95')
+        setTimeout(() => htmlButton.classList.remove('scale-95'), 150)
+
+        if (hasAudio) {
+          // Find and play the audio element
+          const audioElement = htmlButton.parentElement?.querySelector(
+            '.pronunciation-audio'
+          ) as HTMLAudioElement
+
+          if (audioElement) {
+            audioElement.currentTime = 0
+            audioElement.play().catch((error: Error) => {
+              console.error('Failed to play pronunciation audio:', error)
+              // Fallback to text tooltip if audio fails
+              if (hasText) {
+                const tooltip = htmlButton.parentElement?.querySelector('.pronunciation-tooltip')
+                if (tooltip) {
+                  tooltip.classList.remove('hidden', 'opacity-0')
+                  tooltip.classList.add('opacity-100')
+                  // Hide tooltip after 3 seconds
+                  setTimeout(() => {
+                    tooltip.classList.add('opacity-0')
+                    setTimeout(() => tooltip.classList.add('hidden'), 200)
+                  }, 3000)
+                }
+              }
+            })
+          }
+        } else if (hasText) {
+          // For text-only pronunciation, show tooltip to the left
+          const tooltip = htmlButton.parentElement?.querySelector('.pronunciation-tooltip')
+          if (tooltip) {
+            tooltip.classList.remove('hidden', 'opacity-0')
+            tooltip.classList.add('opacity-100')
+            // Hide tooltip after 3 seconds
+            setTimeout(() => {
+              tooltip.classList.add('opacity-0')
+              setTimeout(() => tooltip.classList.add('hidden'), 200)
+            }, 3000)
+          }
+        }
+      })
+    })
+  })
+</script>

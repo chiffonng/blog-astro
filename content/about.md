@@ -2,8 +2,8 @@
 name: My (Chiffon) Nguyen
 tagline: 'Researcher, Developer, Teacher, and Life-long Learner'
 pronouns: 'she/her/hers'
+pronunciation: 'My = /me/'
 location: 'San Francisco, CA, USA'
-avatar: 'assets/avatar.jpg'
 ---
 
 I am interested in **making human knowledge work more accessible, productive,
