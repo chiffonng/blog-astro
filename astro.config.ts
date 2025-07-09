@@ -98,7 +98,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
-        external: ['/pagefind/pagefind.js', '/pagefind/pagefind.js?url']
+        external: ['/pagefind/pagefind.js', '/pagefind/pagefind.js?url', 'src/server/']
       }
     },
     plugins: [

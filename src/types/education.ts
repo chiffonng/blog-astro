@@ -1,6 +1,6 @@
-import { z } from 'astro:content'
+import { z } from 'astro/zod'
 
-import { dateSchema } from './utils'
+import { dateSchema } from './date'
 
 export const educationSchema = z.object({
   institute: z.string(),

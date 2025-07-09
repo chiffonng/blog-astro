@@ -10,9 +10,11 @@ import { profileLinkDefinitions } from '@/theme'
  */
 function extractUsername(type: ProfileLinkType, url: string): string {
   try {
-    // Handle email separately - show full email as username
+    // Handle email separately - show obfuscated display instead of full email
     if (type === 'mail') {
-      return url.replace('mailto:', '')
+      const cleanEmail = url.replace('mailto:', '')
+      const [username, domain] = cleanEmail.split('@')
+      return `${username}@${domain.split('.')[0]}...`
     }
 
     // For URLs, try to extract username from path

@@ -1,6 +1,8 @@
-import { z } from 'astro:content'
+import { z } from 'astro/zod'
 
-import { dateSchema, removeDupsAndLowerCase } from './utils'
+import { removeDupsAndLowerCase } from '@/utils'
+
+import { dateSchema } from './date'
 
 export const projectSchema = z
   .object({

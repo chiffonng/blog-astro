@@ -2,9 +2,6 @@
  * @fileoverview Zod schemas and TS types for profile links system
  */
 
-import * as fs from 'fs'
-import * as path from 'path'
-
 import { z } from 'astro/zod'
 
 import { profileLinkDefinitions } from '@/theme'
@@ -20,13 +17,7 @@ export const profileLinkKeys = Object.keys(profileLinkDefinitions) as Array<Prof
  */
 const emailSchema = z.string().email({ message: 'Must be a valid email address' })
 const urlSchema = z.string().url({ message: 'Must be a valid URL' })
-const pdfSchema = z.string().refine(
-  (val) => {
-    const fullPath = path.join(process.cwd(), 'public', val)
-    return fs.existsSync(fullPath)
-  },
-  { message: 'PDF file must exist in public/ directory' }
-)
+const pdfSchema = z.string()
 
 /**
  * @description Get appropriate validation schema for each profile link type

@@ -1,6 +1,7 @@
-export { default as aboutSchema } from './about'
-export { default as blogSchema } from './blog'
+export { aboutSchema, type AboutType } from './about'
+export { dateSchema } from './date'
 export { educationSchema, type EducationType } from './education'
+export { audioPathSchema, imgPathSchema } from './file'
 export type { KbdProps } from './kbd'
 export {
   ProfileLinkConfigSchema,
