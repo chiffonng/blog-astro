@@ -1,8 +1,9 @@
 ---
-import { sortMDByDate } from 'astro-pure/server'
 import { getBlogCollection } from '@/server'
+
+import { sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { About, BlogCard, Button, Card, Section, SkillLayout } from '@/components'
+import { BlogCard, Button, Card, Profile, Section, SkillLayout } from '@/components'
 
 import * as misc from 'content/misc.md'
 
@@ -28,7 +29,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
     <div class='animate flex flex-col items-center gap-y-5' id='content-header'>
-      <About />
+      <Profile />
       <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
         <Section title='Research'>
           <Card

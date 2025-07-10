@@ -1,9 +1,9 @@
 ---
+import { createProtectedEmail } from '@/server'
 import type { ProcessedProfileLink } from '@/types/links'
 
-import { createProtectedEmail } from '@/server'
-import { profile } from '@/site-config'
 import { processProfileLinks } from '@/lib'
+import { profile } from '@/site-config'
 
 interface Props {
   /**
@@ -43,33 +43,30 @@ const contactLinksData = includeRss ? { ...profile.links, rss: '/rss.xml' } : pr
 const profileLinkList = processProfileLinks(contactLinksData)
 
 const defaultContainerClass = showLabels
-  ? 'flex flex-wrap justify-center items-center gap-x-3 gap-y-2 lg:gap-x-6'
+  ? 'flex flex-wrap justify-center items-center gap-x-4 gap-y-2'
   : 'flex justify-center items-center gap-x-2'
 
 const defaultLinkClass = showLabels
-  ? 'inline-flex items-center gap-1 hover:text-primary transition-colors group'
+  ? 'inline-flex justify-center items-center gap-1 hover:text-primary transition-colors group sm:w-auto'
   : 'inline-flex'
 
-const finalContainerClass = containerClass || defaultContainerClass
-const finalLinkClass = linkClass || defaultLinkClass
+const finalContainerClass = [containerClass, defaultContainerClass]
 ---
 
-<nav class={finalContainerClass} aria-label={ariaLabel}>
+<nav class:list={finalContainerClass} aria-label={ariaLabel}>
   {
     profileLinkList.map(({ type, url, label, iconClass }: ProcessedProfileLink) => {
       if (type === 'mail') {
         const protectedEmail = createProtectedEmail(url)
         return (
           <button
-            class={`${finalLinkClass} email-reveal cursor-pointer`}
+            class:list={[defaultLinkClass, linkClass, 'email-reveal cursor-pointer']}
             data-email={protectedEmail.dataEmail}
             aria-label='Email (click to reveal)'
             title='Click to reveal email address'
           >
             <div class:list={[iconClass, 'group-hover:scale-110 transition-transform']} />
-            {showLabels && (
-              <span class='hidden sm:inline text-base' set:html={protectedEmail.obfuscated} />
-            )}
+            {showLabels && <span set:html={protectedEmail.obfuscated} />}
           </button>
         )
       }
@@ -77,13 +74,13 @@ const finalLinkClass = linkClass || defaultLinkClass
         <a
           href={url}
           target='_blank'
-          class={finalLinkClass}
+          class:list={[linkClass, defaultLinkClass]}
           rel='noopener noreferrer'
           aria-label={type}
           title={label}
         >
           <div class:list={[iconClass, 'group-hover:scale-110 transition-transform']} />
-          {showLabels && <span class='hidden sm:inline'>{label}</span>}
+          {showLabels && <span>{label}</span>}
         </a>
       )
     })
