@@ -112,7 +112,7 @@ export function processProfileLinks(rawProfileLinkConfig: unknown): ProcessedPro
           return labelStr
         } else {
           // Only try username extraction for supported types
-          if (definition.supportsUsernameExtraction) {
+          if (definition.toExtractUsername) {
             return extractUsername(profileLinkType, url)
           } else {
             return definition.label
