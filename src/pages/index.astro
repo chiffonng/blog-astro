@@ -1,9 +1,8 @@
 ---
-import { getBlogCollection } from '@/server'
-
 import { sortMDByDate } from 'astro-pure/server'
+import { getBlogCollection } from '@/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { BlogCard, Button, Card, Profile, Section, SkillLayout } from '@/components'
+import { BlogCard, Button, Card, Profile, Prose, Section, SkillLayout } from '@/components'
 
 import * as misc from 'content/misc.md'
 
@@ -27,57 +26,54 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
-  <main class='flex w-full flex-col items-center'>
-    <div class='animate flex flex-col items-center gap-y-5' id='content-header'>
+  <main class='flex flex-col items-center'>
+    <div id='about-content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
       <Profile />
-      <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-        <Section title='Research'>
-          <Card
-            heading='Undergraduate Research Intern @ AI & Mixed Reality Lab, Landshut University of Applied Sciences'
-            subheading='Landshut, Bavaria, Germany'
-            date='Jun 2022 - Aug 2024'
-          >
-            <p class='text-muted-foreground'>
-              Developed a reproducible pipeline for 3D object detection using LiDAR point cloud data
-              and <a
-                href='https://arxiv.org/abs/1812.05784'
-                target='_blank'
-                rel='noopener noreferrer'>PointPillars</a
-              >
-              algorithm, and conducted benchmarking analysis on synthetic datasets
-            </p>
-          </Card>
-        </Section>
 
-        <Section title='Skills'>
-          <SkillLayout title='Languages' skills={langs} />
-          <SkillLayout title='Programming' skills={programming} />
-          <SkillLayout title='Tools' skills={tools} />
-          <SkillLayout title='ML' skills={machineLearning} />
-          <SkillLayout title='Frameworks' skills={frameworks} />
-          <SkillLayout title='Other' skills={other} />
-        </Section>
+      <Section title='Research'>
+        <Card
+          heading='Undergraduate Research Intern @ AI & Mixed Reality Lab, Landshut University of Applied Sciences'
+          subheading='Landshut, Bavaria, Germany'
+          date='Jun 2022 - Aug 2024'
+        >
+          <p class='text-muted-foreground'>
+            Developed a reproducible pipeline for 3D object detection using LiDAR point cloud data
+            and <a href='https://arxiv.org/abs/1812.05784' target='_blank' rel='noopener noreferrer'
+              >PointPillars</a
+            >
+            algorithm, and conducted benchmarking analysis on synthetic datasets
+          </p>
+        </Card>
+      </Section>
 
-        {
-          allPostsByDate.length > 0 && (
-            <Section title='Posts'>
-              <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
-                {allPostsByDate.map((p) => (
-                  <li class='flex flex-col gap-x-2 sm:flex-row'>
-                    <BlogCard post={p} />
-                  </li>
-                ))}
-              </ul>
-              <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
-            </Section>
-          )
-        }
-        <Section title='Miscellaneous'>
-          <div class='prose prose-a:text-primary'>
-            <misc.Content />
-          </div>
-        </Section>
-      </div>
+      <Section title='Skills'>
+        <SkillLayout title='Languages' skills={langs} />
+        <SkillLayout title='Programming' skills={programming} />
+        <SkillLayout title='Tools' skills={tools} />
+        <SkillLayout title='ML' skills={machineLearning} />
+        <SkillLayout title='Frameworks' skills={frameworks} />
+        <SkillLayout title='Other' skills={other} />
+      </Section>
+
+      {
+        allPostsByDate.length > 0 && (
+          <Section title='Posts'>
+            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
+              {allPostsByDate.map((p) => (
+                <li class='flex flex-col gap-x-2 sm:flex-row'>
+                  <BlogCard post={p} />
+                </li>
+              ))}
+            </ul>
+            <Button title='More posts' class='w-fit self-end' href='/blog' style='ahead' />
+          </Section>
+        )
+      }
+      <Section title='Miscellaneous'>
+        <Prose>
+          <misc.Content />
+        </Prose>
+      </Section>
     </div>
   </main>
 </PageLayout>

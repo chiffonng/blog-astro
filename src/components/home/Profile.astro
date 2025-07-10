@@ -2,30 +2,27 @@
 import { Image } from 'astro:assets'
 
 import { aboutSchema } from '@/types'
-import { ProfileLinks, Pronunciation } from '@/components'
+import { ProfileLinks, Pronunciation, Prose } from '@/components'
 import avatar from '@/assets/avatar.jpg'
 
 import * as about from 'content/about.md'
 
-interface Props {
-  showLinks?: boolean
-}
+const { showLabels = true } = Astro.props
 
-const { showLinks = true } = Astro.props
-
-const valfrmt = await aboutSchema.parseAsync(about.frontmatter)
-const name = valfrmt.name
-const tagline = valfrmt.tagline
-const location = valfrmt.location
-const pronouns = valfrmt?.pronouns
-const pronunciation = valfrmt?.pronunciation
-const pronunciationPath = valfrmt?.pronunciationPath
+const frmt = aboutSchema.parse(about.frontmatter)
+const name = frmt.name
+const tagline = frmt.tagline
+const location = frmt.location
+const phone = frmt?.phone
+const pronouns = frmt?.pronouns
+const pronunciation = frmt?.pronunciation
+const pronunciationPath = frmt?.pronunciationPath
 
 const avaSize = 150
 ---
 
-<div class='flex flex-col items-center gap-y-6'>
-  <div class='relative'>
+<div class='flex flex-col items-center gap-y-3 w-full'>
+  <div id='avatar-area' class='relative'>
     <Image
       src={avatar}
       alt={`${name}'s profile`}
@@ -52,25 +49,38 @@ const avaSize = 150
   </div>
 
   {/* Name and basic info section */}
-  <div class='flex flex-col items-center gap-y-3'>
-    <h1 class='text-2xl font-bold text-center leading-tight'>{name}</h1>
-    <p class='text-center text-muted-foreground max-w-3xl'>
-      {tagline}
-    </p>
-    {
-      location && (
-        <div class='flex items-center gap-x-1 text-sm bg-muted/30 px-2 py-1 rounded-md border'>
-          <div class='i-mingcute:map-pin-line size-4' />
-          <span>{location}</span>
-        </div>
-      )
-    }
-  </div>
+  <h1 class='text-2xl font-bold text-center leading-tight'>{name}</h1>
+  <p class='text-center text-muted-foreground text-lg'>
+    {tagline}
+  </p>
+  {
+    (location || phone) && (
+      <div class='flex items-center gap-x-3 text-sm'>
+        {location && (
+          <span
+            class='flex items-center gap-x-1 bg-muted/30 px-2 py-1 rounded-md border'
+            aria-label={`Location: ${location}`}
+          >
+            <span class='i-mingcute:map-pin-line size-4' aria-hidden='true' />
+            <span>{location}</span>
+          </span>
+        )}
+        {phone && (
+          <span
+            class='flex items-center gap-x-1 bg-muted/30 px-2 py-1 rounded-md border'
+            aria-label={`Phone: ${phone}`}
+          >
+            <span class='i-mingcute:phone-line size-4' aria-hidden='true' />
+            <span>{phone}</span>
+          </span>
+        )}
+      </div>
+    )
+  }
 
-  {showLinks && <ProfileLinks showLabels={true} />}
+  <ProfileLinks showLabels={showLabels} />
 
-  {/* Bio content section */}
-  <div class='prose prose-a:text-primary'>
+  <Prose>
     <about.Content />
-  </div>
+  </Prose>
 </div>
