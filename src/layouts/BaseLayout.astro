@@ -1,8 +1,8 @@
 ---
 import { ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
-import config from '@/site-config'
 import { BaseHead, Footer, MenuNav } from '@/components'
+import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -26,7 +26,7 @@ const {
     <ThemeProvider />
   </head>
 
-  <body class='flex min-h-screen justify-center bg-background text-foreground' {...props}>
+  <body class='flex min-h-screen min-w-80 justify-center bg-background text-foreground' {...props}>
     {
       highlightColor && (
         <div
