@@ -1,14 +1,10 @@
 ---
-import { Image } from 'astro:assets'
+import { getBlogCollection } from '@/server'
 
 import { sortMDByDate } from 'astro-pure/server'
-import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { BlogCard, Card, LinkNav, Section, SkillLayout } from '@/components'
-import getBlogCollection from '@/utils/blog'
-import avatar from '@/assets/avatar.jpg'
+import { BlogCard, Button, Card, Profile, Section, SkillLayout } from '@/components'
 
-import * as about from 'content/about.md'
 import * as misc from 'content/misc.md'
 
 const langs = ['Vietnamese', 'English', 'Mandarin Chinese']
@@ -32,27 +28,9 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
-    <div class='animate mb-10 flex flex-col items-center gap-y-5' id='content-header'>
-      <Image
-        src={avatar}
-        alt='profile'
-        class='h-28 w-auto rounded-full border p-1'
-        loading='eager'
-      />
-
-      <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-bold'>{about.frontmatter.name}</h1>
-        <p class='text-center text-lg text-muted-foreground max-w-2xl'>
-          {about.frontmatter.tagline}
-        </p>
-      </div>
-      <LinkNav showLabels={true} ariaLabel='Contact information' />
+    <div class='animate flex flex-col items-center gap-y-5' id='content-header'>
+      <Profile />
       <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-        <Section>
-          <div class='prose dark:prose-invert prose-a:text-primary max-w-none'>
-            <about.Content />
-          </div>
-        </Section>
         <Section title='Research'>
           <Card
             heading='Undergraduate Research Intern @ AI & Mixed Reality Lab, Landshut University of Applied Sciences'
@@ -95,7 +73,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           )
         }
         <Section title='Miscellaneous'>
-          <div class='prose dark:prose-invert prose-a:text-primary max-w-none'>
+          <div class='prose prose-a:text-primary'>
             <misc.Content />
           </div>
         </Section>

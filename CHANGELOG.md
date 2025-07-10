@@ -5,20 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 2025-07-05
+## [0.4.0] - 2025-07-09
 
 ### Added
 
-- [LinkNav](src/components/layout/LinkNav.astro): Customizable navigation component for displaying
-  contact/social links with configurable label visibility
-- [TOC](src/components/blog/TOC.astro): Table of Contents component with smooth scrolling and
-  progress tracking (original by cworld1 from astro-theme-pure)
-- [Collapse](src/components/base/Collapse.astro): Collapsible component for expandable content
-  sections (original by cworld1 from astro-theme-pure)
-- [TOC Plugin](src/plugins/toc.ts): Table of contents generation utilities and TOCScrollManager
-  class (original by cworld1 from astro-theme-pure)
+- [Collapse](src/components/base/Collapse.astro), [TOC](src/components/blog/TOC.astro), [TOC Plugin](src/plugins/toc.ts), [Button](src/components/base/Button.astro) copied (original by cworld1 from astro-theme-pure)
 - [TOC](src/plugins/toc.ts) auto-scroll functionality to keep highlighted headings visible in
   sidebar as users scroll
+- [Profile](src/components/home/Profile.astro): Add pronouns, pronunciation guide, location, and other profile details
+- [ProfileLinks](src/components/layout/ProfileLinks.astro): Customizable navigation component for displaying links with configurable label visibility
 
 ### Changed
 
@@ -26,10 +21,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   behavior
   - Search functionality integrated into navigation (search bar on large screens, icon on mobile)
   - Smoother scrolling animations and CSS optimizations
-  - Better mobile menu interaction and sticky header behavior
-- Simplified [Footer](src/components/layout/Footer.astro) using new LinkNav component for better
+  - Cmd+K to activate search
+- Simplified [Footer](src/components/layout/Footer.astro) using new ProfileLinks component for better
   maintainability
-- Renamed `contacts` schema to `links` schema for broader link management
 - [Collapse](src/components/base/Collapse.astro): Added `isExpanded` prop to control expanded state
   and improved visual styling
 - [TOC](src/components/blog/TOC.astro): Enhanced with mobile/desktop responsive design and wrapping
@@ -39,15 +33,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   [plugins/toc](src/plugins/toc.ts)
 - Shiki copy button in [shiki-transformers.ts](src/plugins/shiki-transformers.ts) to use unicode
   emojis instead of svg icons
-- Moved Section component from `home/` to `layout/` directory for better categorization
 - Update assets: favicon, social media preview image, and new icon definitions
 
 ### Removed
 
-- [ContactBar](src/components/home/ContactBar.astro): Replaced with LinkNav component
-- [Sponsors](src/components/projects/Sponsors.astro) and
-  [Sponsorship](src/components/projects/Sponsorship.astro): Removed sponsor-related components
-- Legacy contact schema and types
+- ContactBar: Replaced with ProfileLinks component
+- Sponsors and Sponsorship: Removed sponsor-related components
 
 ### Fixed
 
@@ -71,9 +62,9 @@ Based on `git diff upstream/main...origin/main`, excluding personal configuratio
 
 ### Changed
 
-- Migrated from Bun to pnpm with workspace configuration
+- Migrated from Bun to pnpm
 - Migrated most SVG components to CSS classes using UnoCSS PresetIcons
-- Refactored `Tools` section in About page to the new page: [Tool](src/pages/tools/index.astro)
+- [Tools](src/pages/uses/index.astro) has a new page
 - Handled frontmatter as metadata similar to `SiteMeta` in
   [CommonLayout](src/layouts/CommonLayout.astro) layout
 - Flushed `Footer` down to the bottom in [BaseLayout](src/layouts/BaseLayout.astro)
@@ -103,5 +94,7 @@ Based on `git diff upstream/main...origin/main`, excluding personal configuratio
 
 ---
 
-**Author:** My Chiffon Nguyen **Project:** Astro Academic Blog - A personal website built on Astro 5
-with components from astro-pure-theme and inspiration from astro-cv-esquelete.
+**Author:** My Chiffon Nguyen
+
+**Project:** Astro Academic Blog - A personal website built on Astro 5 with components from
+astro-pure-theme and inspiration from astro-cv-esquelete.

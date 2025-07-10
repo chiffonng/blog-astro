@@ -3,7 +3,9 @@
     "allow": [
       "Bash(grep:*)",
       "Bash(ls:*)",
+      "Bash(pwd:*)",
       "Bash(cat:*)",
+      "Bash(curl:*)",
       "Bash(git log:*)",
       "Bash(git diff:*)",
       "Bash(git status:*)",
@@ -17,12 +19,12 @@
       "Bash(pnpm lint:*)",
       "Bash(pnpm routine:*)",
       "Bash(pnpm check:*)",
-      "Bash(curl:*)",
+      "Bash(npx pagefind:*)",
+      "Bash(tree:*)",
       "WebFetch(domain:localhost)",
       "WebFetch(domain:astro-pure.js.org)",
       "WebFetch(domain:context7.com)",
-      "Bash(npx pagefind:*)",
-      "Bash(tree:*)"
+      "WebFetch(domain:astro.build)"
     ],
     "deny": []
   }

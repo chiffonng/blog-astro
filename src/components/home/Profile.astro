@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets'
+
+import { aboutSchema } from '@/types'
+import { ProfileLinks, Pronunciation } from '@/components'
+import avatar from '@/assets/avatar.jpg'
+
+import * as about from 'content/about.md'
+
+interface Props {
+  showLinks?: boolean
+}
+
+const { showLinks = true } = Astro.props
+
+const valfrmt = await aboutSchema.parseAsync(about.frontmatter)
+const name = valfrmt.name
+const tagline = valfrmt.tagline
+const location = valfrmt.location
+const pronouns = valfrmt?.pronouns
+const pronunciation = valfrmt?.pronunciation
+const pronunciationPath = valfrmt?.pronunciationPath
+
+const avaSize = 150
+---
+
+<div class='flex flex-col items-center gap-y-6'>
+  <div class='relative'>
+    <Image
+      src={avatar}
+      alt={`${name}'s profile`}
+      height={avaSize}
+      class='rounded-full border p-1 overflow-hidden'
+      loading='eager'
+    />
+
+    {/* Pronouns box - attached to top right of rounded avatar */}
+    {
+      pronouns && (
+        <div class='absolute top-2 -right-8 px-2 py-1 rounded-full text-xs text-primary-foreground bg-primary border-2 border-background'>
+          {pronouns}
+        </div>
+      )
+    }
+
+    {/* Pronunciation icon - attached to bottom left of rounded avatar */}
+    <Pronunciation
+      pronounce={pronunciation}
+      pronounceAudio={pronunciationPath}
+      class='absolute bottom-2 left-4'
+    />
+  </div>
+
+  {/* Name and basic info section */}
+  <div class='flex flex-col items-center gap-y-3'>
+    <h1 class='text-2xl font-bold text-center leading-tight'>{name}</h1>
+    <p class='text-center text-muted-foreground max-w-3xl'>
+      {tagline}
+    </p>
+    {
+      location && (
+        <div class='flex items-center gap-x-1 text-sm bg-muted/30 px-2 py-1 rounded-md border'>
+          <div class='i-mingcute:map-pin-line size-4' />
+          <span>{location}</span>
+        </div>
+      )
+    }
+  </div>
+
+  {showLinks && <ProfileLinks showLabels={true} />}
+
+  {/* Bio content section */}
+  <div class='prose prose-a:text-primary'>
+    <about.Content />
+  </div>
+</div>
