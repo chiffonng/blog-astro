@@ -192,6 +192,9 @@ export default defineConfig({
     presetTypography(typographyConfig)
   ],
   rules,
+  shortcuts: {
+    prose: 'prose dark:prose-invert prose-a:text-primary hover:prose-a:text-foreground'
+  },
   theme: {
     colors: themeColors
   },

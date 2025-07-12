@@ -27,4 +27,4 @@ export const aboutSchema = z.object({
   pronunciationPath: audioPathSchema.optional()
 })
 
-export type AboutType = z.input<typeof aboutSchema>
+export type AboutType = z.infer<typeof aboutSchema>
