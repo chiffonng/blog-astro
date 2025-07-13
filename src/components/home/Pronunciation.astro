@@ -32,7 +32,6 @@ const buttonTitle = hasText ? `Pronunciation guide: ${pronounce}` : 'Play pronun
 {
   (hasText || hasAudio) && (
     <div class={containerClass}>
-      {/* HTML audio element for pronunciation */}
       {hasAudio && (
         <audio
           preload='metadata'
