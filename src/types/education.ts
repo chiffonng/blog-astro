@@ -1,6 +1,6 @@
 import { z } from 'astro/zod'
 
-import { dateSchema } from './date'
+import { dateSchema } from '@/types'
 
 export const educationSchema = z.object({
   institute: z.string(),

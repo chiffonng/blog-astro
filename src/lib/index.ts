@@ -1,2 +1,3 @@
-export { useMagicKeys, getModifierKey, formatKeyCombo, isMac, modifierKey } from './keyboard'
+export { dedupLowerCase } from './dedup'
+export { isMac, modifierKey } from './keyboard'
 export { processProfileLinks } from './process-links'

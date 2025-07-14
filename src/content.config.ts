@@ -1,20 +1,11 @@
-import { defineCollection, z, type ImageFunction } from 'astro:content'
+import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
 
-import { projectSchema } from '@/types'
-import { removeDupsAndLowerCase } from '@/utils'
+import { dateSchema, imageSchema } from '@/types'
+import { dedupLowerCase } from '@/lib'
 
-const imageSchema = (image: ImageFunction) =>
-  z.object({
-    src: image(),
-    alt: z.string().optional(),
-    inferSize: z.boolean().optional(),
-    width: z.number().optional(),
-    height: z.number().optional(),
-    color: z.string().optional()
-  })
-
-const blogSchema = ({ image }: { image: ImageFunction }) =>
+export const PROJECT_DESCRIPTION_LENGTH = 150
+const blogSchema = () =>
   z.object({
     title: z.string().max(60),
 
@@ -23,22 +14,47 @@ const blogSchema = ({ image }: { image: ImageFunction }) =>
     description: z.string().max(160).optional(),
 
     updatedDate: z.coerce.date().optional(),
-    heroImage: imageSchema(image).optional(),
-    tags: z.array(z.string()).default([]).transform(removeDupsAndLowerCase),
+    heroImage: imageSchema.optional(),
+    tags: z.array(z.string()).default([]).transform(dedupLowerCase),
     language: z.string().optional().default('en'),
 
     // Special fields
     comment: z.boolean().default(false)
   })
 
+export const projectSchema = z
+  .object({
+    title: z.string(),
+    isHighlighted: z.boolean().default(false),
+    fromDate: dateSchema.optional(),
+    toDate: dateSchema.optional(),
+    repo: z.string().url().optional(),
+    doc: z.string().url().optional(),
+    url: z.string().url().optional(),
+    release: z.string().url().optional(),
+    context: z.enum(['school', 'personal', 'work', 'collab']).optional(),
+    description: z.string().max(PROJECT_DESCRIPTION_LENGTH).optional(),
+    tags: z.array(z.string()).default([]).optional()
+  })
+  .refine(
+    // Validate that toDate is after fromDate
+    (data) => {
+      if (!data.fromDate || !data.toDate) return true
+      return data.toDate >= data.fromDate
+    },
+    {
+      message: 'End date must be after or equal to start date'
+    }
+  )
+
 const blog = defineCollection({
-  loader: glob({ base: './content/blog', pattern: '**/*.{md,mdx}' }),
-  schema: blogSchema
+  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+  schema: blogSchema()
 })
 
 // Projects collection
 const projects = defineCollection({
-  loader: glob({ base: './content/projects', pattern: '**/!(*README).{md,mdx}' }),
+  loader: glob({ base: './src/content/projects', pattern: '**/!(*README).{md,mdx}' }),
   schema: projectSchema
 })
 
