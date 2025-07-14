@@ -5,7 +5,6 @@ export { default as Collapse } from './base/Collapse.astro'
 export { default as Kbd } from './base/Kbd.astro'
 export { default as ProfileLinks } from './base/ProfileLinks.astro'
 
-
 // Layout
 export { default as BaseHead } from './layout/BaseHead.astro'
 export { default as Footer } from './layout/Footer.astro'

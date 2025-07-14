@@ -60,7 +60,7 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "typescript-eslint": "^8.36.0"
   },
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.13.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",

@@ -9,11 +9,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- [Collapse](src/components/base/Collapse.astro), [TOC](src/components/blog/TOC.astro), [TOC Plugin](src/plugins/toc.ts), [Button](src/components/base/Button.astro) copied (original by cworld1 from astro-theme-pure)
+- [Collapse](src/components/base/Collapse.astro), [TOC](src/components/blog/TOC.astro),
+  [TOC Plugin](src/plugins/toc.ts), [Button](src/components/base/Button.astro) copied (original by
+  cworld1 from astro-theme-pure)
 - [TOC](src/plugins/toc.ts) auto-scroll functionality to keep highlighted headings visible in
   sidebar as users scroll
-- [Profile](src/components/home/Profile.astro): Add pronouns, pronunciation guide, location, and other profile details
-- [ProfileLinks](src/components/layout/ProfileLinks.astro): Customizable navigation component for displaying links with configurable label visibility
+- [Profile](src/components/home/Profile.astro): Add pronouns, pronunciation guide, location, and
+  other profile details
+- [ProfileLinks](src/components/layout/ProfileLinks.astro): Customizable navigation component for
+  displaying links with configurable label visibility
 
 ### Changed
 
@@ -22,8 +26,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Search functionality integrated into navigation (search bar on large screens, icon on mobile)
   - Smoother scrolling animations and CSS optimizations
   - Cmd+K to activate search
-- Simplified [Footer](src/components/layout/Footer.astro) using new ProfileLinks component for better
-  maintainability
+- Simplified [Footer](src/components/layout/Footer.astro) using new ProfileLinks component for
+  better maintainability
 - [Collapse](src/components/base/Collapse.astro): Added `isExpanded` prop to control expanded state
   and improved visual styling
 - [TOC](src/components/blog/TOC.astro): Enhanced with mobile/desktop responsive design and wrapping
