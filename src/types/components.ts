@@ -141,7 +141,7 @@ export interface ProjectCardProps {
 export enum ToolTag {
   OpenSource = 'oss',
   SelfHosted = 'self-hosted',
-  Favorite = '>u',
+  Favorite = '🩵',
   Free = 'free',
   Paid = 'paid',
   Gifted = 'gifted',
