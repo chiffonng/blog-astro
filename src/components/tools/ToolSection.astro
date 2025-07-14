@@ -1,12 +1,7 @@
 ---
-import type { ToolProps } from './Tool.astro'
-import Tool from './Tool.astro'
+import type { ToolSectionProps as Props } from '@/types/components'
 
-interface Props {
-  class?: string
-  title: string
-  tools: ToolProps[]
-}
+import Tool from './Tool.astro'
 
 const { class: className, title, tools, ...props } = Astro.props
 ---

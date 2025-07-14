@@ -1,5 +1,4 @@
 export { getBlogCollection, prod } from './blog'
-
 export {
   obfuscateEmail,
   encodeEmailForAttribute,

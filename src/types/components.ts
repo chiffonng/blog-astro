@@ -26,7 +26,7 @@ export interface CollapseProps {
 export interface IconRendererProps {
   icon: string | ImageMetadata | Promise<typeof import('*.svg?raw')>
   alt: string
-  className?: string
+  class?: string
 }
 
 export interface LinkProps {
@@ -94,7 +94,7 @@ export type KbdProps = {
     | 'help'
     | 'space'
   )[]
-  className?: string
+  class?: string
 }
 
 // Layout component props
@@ -141,7 +141,7 @@ export interface ProjectCardProps {
 export enum ToolTag {
   OpenSource = 'oss',
   SelfHosted = 'self-hosted',
-  Favorite = '>u',
+  Favorite = '🩵',
   Free = 'free',
   Paid = 'paid',
   Gifted = 'gifted',

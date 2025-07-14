@@ -4,7 +4,7 @@ import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 import type { HTMLTag, Polymorphic } from 'astro/types'
 
 import { FormattedDate } from 'astro-pure/user'
-import { Button } from '@/components'
+import { Link } from '@/components'
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   post: CollectionEntry<CollectionKey>
@@ -114,7 +114,7 @@ const { remarkPluginFrontmatter } = await render(post)
       <ul class='tag-list mt-1 flex flex-wrap gap-2'>
         {data.tags.map((tag: string) => (
           <li>
-            <Button title={tag} href={`/tags/${tag}`} style='pill' />
+            <Link title={tag} href={`/tags/${tag}`} style='pill' />
           </li>
         ))}
       </ul>

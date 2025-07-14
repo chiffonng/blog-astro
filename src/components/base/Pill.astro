@@ -1,0 +1,16 @@
+---
+import type { PillProps as Props } from '@/types'
+
+const { title, class: className = '' } = Astro.props
+---
+
+<span
+  class:list={[
+    'pill inline-flex items-center gap-x-1 rounded-lg bg-muted border px-2 py-1 text-sm text-muted-foreground cursor-default',
+    className
+  ]}
+>
+  <slot>
+    {title && <p class='my-0'>{title}</p>}
+  </slot>
+</span>

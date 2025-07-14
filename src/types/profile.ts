@@ -30,11 +30,10 @@ export const aboutSchema = z.object({
 /**
  * @description Schema for profile configuration
  */
-export const ProfileConfigSchema = () =>
-  z.object({
-    /** Profile links configuration */
-    links: ProfileLinkConfigSchema().describe('Profile links configuration')
-  })
+export const ProfileConfigSchema = z.object({
+  /** Profile links configuration */
+  links: ProfileLinkConfigSchema.describe('Profile links configuration')
+})
 
 export type AboutType = z.infer<typeof aboutSchema>
-export type ProfileConfig = z.infer<ReturnType<typeof ProfileConfigSchema>>
+export type ProfileConfig = z.infer<typeof ProfileConfigSchema>

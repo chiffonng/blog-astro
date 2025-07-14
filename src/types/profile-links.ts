@@ -13,26 +13,22 @@ export type ProfileLinkType = keyof typeof profileLinkDefinitions
 export const profileLinkKeys = Object.keys(profileLinkDefinitions) as Array<ProfileLinkType>
 
 /**
- * @description Validation schemas for different link types
- */
-const emailSchema = z.string().email({ message: 'Must be a valid email address' })
-const urlSchema = z.string().url({ message: 'Must be a valid URL' })
-const pdfSchema = z.string()
-
-/**
  * @description Get appropriate validation schema for each profile link type
  */
-const getLinkSchema = (type: ProfileLinkType): z.ZodTypeAny => {
+const getLinkSchema = (type: ProfileLinkType): z.ZodString => {
   switch (type) {
     case 'mail':
-      return emailSchema
+      return z
+        .string()
+        .min(1, 'Email cannot be empty')
+        .email({ message: 'Must be a valid email address' })
     case 'cv':
     case 'resume':
-      return pdfSchema
+      return z.string().min(1, 'Path/URL cannot be empty')
     case 'rss':
-      return z.string()
+      return z.string().min(1, 'RSS path cannot be empty')
     default:
-      return urlSchema
+      return z.string().min(1, 'URL cannot be empty').url({ message: 'Must be a valid URL' })
   }
 }
 
@@ -45,7 +41,7 @@ const createProfileLinkSchema = <T extends ProfileLinkType>(type: T) => {
       getLinkSchema(type),
       z.object({
         url: getLinkSchema(type),
-        label: z.union([z.string(), z.literal('platform')]).optional()
+        label: z.union([z.string().min(1), z.literal('platform')]).optional()
       })
     ])
     .optional()
@@ -68,7 +64,6 @@ export type ProfileLinkConfig = {
 
 /**
  * @description Schema for profile links configuration object
- * Provides full intellisense for all profile link types
  *
  * @example
  * ```typescript
@@ -83,14 +78,14 @@ export type ProfileLinkConfig = {
  * }
  * ```
  */
-export const ProfileLinkConfigSchema = (): z.ZodType<ProfileLinkConfig> => {
-  // Create the runtime schema using the mapped approach
-  const schemaShape = Object.fromEntries(
-    profileLinkKeys.map((key) => [key, createProfileLinkSchema(key)])
-  ) as Record<ProfileLinkType, ReturnType<typeof createProfileLinkSchema>>
-
-  return z.object(schemaShape) as z.ZodType<ProfileLinkConfig>
-}
+export const ProfileLinkConfigSchema = z
+  .object(
+    Object.fromEntries(profileLinkKeys.map((key) => [key, createProfileLinkSchema(key)])) as Record<
+      ProfileLinkType,
+      ReturnType<typeof createProfileLinkSchema>
+    >
+  )
+  .partial()
 
 /**
  * @description Schema for processed profile link with metadata

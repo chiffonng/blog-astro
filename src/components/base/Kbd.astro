@@ -1,9 +1,8 @@
 ---
-import { keyMap } from '@/constants/keyMap'
-
 import type { KbdProps as Props } from '@/types'
+import { keyMap } from '@/lib/constants'
 
-const { keys, className } = Astro.props
+const { keys, class: className } = Astro.props
 
 const classes = [
   'px-1.5 py-0.5 bg-background border border-border rounded text-xs font-mono',

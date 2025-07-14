@@ -1,14 +1,9 @@
 ---
 import { Image } from 'astro:assets'
-import type { InferEntrySchema } from 'astro:content'
 
 import { PageInfo } from 'astro-pure/components/pages'
 import { FormattedDate } from 'astro-pure/user'
-
-interface Props {
-  data: InferEntrySchema<'blog'>
-  remarkPluginFrontmatter: Record<string, unknown>
-}
+import type { HeroProps as Props } from '@/types/components'
 
 const {
   data: {

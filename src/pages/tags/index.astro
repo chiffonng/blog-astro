@@ -2,7 +2,7 @@
 import { getUniqueTagsWithCount } from 'astro-pure/server'
 import { getBlogCollection } from '@/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { Button } from '@/components'
+import { Link } from '@/components'
 
 const allPosts = await getBlogCollection()
 const allTags = getUniqueTagsWithCount(allPosts)
@@ -14,7 +14,7 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/blog' style='back' />
+  <Link title='Back' href='/blog' style='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 text-3xl font-medium'>Tags</h1>
@@ -26,14 +26,14 @@ const meta = {
           <ul class='flex flex-wrap gap-4'>
             {allTags.map(([tag, val]) => (
               <li>
-                <Button
+                <Link
                   href={`/tags/${tag}`}
                   style='pill'
                   class='items-start gap-x-1 rounded-xl px-3 py-1 text-lg'
                 >
                   {tag}
                   <span class='text-base'> - {val}</span>
-                </Button>
+                </Link>
               </li>
             ))}
           </ul>

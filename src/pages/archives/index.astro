@@ -1,8 +1,8 @@
 ---
 import { groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
-import { Button } from 'astro-pure/user'
 import { getBlogCollection } from '@/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { Link } from '@/components'
 import BlogCard from '@/components/blog/BlogCard.astro'
 
 export const prerender = true
@@ -18,7 +18,7 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/blog' style='back' />
+  <Link title='Back' href='/blog' style='back' />
 
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>

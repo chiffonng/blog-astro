@@ -2,7 +2,7 @@
 import { PFSearch } from 'astro-pure/components/pages'
 import { integ } from '@/site-config'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { Button } from '@/components'
+import { Link } from '@/components'
 
 const meta = {
   description: 'Search relative posts of the whole blog',
@@ -11,7 +11,7 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/blog' style='back' />
+  <Link title='Back' href='/blog' style='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
       <h1 class='mb-6 text-3xl font-medium'>Search</h1>

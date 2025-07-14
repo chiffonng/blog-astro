@@ -85,8 +85,7 @@ export function processProfileLinks(rawProfileLinkConfig: unknown): ProcessedPro
   const inputKeys = Object.keys(rawProfileLinkConfig || {})
 
   // Validate the profile configuration object
-  const schema = ProfileLinkConfigSchema()
-  const validatedLinks = schema.parse(rawProfileLinkConfig)
+  const validatedLinks = ProfileLinkConfigSchema.parse(rawProfileLinkConfig)
 
   return inputKeys
     .filter((type) => {
