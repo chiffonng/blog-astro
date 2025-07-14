@@ -1,8 +1,6 @@
 import { z } from 'astro/zod'
 
-import { audioPathSchema } from '@/types'
-
-import { ProfileLinkConfigSchema } from './profile-links'
+import { audioPathSchema, ProfileLinkConfigSchema } from '@/types'
 
 // Doc: https://zod.dev/json-schema#object-schemas
 export const aboutSchema = z.object({
@@ -11,7 +9,7 @@ export const aboutSchema = z.object({
   location: z.string(),
   phone: z
     .string()
-    .regex(/^ [+] ? [\d\s().-]{7, 22}$ /, {
+    .regex(/^[+]?[\d\s().-]{7,22}$/, {
       message: 'Invalid phone number format. Examples: +1 (628) 900-6301, +44 20 7946 0958'
     })
     .refine(
@@ -26,7 +24,7 @@ export const aboutSchema = z.object({
     .optional(),
   pronouns: z.string().max(20).optional(),
   pronunciation: z.string().optional(),
-  pronunciationPath: audioPathSchema.optional()
+  pronunciationAudioPath: audioPathSchema.optional()
 })
 
 /**

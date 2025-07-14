@@ -2,8 +2,7 @@
 name: My (Chiffon) Nguyen
 tagline: 'Researcher, Developer, Teacher, and Life-long Learner'
 pronouns: 'she/her/hers'
-pronunciation: 'My = /me/'
-pronounciationAudio: 'https://en-audio.howtopronounce.com/54869a3d267af5379de8162f7378ac76.mp3'
+pronunciation: 'My = /me/, Chiffon = /shif-ON/, Nguyen = /ngwen/'
 location: 'San Francisco, CA, USA'
 ---
 
