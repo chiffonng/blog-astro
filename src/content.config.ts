@@ -2,7 +2,7 @@ import { defineCollection, z, type SchemaContext } from 'astro:content'
 import { glob } from 'astro/loaders'
 
 import { dateSchema } from '@/types'
-import { dedupLowerCase } from '@/lib'
+import { dedupLowerCase, dedupPreserveCase } from '@/lib'
 
 export const PROJECT_DESCRIPTION_LENGTH = 150
 
@@ -46,7 +46,7 @@ const projectSchema = z
     release: z.string().url().optional(),
     context: z.enum(['school', 'personal', 'work', 'collab']).optional(),
     description: z.string().max(PROJECT_DESCRIPTION_LENGTH).optional(),
-    tags: z.array(z.string()).default([]).optional()
+    tags: z.array(z.string()).default([]).transform(dedupPreserveCase)
   })
   .refine(
     // Validate that toDate is after fromDate
