@@ -35,7 +35,7 @@ if (!svgSource.trimStart().toLowerCase().startsWith('<svg')) {
   maybe you need to add '?raw' to the end of the import?`)
 }
 
-const contents = overrideSvgAttributes(svgSource, attributeOverrides)
+const contents = await overrideSvgAttributes(svgSource, attributeOverrides)
 ---
 
 <Fragment set:html={contents} />
