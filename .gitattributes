@@ -7,7 +7,6 @@ public/doc/** merge=ours
 public/img/** merge=ours
 src/assets/** merge=ours
 src/content/docs/** merge=ours
-src/constants/** merge=ours
 src/pages/projects/** merge=ours
 src/pages/index.astro merge=ours
 src/pages/*.md merge=ours
