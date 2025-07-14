@@ -1,4 +1,4 @@
-export { imgPathSchema, imageSchema, audioPathSchema, dateSchema } from './common'
+export { imgPathSchema, audioPathSchema, dateSchema } from './common'
 export {
   type CardProps,
   type CollapseProps,

@@ -1,11 +1,23 @@
-import { defineCollection, z } from 'astro:content'
+import { defineCollection, z, type SchemaContext } from 'astro:content'
 import { glob } from 'astro/loaders'
 
-import { dateSchema, imageSchema } from '@/types'
+import { dateSchema } from '@/types'
 import { dedupLowerCase } from '@/lib'
 
 export const PROJECT_DESCRIPTION_LENGTH = 150
-const blogSchema = () =>
+
+export const imageSchema = ({ image }: SchemaContext) =>
+  z.object({
+    src: image(),
+    alt: z.string().optional(),
+    inferSize: z.boolean().optional(),
+    width: z.number().optional(),
+    height: z.number().optional(),
+
+    color: z.string().optional()
+  })
+
+const blogSchema = ({ image }: SchemaContext) =>
   z.object({
     title: z.string().max(60),
 
@@ -14,7 +26,7 @@ const blogSchema = () =>
     description: z.string().max(160).optional(),
 
     updatedDate: z.coerce.date().optional(),
-    heroImage: imageSchema.optional(),
+    heroImage: imageSchema({ image }).optional(),
     tags: z.array(z.string()).default([]).transform(dedupLowerCase),
     language: z.string().optional().default('en'),
 
@@ -22,7 +34,7 @@ const blogSchema = () =>
     comment: z.boolean().default(false)
   })
 
-export const projectSchema = z
+const projectSchema = z
   .object({
     title: z.string(),
     isHighlighted: z.boolean().default(false),
@@ -49,7 +61,7 @@ export const projectSchema = z
 
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
-  schema: blogSchema()
+  schema: blogSchema
 })
 
 // Projects collection

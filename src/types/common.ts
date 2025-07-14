@@ -21,30 +21,6 @@ const dateSchema = z
     message: 'Invalid date format. Must be YYYY-MM-DD or YYYY-MM'
   })
 
-/**
- * @description Schema for Astro Image component
- * @link https://docs.astro.build/en/reference/modules/astro-assets
- * @required src
- * @note inferSize should be true for remote image to avoid manually
- * specifying both dimensions
- */
-const imageSchema = z.object({
-  src: z.string(),
-  alt: z.string().optional(),
-  width: z.number().optional(),
-  height: z.number().optional(),
-  inferSize: z.boolean().optional(),
-  densities: z.array(z.number()).optional(),
-  widths: z.array(z.number()).optional(),
-  sizes: z.string().optional(),
-  format: z.enum(['avif', 'jpeg', 'jpg', 'png', 'svg', 'webp']).optional(),
-  quality: z.number().min(0).max(100).optional(),
-  loading: z.enum(['eager', 'lazy']).optional(),
-  fetchpriority: z.enum(['high', 'low', 'auto']).optional(),
-  // Custom fields
-  color: z.string().optional()
-})
-
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.svg'] as const
 
 const imgPathSchema = z.string().refine(
@@ -102,4 +78,4 @@ const audioPathSchema = z.string().refine(
   }
 )
 
-export { imgPathSchema, imageSchema, audioPathSchema, dateSchema }
+export { imgPathSchema, audioPathSchema, dateSchema }

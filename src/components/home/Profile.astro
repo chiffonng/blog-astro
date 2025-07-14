@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets'
 
 import { aboutSchema } from '@/types'
-import { ProfileLinks, Pronunciation, Prose } from '@/components'
+import { ProfileLinks, Pronunciation } from '@/components'
 import avatar from '@/assets/avatar.jpg'
 
 import * as about from 'content/about.md'
@@ -80,7 +80,7 @@ const avaSize = 150
 
   <ProfileLinks showLabels={showLabels} />
 
-  <Prose>
+  <div class='prose'>
     <about.Content />
-  </Prose>
+  </div>
 </div>
