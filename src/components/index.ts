@@ -4,7 +4,7 @@ export { default as Card } from './base/Card.astro'
 export { default as Collapse } from './base/Collapse.astro'
 export { default as Kbd } from './base/Kbd.astro'
 export { default as ProfileLinks } from './base/ProfileLinks.astro'
-export { default as Prose } from './base/Prose.astro'
+
 
 // Layout
 export { default as BaseHead } from './layout/BaseHead.astro'

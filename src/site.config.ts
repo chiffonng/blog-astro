@@ -63,6 +63,7 @@ export const theme: ThemeUserConfig = {
 
   /** Configure the footer of your site. */
   footer: {
+    year: `${new Date().getFullYear()}`,
     links: [
       {
         title: 'Source Code',
