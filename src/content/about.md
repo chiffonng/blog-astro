@@ -1,9 +1,9 @@
 ---
 name: My (Chiffon) Nguyen
 tagline: 'Researcher, Developer, Teacher, and Life-long Learner'
-phone: '+1 (628) 306 0446'
 pronouns: 'she/her/hers'
 pronunciation: 'My = /me/'
+pronounciationAudio: 'https://en-audio.howtopronounce.com/54869a3d267af5379de8162f7378ac76.mp3'
 location: 'San Francisco, CA, USA'
 ---
 

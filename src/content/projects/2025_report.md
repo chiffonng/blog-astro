@@ -1,5 +1,6 @@
 ---
 title: Programming Lab Retrospective Report
+description: Data-driven retrospective report with 20 prioritized recommendations for a 10-week Python programming lab using Google APIs.
 repo: https://github.com/chiffonng/jupyter-notebooks/blob/main/get_all_comments_across_notebooks.ipynb
 fromDate: 2025-05-07
 toDate: 2025-05-24

@@ -1,6 +1,9 @@
 ---
 title: 'Yammer Drop in User Engagement: Detailed Report'
+description: Data analysis report identifying causes of user engagement drop in Yammer enterprise platform with targeted recommendations.
 repo: https://github.com/chiffonng/yammer-engagement-drop/
+context: personal
+toDate: 2023-07
 doc: https://github.com/chiffonng/yammer-engagement-drop/blob/main/Yammer%20Detailed%20Analysis.pdf
 content: personal
 tags:

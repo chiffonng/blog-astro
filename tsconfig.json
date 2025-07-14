@@ -13,7 +13,7 @@
     "strictNullChecks": true,
     // Paths
     "paths": {
-      "content/*": ["content/*"],
+      "content/*": ["src/content/*"],
       "@/*": ["src/*"],
       "@/assets/*": ["src/assets/*"],
       "@/constants/*": ["src/constants/*"],

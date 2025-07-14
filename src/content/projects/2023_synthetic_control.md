@@ -1,5 +1,6 @@
 ---
 title: Synthetic Control Replication
+description: Replication study of Philadelphia's excise tax impact on beverages using synthetic control methods in R with causal inference.
 fromDate: 2023-01-01
 toDate: 2023-12-31
 repo: https://github.com/chiffonng/synthetic-control-rep
@@ -14,11 +15,10 @@ tags:
   - replication
 ---
 
-In a pair, we replicated Benjamin W. Chrisinger's paper
+In a pair, we replicated Chrisinger (2021)'s paper
 "[Philadelphia’s Excise Tax on Sugar-Sweetened and Artificially Sweetened Beverages and Supplemental Nutrition Assistance Program Benefit Redemption](https://pmc.ncbi.nlm.nih.gov/articles/PMC8630475/)"
 in R. While we were able to replicate similar trends, the magnitude of the
-effects differs, and our models lack robustness. We attribute these disparities
-to our lack of access to final data used (we cleaned the data ourselves) and
-variations in synthetic control implementations. Until these discrepancies are
-addressed, we withhold definitive conclusions regarding the claimed impact of
+effects differs and our models lack robustness. We attribute these disparities
+to our lack of access to final data used and variations in synthetic control implementations. Until these discrepancies are addressed,
+we withhold definitive conclusions regarding the claimed impact of
 the introduced excise tax in Philadelphia County and its neighboring counties.
