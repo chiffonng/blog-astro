@@ -1,9 +1,6 @@
 ---
-interface Props {
-  class?: string
-  title: string
-  isExpanded?: boolean
-}
+import type { CollapseProps as Props } from '@/types/components'
+
 const { class: className, title, isExpanded = false, ...props } = Astro.props
 ---
 

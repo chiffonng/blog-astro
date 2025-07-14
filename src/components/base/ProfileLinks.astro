@@ -1,33 +1,9 @@
 ---
 import { createProtectedEmail } from '@/server'
 import type { ProcessedProfileLink } from '@/types'
+import type { ProfileLinksProps as Props } from '@/types/components'
 import { profile } from '@/site-config'
 import { processProfileLinks } from '@/lib'
-
-interface Props {
-  /**
-   * Include RSS feed link in the contact list
-   * @default false
-   */
-  includeRss?: boolean
-  /**
-   * Show text labels alongside icons
-   * @default false
-   */
-  showLabels?: boolean
-  /**
-   * Custom CSS classes for the container
-   */
-  class?: string
-  /**
-   * Custom CSS classes for individual links
-   */
-  linkClass?: string
-  /**
-   * ARIA label for the navigation
-   */
-  ariaLabel?: string
-}
 
 const {
   includeRss = false,

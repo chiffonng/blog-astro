@@ -24,5 +24,5 @@ export { default as Pronunciation } from './home/Pronunciation.astro'
 export { default as SkillLayout } from './home/SkillLayout.astro'
 
 // Tools/Uses
-export { ToolTag } from './tools/Tool.astro'
+
 export { default as ToolSection } from './tools/ToolSection.astro'

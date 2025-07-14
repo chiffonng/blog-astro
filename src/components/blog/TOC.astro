@@ -1,16 +1,8 @@
 ---
-import type { MarkdownHeading } from 'astro'
-
 import { TOCHeading } from 'astro-pure/components/pages'
 import { generateToc } from '@/plugins/toc'
+import type { TOCProps as Props } from '@/types/components'
 import { Collapse } from '@/components'
-
-interface Props {
-  headings: MarkdownHeading[]
-  class?: string
-  id?: string
-  isMobile?: boolean
-}
 
 const { headings, class: className, isMobile = false, ...props } = Astro.props
 
