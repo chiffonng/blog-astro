@@ -3,9 +3,9 @@
 import type { MarkdownLayoutProps } from 'astro'
 
 import { BackToTop } from 'astro-pure/components/pages'
-import { Button } from 'astro-pure/user'
 import { integ } from '@/site-config'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { Link } from '@/components'
 
 type DirectProps = {
   title?: string
@@ -33,7 +33,7 @@ const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated || new Date().to
   meta={{ title: pageTitle, description: pageDescription, ogImage: pageHeroImage?.src }}
   {...props}
 >
-  <Button title='Back' href={pageBack} style='back' />
+  <Link title='Back' href={pageBack} style='back' />
   <main class='mt-6'>
     <article class='min-w-0 grow'>
       <div id='content-header' class='animate'>

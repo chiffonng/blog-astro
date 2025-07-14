@@ -3,6 +3,9 @@ export { default as Button } from './base/Button.astro'
 export { default as Card } from './base/Card.astro'
 export { default as Collapse } from './base/Collapse.astro'
 export { default as Kbd } from './base/Kbd.astro'
+export { default as Link } from './base/Link.astro'
+export { default as LinkExternal } from './base/LinkExternal.astro'
+export { default as Pill } from './base/Pill.astro'
 export { default as ProfileLinks } from './base/ProfileLinks.astro'
 export { default as Svg } from './base/Svg.astro'
 
@@ -25,5 +28,4 @@ export { default as Pronunciation } from './home/Pronunciation.astro'
 export { default as SkillLayout } from './home/SkillLayout.astro'
 
 // Tools/Uses
-
 export { default as ToolSection } from './tools/ToolSection.astro'

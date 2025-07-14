@@ -1,0 +1,19 @@
+---
+import type { LinkExternalProps as Props } from '@/types'
+
+const { href, title, icon, class: className, ...props } = Astro.props
+---
+
+<a
+  href={href}
+  class:list={[
+    'group inline-flex items-center gap-2 px-2 py-1.5 border-2 border-border text-xs font-medium rounded-lg hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-200 no-underline cursor-pointer',
+    'sm:rounded-xl',
+    className
+  ]}
+  {...props}
+>
+  {icon && <span class={icon} />}
+  <span class='hidden sm:inline'>{title}</span>
+  <span class='sm:hidden sr-only'>{title}</span>
+</a>
