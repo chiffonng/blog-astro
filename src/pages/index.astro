@@ -2,7 +2,7 @@
 import { sortMDByDate } from 'astro-pure/server'
 import { getBlogCollection } from '@/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { BlogCard, Button, Card, Profile, Prose, Section, SkillLayout } from '@/components'
+import { BlogCard, Button, Card, Profile, Section, SkillLayout } from '@/components'
 
 import * as misc from 'content/misc.md'
 
@@ -70,9 +70,9 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         )
       }
       <Section title='Miscellaneous'>
-        <Prose>
+        <div class='prose max-w-none'>
           <misc.Content />
-        </Prose>
+        </div>
       </Section>
     </div>
   </main>

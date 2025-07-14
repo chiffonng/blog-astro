@@ -1,6 +1,7 @@
 ---
 cover:
 title: Classify notes into notes and assignments
+description: Machine learning classification system to automatically organize Obsidian notes using SVM and Naive Bayes with 87% accuracy.
 toDate: 2023-10
 context: school
 tags:
