@@ -16,18 +16,18 @@ export function dedupLowerCase(array: readonly string[]): string[] {
  */
 export function dedupPreserveCase(array: readonly string[]): string[] {
   if (!array || array.length === 0) return []
-  
+
   const seen = new Map<string, string>()
-  
+
   for (const item of array) {
     const trimmed = item.trim()
     if (!trimmed) continue
-    
+
     const lowerKey = trimmed.toLowerCase()
     if (!seen.has(lowerKey)) {
       seen.set(lowerKey, trimmed)
     }
   }
-  
+
   return Array.from(seen.values())
 }

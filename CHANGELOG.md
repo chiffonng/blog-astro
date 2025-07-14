@@ -5,12 +5,61 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2025-07-14
+
+The main changes are for About, Projects, and Publication, with a lot of refactoring.
+
+### Added
+
+- New components: [Pill](src/components/base/Pill.astro), [Svg](src/components/base/Svg.astro), [LinkExternal](src/components/base/LinkExternal.astro)
+- Phone number validation and display on home page
+- Project tags deduplication
+- Click-to-close feature for pronunciation tooltip
+- [Props interfaces](src/types/components.ts) for better component type safety
+
+### Changed
+
+- **Major refactor**: Moved content to git submodule for to manage separately (`src/content` link to another Github repository)
+- **Profile links system overhaul**:
+  - Simplified [ProfileLinkConfigSchema](src/types/profile-links.ts) with better validation
+  - Enhanced validation to prevent empty strings and undefined values
+  - Improved type safety and IntelliSense support
+  - Updated [ProfileConfigSchema](src/types/profile.ts) to use simplified schema
+- **Architecture improvements**:
+  - Moved files under `src/constants/` and `src/utils` to `src/lib` directory
+  - Enhanced [process-links.ts](src/lib/process-links.ts) with better error handling
+  - Grouped related types and schemas (reducing number of modules)
+  - Renamed `types/links` to `types/profile-links` for clarity
+- **Component improvements**:
+  - Replaced Button component with Link, LinkExternal and Pill components
+  - Added props interfaces for better component type safety
+  - Refactored component imports for better organization
+- **UI/UX enhancements**:
+  - Improved prose styling using Tailwind typography
+  - Set maximum home page width for better readability
+  - Simplified assets (favicon + share previews) and reduced CSS complexity
+- **Dependencies**: Updated to latest versions and cleaned up packages
+- **Package manager**: Updated to pnpm@10.13.1
+- **Configuration**: Changed .gitattributes and added .gitmodules for submodule support
+
+### Fixed
+
+- Profile links validation now properly rejects empty strings and undefined values
+- Validation of [phone numbers](src/types/profile.ts), [image](src/content.config.ts) for blog posts
+- [Pronunciation](src/components/home/Pronunciation.astro) tooltip interaction and display
+
+### Removed
+
+- All content files moved to separate git submodule (about.md, blog posts, projects, etc.)
+- Removed src/constants and src/utils directories (moved to src/lib)
+- Button component (replaced with Link, LinkExternal and Pill components)
+
 ## [0.4.0] - 2025-07-09
 
 ### Added
 
 - [Collapse](src/components/base/Collapse.astro), [TOC](src/components/blog/TOC.astro),
-  [TOC Plugin](src/plugins/toc.ts), [Button](src/components/base/Button.astro) copied (original by
+  [TOC Plugin](src/plugins/toc.ts), [Link](src/components/base/Link.astro) copied (original by
   cworld1 from astro-theme-pure)
 - [TOC](src/plugins/toc.ts) auto-scroll functionality to keep highlighted headings visible in
   sidebar as users scroll

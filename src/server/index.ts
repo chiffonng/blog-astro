@@ -1,4 +1,5 @@
 export { getBlogCollection, prod } from './blog'
+export { getProjectsCollection, sortProjectsByDate } from './collection'
 
 export {
   obfuscateEmail,
