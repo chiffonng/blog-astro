@@ -26,7 +26,7 @@ export interface CollapseProps {
 export interface IconRendererProps {
   icon: string | ImageMetadata | Promise<typeof import('*.svg?raw')>
   alt: string
-  className?: string
+  class?: string
 }
 
 export interface LinkProps {
@@ -94,7 +94,7 @@ export type KbdProps = {
     | 'help'
     | 'space'
   )[]
-  className?: string
+  class?: string
 }
 
 // Layout component props
