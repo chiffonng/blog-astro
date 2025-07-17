@@ -113,19 +113,21 @@ export function openShareWindow(url: string, platform: string): void {
  * @returns Promise that resolves when copy is complete
  */
 export async function copyToClipboard(text: string): Promise<void> {
-  try {
+  if (navigator.clipboard) {
     await navigator.clipboard.writeText(text)
-  } catch {
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea')
-    textArea.value = text
-    textArea.style.position = 'fixed'
-    textArea.style.left = '-999999px'
-    textArea.style.top = '-999999px'
-    document.body.appendChild(textArea)
-    textArea.focus()
-    textArea.select()
-    document.execCommand('copy')
-    textArea.remove()
   }
+
+  // Fallback for older browsers
+  const textArea = document.createElement('textarea')
+  textArea.value = text
+  textArea.style.position = 'fixed'
+  textArea.style.left = '-999999px'
+  textArea.style.top = '-999999px'
+  document.body.appendChild(textArea)
+  textArea.focus()
+  textArea.select()
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  document.execCommand('copy')
+  textArea.remove()
 }
