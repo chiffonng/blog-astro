@@ -1,4 +1,1 @@
-declare module 'virtual:config' {
-  const Config: import('astro-pure/types').ConfigOutput
-  export default Config
-}
+// Removed virtual:config module declaration since we migrated away from astro-pure

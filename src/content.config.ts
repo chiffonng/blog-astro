@@ -30,8 +30,14 @@ const blogSchema = ({ image }: SchemaContext) =>
     tags: z.array(z.string()).default([]).transform(dedupLowerCase),
     language: z.string().optional().default('en'),
 
-    // Special fields
-    comment: z.boolean().default(false)
+    /**
+     * @description To overwrite entry id, such as /blog/[slug-name]. Similar to permalink
+     * @tutorial https://docs.astro.build/en/guides/content-collections/#defining-custom-ids
+     */
+    slug: z
+      .string()
+      .optional()
+      .describe('To overwrite entry id in URL, such as /blog/[slug-name]. Similar to permalink')
   })
 
 const projectSchema = z
@@ -64,7 +70,6 @@ const blog = defineCollection({
   schema: blogSchema
 })
 
-// Projects collection
 const projects = defineCollection({
   loader: glob({ base: './src/content/projects', pattern: '**/!(*README).{md,mdx}' }),
   schema: projectSchema

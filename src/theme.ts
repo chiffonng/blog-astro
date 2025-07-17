@@ -164,6 +164,8 @@ export const profileLinkDefinitions = {
   },
 
   // Professional communication
+  mail: { label: 'Email', iconClass: 'i-mingcute:mail-line', toExtractUsername: true },
+  email: { label: 'Email', iconClass: 'i-mingcute:mail-line', toExtractUsername: true },
   github: {
     label: 'GitHub',
     iconClass: 'i-mingcute:github-line',
@@ -179,7 +181,6 @@ export const profileLinkDefinitions = {
     iconClass: 'i-mingcute:notion-line',
     toExtractUsername: false
   },
-  mail: { label: 'Email', iconClass: 'i-mingcute:mail-line', toExtractUsername: true },
   slack: { label: 'Slack', iconClass: 'i-mingcute:slack-line', toExtractUsername: false },
 
   // Content & Media
@@ -213,6 +214,16 @@ export const sponsorIconDefinitions = {
   buyMeACoffee: { label: 'Buy Me a Coffee', iconClass: 'i-mycons-buymeacoffee' }
 } as const
 
+export const shareIconDefinitions = {
+  copyLink: { label: 'Copy Link', iconClass: 'i-mingcute:link-line' },
+  x: { label: 'X (Twitter)', iconClass: 'i-mingcute:social-x-line' },
+  bluesky: { label: 'Bluesky', iconClass: 'i-mingcute:bluesky-social-line' },
+  linkedin: { label: 'LinkedIn', iconClass: 'i-mingcute:linkedin-line' },
+  facebook: { label: 'Facebook', iconClass: 'i-mingcute:facebook-line' },
+  weibo: { label: 'Weibo', iconClass: 'i-mingcute:weibo-line' },
+  email: { label: 'Email', iconClass: 'i-mingcute:mail-line' }
+} as const
+
 /**
  * @description Generate dynamic icon classes for UnoCSS safelist
  * @param profileLinks - The profile links configuration object
@@ -225,4 +236,21 @@ export function getProfileIconClasses(profileLinks: Record<string, unknown>): st
       .filter(Boolean),
     profileLinkDefinitions.rss.iconClass // Always include RSS
   ] as string[]
+}
+
+/**
+ * @description Generate share icon classes for UnoCSS safelist based on enabled platforms
+ * @param enabledPlatforms - Array of enabled share platforms
+ * @returns Array of share icon classes
+ */
+export function getShareIconClasses(enabledPlatforms: string[] = []): string[] {
+  // Always include copy link and email
+  const defaultPlatforms = ['copyLink', 'email']
+  const allPlatforms = [...new Set([...defaultPlatforms, ...enabledPlatforms])]
+
+  return allPlatforms
+    .map(
+      (platform) => shareIconDefinitions[platform as keyof typeof shareIconDefinitions]?.iconClass
+    )
+    .filter(Boolean)
 }

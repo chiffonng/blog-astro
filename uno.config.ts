@@ -1,7 +1,7 @@
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders'
 
-import { profile } from './src/site.config'
-import { getProfileIconClasses } from './src/theme'
+import config from './src/site.config'
+import { getProfileIconClasses, getShareIconClasses } from './src/theme'
 import { defineConfig, presetIcons, presetMini, presetTypography, type Rule } from 'unocss'
 
 const fg = 'hsl(var(--foreground) / var(--un-text-opacity, 1))'
@@ -193,14 +193,25 @@ export default defineConfig({
   ],
   rules,
   shortcuts: {
-    prose: 'prose dark:prose-invert prose-a:text-primary hover:prose-a:text-foreground'
+    prose: 'prose dark:prose-invert prose-a:text-primary hover:prose-a:text-foreground',
+
+    // Badge shortcuts for consistent styling across project contexts and tool tags
+    'badge-base': 'text-xs px-2 py-1 rounded',
+    'badge-blue': 'badge-base bg-blue-500/20 text-blue-600 dark:text-blue-400',
+    'badge-green': 'badge-base bg-green-500/20 text-green-600 dark:text-green-400',
+    'badge-purple': 'badge-base bg-purple-500/20 text-purple-600 dark:text-purple-400',
+    'badge-orange': 'badge-base bg-orange-500/20 text-orange-600 dark:text-orange-400',
+    'badge-yellow': 'badge-base bg-yellow-500/20 text-yellow-600 dark:text-yellow-400',
+    'badge-gray': 'badge-base bg-muted text-muted-foreground',
+    'badge-red': 'badge-base bg-red-500/20 text-red-600 dark:text-red-400'
   },
   theme: {
     colors: themeColors
   },
   // https://unocss.dev/guide/extracting#limitations
   safelist: [
-    ...getProfileIconClasses(profile.links),
+    ...getProfileIconClasses(config.links),
+    ...getShareIconClasses(config.sharePlatforms),
     // TOC
     'rounded-t-2xl',
     'rounded-b-2xl',

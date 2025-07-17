@@ -1,0 +1,133 @@
+---
+import { render, type CollectionEntry } from 'astro:content'
+
+import { getProjectsCollection, sortProjectsByDate } from '@/server/collection'
+import { getProjectLinks, hasProjectContent } from '@/lib'
+import { createDateRange } from '@/lib/format-date'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import { Link, LinkExternal, Pill } from '@/components'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const projects = sortProjectsByDate(await getProjectsCollection())
+  // Only generate pages for projects with content
+  return projects
+    .filter((project) => hasProjectContent(project))
+    .map((project) => ({
+      params: { id: project.id },
+      props: { project }
+    }))
+}
+
+type Props = {
+  project: CollectionEntry<'projects'>
+}
+
+const { project } = Astro.props
+const { Content } = await render(project)
+const { title, isHighlighted, fromDate, toDate, repo, doc, url, release, context, tags } =
+  project.data
+
+const dateRange = createDateRange(fromDate, toDate)
+const links = getProjectLinks(repo, doc, url, release)
+
+const getContextBadgeClass = (context?: string) => {
+  switch (context) {
+    case 'school':
+      return 'badge-blue'
+    case 'work':
+      return 'badge-green'
+    case 'personal':
+      return 'badge-purple'
+    case 'collab':
+      return 'badge-orange'
+    default:
+      return 'badge-gray'
+  }
+}
+
+const contextBadgeClass = getContextBadgeClass(context)
+
+const meta = {
+  title: title,
+  description: `Project details for ${title}`
+}
+---
+
+<PageLayout {meta}>
+  <Link title='Back to Projects' href='/projects' style='back' />
+
+  <main data-pagefind-body class='mt-6 lg:mt-10'>
+    <article class='animate max-w-4xl mx-auto'>
+      {/* Header */}
+      <header class='mb-8'>
+        <div class='flex flex-col gap-4'>
+          {/* Title and Highlight */}
+          <div class='flex items-start justify-between gap-4'>
+            <h1 class='text-3xl font-bold leading-tight sm:text-4xl'>{title}</h1>
+            {
+              isHighlighted && (
+                <div class='shrink-0 rounded-full bg-gradient-to-r from-primary to-primary/70 px-3 py-1 text-sm text-primary-foreground font-medium'>
+                  Featured
+                </div>
+              )
+            }
+          </div>
+
+          {/* Context and Date */}
+          <div class='flex flex-wrap items-center gap-3 text-sm'>
+            {
+              context && (
+                <span class={contextBadgeClass}>
+                  {context.charAt(0).toUpperCase() + context.slice(1)}
+                </span>
+              )
+            }
+            {
+              dateRange && (
+                <span class='text-muted-foreground flex items-center gap-1'>
+                  <span class='i-mingcute:calendar-line' />
+                  {dateRange}
+                </span>
+              )
+            }
+          </div>
+
+          {/* Tags */}
+          {
+            tags && tags.length > 0 && (
+              <div class='flex flex-wrap gap-2'>
+                {tags.map((tag: string) => (
+                  <Pill title={tag} />
+                ))}
+              </div>
+            )
+          }
+
+          {/* Links */}
+          {
+            links.length > 0 && (
+              <div class='flex flex-wrap gap-3'>
+                {links.map(({ href, icon, label }) => (
+                  <LinkExternal
+                    href={href}
+                    title={label}
+                    icon={icon}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  />
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </header>
+
+      {/* Content */}
+      <div class='prose prose-lg max-w-none prose-a:text-primary dark:prose-invert'>
+        <Content />
+      </div>
+    </article>
+  </main>
+</PageLayout>

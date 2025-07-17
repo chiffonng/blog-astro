@@ -1,8 +1,8 @@
 ---
 // import { ClientRouter } from 'astro:transitions'
 
-import type { SiteMeta } from 'astro-pure/types'
 import config from '@/site-config'
+import type { SiteMeta } from '@/types/site-config'
 
 type Props = SiteMeta
 
@@ -11,6 +11,13 @@ const { articleDate, description, ogImage, title } = Astro.props
 const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const socialImageURL = new URL(ogImage ? ogImage : '/img/social-preview.png', Astro.url).href
+
+// Check if favicon is an emoji and generate data URL
+const emojiRegex = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u
+const isEmojiFavicon = emojiRegex.test(config.favicon)
+const faviconDataURL = isEmojiFavicon
+  ? `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${config.favicon}</text></svg>`
+  : null
 ---
 
 <meta charset='utf-8' />
@@ -19,10 +26,21 @@ const socialImageURL = new URL(ogImage ? ogImage : '/img/social-preview.png', As
 <title>{siteTitle}</title>
 
 {/* Favicon */}
-<link rel='apple-touch-icon' sizes='180x180' href='/favicon/apple-touch-icon.png' />
-<link rel='icon' type='image/png' sizes='32x32' href='/favicon/favicon-32x32.png' />
-<link rel='icon' type='image/png' sizes='16x16' href='/favicon/favicon-16x16.png' />
-<link rel='manifest' href='/favicon/site.webmanifest' />
+{
+  isEmojiFavicon ? (
+    <>
+      <link rel='icon' href={faviconDataURL} />
+      <link rel='apple-touch-icon' href={faviconDataURL} />
+    </>
+  ) : (
+    <>
+      <link rel='apple-touch-icon' sizes='180x180' href='/favicon/apple-touch-icon.png' />
+      <link rel='icon' type='image/png' sizes='32x32' href='/favicon/favicon-32x32.png' />
+      <link rel='icon' type='image/png' sizes='16x16' href='/favicon/favicon-16x16.png' />
+      <link rel='manifest' href='/favicon/site.webmanifest' />
+    </>
+  )
+}
 
 {/* Font preloads */}
 <link rel='preload' href='/fonts/Satoshi-Variable.ttf' as='font' type='font/ttf' crossorigin />
@@ -40,7 +58,7 @@ const socialImageURL = new URL(ogImage ? ogImage : '/img/social-preview.png', As
 {/* Primary Meta Tags */}
 <meta content={siteTitle} name='title' />
 <meta content={description} name='description' />
-<meta content={config.author} name='author' />
+<meta content={config.name} name='author' />
 
 {/* Theme Color */}
 <meta content='' name='theme-color' />
@@ -58,7 +76,7 @@ const socialImageURL = new URL(ogImage ? ogImage : '/img/social-preview.png', As
 {
   articleDate && (
     <>
-      <meta content={config.author} property='article:author' />
+      <meta content={config.name} property='article:author' />
       <meta content={articleDate} property='article:published_time' />
     </>
   )

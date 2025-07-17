@@ -2,40 +2,32 @@
 import type { MarkdownHeading } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
-import { Comment, MediumZoom } from 'astro-pure/advanced'
-import { ArticleBottom, Copyright } from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/ContentLayout.astro'
-import { TOC } from '@/components'
-import Hero from '@/components/blog/Hero.astro'
+import { Hero, MediumZoom, PostBottom, TOC } from '@/components'
 
 // Plugin styles
 import 'katex/dist/katex.min.css'
 
-import { integ } from '@/site-config'
+import config from '@/site.config'
 
 interface Props {
   post: CollectionEntry<'blog'>
-  posts: CollectionEntry<'blog'>[]
   headings: MarkdownHeading[]
   remarkPluginFrontmatter: Record<string, unknown>
+  prevPost?: CollectionEntry<'blog'> | null
+  nextPost?: CollectionEntry<'blog'> | null
 }
 
 const {
-  post: { id, data },
-  posts,
+  post,
+  post: { data },
   headings,
-  remarkPluginFrontmatter
+  remarkPluginFrontmatter,
+  prevPost,
+  nextPost
 } = Astro.props
 
-const {
-  description,
-  heroImage,
-  publishDate,
-  title,
-  updatedDate,
-  publish: isPublished,
-  comment: enableComment
-} = data
+const { description, heroImage, publishDate, title, updatedDate, publish: isPublished } = data
 
 const socialImage = heroImage
   ? typeof heroImage.src === 'string'
@@ -62,12 +54,9 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
       <slot />
 
       <Fragment slot='bottom'>
-        {/* Copyright */}
-        <Copyright {data} />
         {/* Article recommend */}
-        <ArticleBottom collections={posts} {id} class='mt-3 sm:mt-6' />
-        {/* Comment */}
-        {enableComment && <Comment class='mt-3 sm:mt-6' />}
+        <PostBottom entry={post} {prevPost} {nextPost} class='mt-3 sm:mt-6' />
+        {/* Comment - Removed as requested */}
       </Fragment>
 
       <slot name='bottom-sidebar' slot='bottom-sidebar' />
@@ -75,4 +64,4 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
   )
 }
 
-{integ.mediumZoom.enable && <MediumZoom />}
+{config.mediumZoom.enable && <MediumZoom />}

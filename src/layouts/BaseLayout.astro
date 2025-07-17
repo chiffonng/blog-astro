@@ -1,8 +1,7 @@
 ---
-import { ThemeProvider } from 'astro-pure/components/basic'
-import type { SiteMeta } from 'astro-pure/types'
 import config from '@/site-config'
-import { BaseHead, Footer, MenuNav } from '@/components'
+import type { SiteMeta } from '@/types/site-config'
+import { BaseHead, Footer, MenuNav, ThemeProvider } from '@/components'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const {
-  meta: { articleDate, description = config.description, ogImage, title },
+  meta: { articleDate, description = config.tagline, ogImage, title },
   highlightColor,
   ...props
 } = Astro.props

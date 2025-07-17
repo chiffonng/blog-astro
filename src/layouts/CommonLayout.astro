@@ -2,10 +2,8 @@
 // Original: https://github.com/cworld1/astro-theme-pure/blob/main/src/layouts/IndividualPage.astro
 import type { MarkdownLayoutProps } from 'astro'
 
-import { BackToTop } from 'astro-pure/components/pages'
-import { integ } from '@/site-config'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { Link } from '@/components'
+import { BackToTop, Link } from '@/components'
 
 type DirectProps = {
   title?: string
@@ -76,10 +74,7 @@ const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated || new Date().to
         }
       </div>
 
-      <div
-        id='content'
-        class:list={['animate mt-8 max-w-none overflow-x-hidden', integ.typography.class]}
-      >
+      <div id='content' class:list={['animate mt-8 max-w-none overflow-x-hidden prose']}>
         <slot />
       </div>
     </article>

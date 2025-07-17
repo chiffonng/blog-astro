@@ -2,12 +2,10 @@
 import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
-import { Paginator } from 'astro-pure/components/pages'
-import { getUniqueTags, sortMDByDate } from 'astro-pure/server'
-import { getBlogCollection } from '@/server'
 import config from '@/site-config'
+import { getBlogCollection, getUniqueTags, sortMDByDate } from '@/server/collection'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { BlogCard, Link } from '@/components'
+import { Link, Paginator, PreviewCard } from '@/components'
 
 export const prerender = true
 
@@ -16,7 +14,7 @@ export const getStaticPaths = (async ({ paginate }) => {
   const uniqueTags = getUniqueTags(collections)
   const collectionsCount = collections.length
   return paginate(collections, {
-    pageSize: config.content.blogPageSize,
+    pageSize: config.paginatorSize,
     props: { uniqueTags, collectionsCount }
   })
 }) satisfies GetStaticPaths
@@ -74,7 +72,7 @@ const paginationProps = {
             {/* posts */}
             <ul class='flex flex-col gap-y-4 text-start'>
               {page.data.map((post) => (
-                <BlogCard {post} detailed />
+                <PreviewCard {post} detailed />
               ))}
             </ul>
             <Paginator {...paginationProps} />

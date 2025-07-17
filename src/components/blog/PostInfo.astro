@@ -1,0 +1,51 @@
+---
+import type { CollectionKey, InferEntrySchema } from 'astro:content'
+import config from '@/site.config'
+
+import { getFormattedDate } from '@/lib'
+
+interface Props<T extends CollectionKey> {
+  data: InferEntrySchema<T>
+}
+
+const {
+  data: { title, publishDate }
+} = Astro.props
+---
+
+<div class='relative flex flex-col gap-y-2'>
+  {/* title & link */}
+  <div class='flex flex-col'>
+    <div class='font-medium text-foreground'>{title}</div>
+    <div class='text-sm'>{Astro.url}</div>
+  </div>
+
+  {/* common info */}
+  <div class='flex flex-row flex-wrap justify-start gap-x-5 gap-y-1 sm:gap-x-8'>
+    <div class='flex gap-x-2 sm:flex-col'>
+      <span>Author</span>
+      <span class='text-sm text-foreground max-sm:place-self-center'>{config.name}</span>
+    </div>
+    {
+      publishDate && (
+        <div class='flex gap-x-2 sm:min-w-16 sm:flex-col'>
+          <span>Published on</span>
+          <span class='text-sm text-foreground max-sm:place-self-center'>
+            {getFormattedDate(publishDate)}
+          </span>
+        </div>
+      )
+    }
+    <div class='flex gap-x-2 sm:flex-col'>
+      <span>Copyright</span>
+      <a
+        class='text-sm text-foreground max-sm:place-self-center'
+        href={config.license?.href}
+        target='_blank'
+        rel='license noreferrer nofollow'
+      >
+        {config.license?.type}
+      </a>
+    </div>
+  </div>
+</div>

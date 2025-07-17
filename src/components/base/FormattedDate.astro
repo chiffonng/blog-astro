@@ -1,0 +1,16 @@
+---
+import type { FormattedDateProps } from '@/components/types'
+import { getFormattedDate } from '@/lib'
+
+type Props = FormattedDateProps
+
+const { date, dateTimeOptions, class: className, ...attrs } = Astro.props
+
+const postDate = getFormattedDate(date, dateTimeOptions)
+---
+
+<span class:list={['text-muted-foreground', className]} {...attrs}>
+  <time datetime={date.toISOString()}>
+    {postDate}
+  </time>
+</span>

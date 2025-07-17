@@ -1,9 +1,7 @@
 ---
-import { groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
-import { getBlogCollection } from '@/server'
+import { getBlogCollection, groupCollectionsByYear, sortMDByDate } from '@/server/collection'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { Link } from '@/components'
-import BlogCard from '@/components/blog/BlogCard.astro'
+import { Link, PreviewCard } from '@/components'
 
 export const prerender = true
 
@@ -42,7 +40,7 @@ const meta = {
             </p>
             <ul class='flex flex-col text-start'>
               {posts.map((p) => (
-                <BlogCard post={p} class='border-0 bg-transparent py-2' />
+                <PreviewCard post={p} class='border-0 bg-transparent py-2' />
               ))}
             </ul>
           </div>

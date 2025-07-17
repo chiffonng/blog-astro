@@ -1,9 +1,8 @@
 ---
 import { Image } from 'astro:assets'
 
-import { PageInfo } from 'astro-pure/components/pages'
-import { FormattedDate } from 'astro-pure/user'
-import type { HeroProps as Props } from '@/types/components'
+import type { HeroProps as Props } from '@/components/types'
+import { FormattedDate, PageInfo } from '@/components'
 
 const {
   data: {
@@ -13,7 +12,7 @@ const {
     heroImage,
     publishDate,
     updatedDate,
-    comment: enableComment,
+
     tags,
     language
   },
@@ -111,7 +110,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 
   <div class='mt-3 italic'>
     <blockquote class='text-sm text-muted-foreground'><q>{description}</q></blockquote>
-    {!publish && enableComment && <PageInfo class='mt-1' />}
+    {!publish && <PageInfo class='mt-1' />}
   </div>
 </div>
 

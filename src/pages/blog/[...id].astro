@@ -1,29 +1,33 @@
 ---
 import { render, type CollectionEntry } from 'astro:content'
 
-import { sortMDByDate } from 'astro-pure/server'
-import { getBlogCollection } from '@/server'
+import { getBlogCollection, sortMDByDate } from '@/server/collection'
 import PostLayout from '@/layouts/BlogPost.astro'
 
 export const prerender = true
 
 export async function getStaticPaths() {
   const posts = sortMDByDate(await getBlogCollection())
-  return posts.map((post) => ({
-    params: { id: post.id },
-    props: { post, posts }
-  }))
+  return posts.map((post, index) => {
+    const prevPost = index < posts.length - 1 ? posts[index + 1] : null
+    const nextPost = index > 0 ? posts[index - 1] : null
+    return {
+      params: { id: post.id },
+      props: { post, prevPost, nextPost }
+    }
+  })
 }
 
 type Props = {
   post: CollectionEntry<'blog'>
-  posts: CollectionEntry<'blog'>[]
+  prevPost: CollectionEntry<'blog'> | null
+  nextPost: CollectionEntry<'blog'> | null
 }
 
-const { post, posts } = Astro.props
+const { post, prevPost, nextPost } = Astro.props
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
 ---
 
-<PostLayout {post} {posts} {headings} {remarkPluginFrontmatter}>
+<PostLayout {post} {headings} {remarkPluginFrontmatter} {prevPost} {nextPost}>
   <Content />
 </PostLayout>

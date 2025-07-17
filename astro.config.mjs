@@ -1,15 +1,20 @@
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
-import AstroPureIntegration from 'astro-pure'
+import mdx from '@astrojs/mdx'
+import sitemap from '@astrojs/sitemap'
 import { defineConfig } from 'astro/config'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
+import UnoCSS from 'unocss/astro'
 
 // Others
 // import { visualizer } from 'rollup-plugin-visualizer'
 
 // Local integrations
+import { pagefindIntegration } from './src/integrations/pagefind.ts'
 // Local rehype & remark plugins
-import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
+import { remarkAddZoomable, remarkReadingTime } from './src/plugins/remark-plugins.ts'
 // Shiki
 import {
   addCopyButton,
@@ -20,6 +25,12 @@ import {
   updateStyle
 } from './src/plugins/shiki-transformers.ts'
 import config from './src/site.config.ts'
+
+// Build remark plugins conditionally
+const remarkPlugins = [remarkMath, remarkReadingTime]
+if (config.mediumZoom.enable) {
+  remarkPlugins.push([remarkAddZoomable, config.mediumZoom.options])
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -39,13 +50,10 @@ export default defineConfig({
   },
 
   integrations: [
-    // astro-pure will automatically add sitemap, mdx & unocss
-    AstroPureIntegration(config)
-    // sitemap(),
-    // mdx(),
-    // UnoCSS({
-    //   injectReset: true
-    // }),
+    sitemap(),
+    mdx({ optimize: true }),
+    UnoCSS({ injectReset: true }),
+    pagefindIntegration(config.pagefind)
   ],
 
   prefetch: true,
@@ -56,7 +64,7 @@ export default defineConfig({
   },
   // Markdown Options
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins,
     rehypePlugins: [
       [rehypeKatex, {}],
       rehypeHeadingIds,
@@ -66,6 +74,14 @@ export default defineConfig({
           behavior: 'append',
           properties: { className: ['anchor'] },
           content: { type: 'text', value: '#' }
+        }
+      ],
+      [
+        rehypeExternalLinks,
+        {
+          content: { type: 'text', value: config.content.externalLinksContent },
+          target: '_blank',
+          rel: ['nofollow', 'noopener', 'noreferrer']
         }
       ]
     ],
@@ -89,13 +105,6 @@ export default defineConfig({
     contentIntellisense: true
   },
   vite: {
-    // astro-pure package in node_modules ship .ts files,
-    // which are not supported by Node.js 24
-    // either exclude them from the optimization or
-    // disable Node.js TypeScript stripping with --no-experimental-strip-types
-    optimizeDeps: {
-      exclude: ['astro-pure']
-    },
     build: {
       rollupOptions: {
         external: ['/pagefind/pagefind.js', '/pagefind/pagefind.js?url']

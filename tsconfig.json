@@ -15,17 +15,16 @@
     "paths": {
       "content/*": ["src/content/*"],
       "@/*": ["src/*"],
-      "@/assets/*": ["src/assets/*"],
-      "@/constants/*": ["src/constants/*"],
-      "@/layouts/*": ["src/layouts/*"],
-      "@/components/*": ["src/components/*"],
-      "@/pages/*": ["src/pages/*"],
+      "@/types": ["src/types/index.ts"],
+      "@/types/*": ["src/types/*"],
+      "@/site-config": ["src/site.config.ts"],
       "@/plugins/*": ["src/plugins/*"],
       "@/server": ["src/server/index.ts"],
       "@/server/*": ["src/server/*"],
-      "@/site-config": ["src/site.config.ts"],
-      "@/types/*": ["src/types/*"],
-      "@/utils": ["src/utils/index.ts"]
+      "@/lib": ["src/lib/index.ts"],
+      "@/assets/*": ["src/assets/*"],
+      "@/components/*": ["src/components/*"],
+      "@/layouts/*": ["src/layouts/*"]
     }
   },
   "exclude": ["node_modules", "**/node_modules/*", ".vscode", "dist", "public/scripts/*", "test/*"]
