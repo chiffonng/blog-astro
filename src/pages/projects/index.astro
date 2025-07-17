@@ -1,48 +1,50 @@
 ---
-import { Image } from 'astro:assets'
-
+import { getProjectsCollection, sortProjectsByDate } from '@/server/collection'
 import PageLayout from '@/layouts/CommonLayout.astro'
-import ProjectSection from '@/components/projects/ProjectSection.astro'
+import { GithubActivity, ProjectCard, Section } from '@/components'
+
+const allProjects = sortProjectsByDate(await getProjectsCollection())
+const featuredProjects = allProjects.filter((project) => project.data.isHighlighted)
+const otherProjects = allProjects.filter((project) => !project.data.isHighlighted)
 ---
 
 <PageLayout title='Projects'>
-  <h2 id='programs'>Programs</h2>
-  <ProjectSection
-    project={[
-      {
-        name: '📒 Notie',
-        description:
-          'Android note App complies with Material You specifications, developed using Java',
-        links: [
-          { type: 'repo', href: 'https://github.com/cworld1/notie' },
-          {
-            type: 'release',
-            href: 'https://github.com/cworld1/notie/releases'
-          }
-        ]
-      },
-      {
-        name: '💄 PKU Art',
-        description: 'A script to beautify pku course website',
-        links: [
-          { type: 'repo', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'url', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'doc', href: 'https://docs.arthals.ink/docs/pku-art' }
-        ]
-      }
-    ]}
-  />
-  <h2 id='github-activities'>Github Activities</h2>
-  <p>
-    <Image
-      src='https://ghchart.rshah.org/659eb9/cworld1'
-      alt='github activities'
-      inferSize
-      loading='lazy'
-    />
-  </p>
-  <p>
-    If you think it would be useful or interesting to collaborate on a project, you can contact me
-    to discuss a project.
-  </p>
+  <div class='flex flex-col gap-6'>
+    {/* Featured Projects */}
+    {
+      featuredProjects.length > 0 && (
+        <Section title='Featured Projects'>
+          <div class='grid gap-4 md:grid-cols-1 lg:grid-cols-2'>
+            {featuredProjects.map((project) => (
+              <ProjectCard {project} />
+            ))}
+          </div>
+        </Section>
+      )
+    }
+
+    {/* Other Projects */}
+    {
+      otherProjects.length > 0 && (
+        <Section title='Other Projects'>
+          <div class='grid gap-4 md:grid-cols-1 lg:grid-cols-2'>
+            {otherProjects.map((project) => (
+              <ProjectCard {project} />
+            ))}
+          </div>
+        </Section>
+      )
+    }
+
+    {/* Github Activity */}
+    <GithubActivity />
+
+    {/* Collaboration */}
+    <Section title='Collaboration'>
+      <p class='text-muted-foreground leading-relaxed'>
+        If you think it would be useful or interesting to collaborate on a project, you can contact
+        me to discuss a project.
+      </p>
+    </Section>
+  </div>
 </PageLayout>

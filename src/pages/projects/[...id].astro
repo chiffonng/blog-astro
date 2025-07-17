@@ -37,7 +37,7 @@ const getContextBadgeClass = (context?: string) => {
     case 'school':
       return 'badge-blue'
     case 'work':
-      return 'badge-yellow'
+      return 'badge-green'
     case 'personal':
       return 'badge-purple'
     case 'collab':
@@ -79,7 +79,7 @@ const meta = {
           <div class='flex flex-wrap items-center gap-3 text-sm'>
             {
               context && (
-                <span class:list={['px-3 py-1 rounded font-medium', contextBadgeClass]}>
+                <span class={contextBadgeClass}>
                   {context.charAt(0).toUpperCase() + context.slice(1)}
                 </span>
               )
@@ -98,7 +98,7 @@ const meta = {
           {
             tags && tags.length > 0 && (
               <div class='flex flex-wrap gap-2'>
-                {tags.map((tag) => (
+                {tags.map((tag: string) => (
                   <Pill title={tag} />
                 ))}
               </div>
