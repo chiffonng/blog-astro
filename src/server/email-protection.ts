@@ -31,29 +31,16 @@ export function encodeEmailForAttribute(email: string): string {
 }
 
 /**
- * @description Extracts the display part of an email (before @)
- * @param {string} email - The email address
- * @returns {string} The username part of the email
- */
-export function getEmailDisplay(email: string): string {
-  const cleanEmail = email.replace('mailto:', '')
-  const [username, domain] = cleanEmail.split('@')
-  return `${username}@${domain.split('.')[0]}...`
-}
-
-/**
  * @description Creates a click-to-reveal email link
  * @param {string} email - The email address
  * @returns {object} Object containing obfuscated display and data attributes
  */
 export function createProtectedEmail(email: string): {
-  display: string
   dataEmail: string
   obfuscated: string
 } {
   const cleanEmail = email.replace('mailto:', '')
   return {
-    display: getEmailDisplay(cleanEmail),
     dataEmail: encodeEmailForAttribute(cleanEmail),
     obfuscated: obfuscateEmail(cleanEmail)
   }

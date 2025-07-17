@@ -1,7 +1,2 @@
-export { getBlogCollection, prod } from './blog'
-export {
-  obfuscateEmail,
-  encodeEmailForAttribute,
-  getEmailDisplay,
-  createProtectedEmail
-} from './email-protection'
+export * from './collection'
+export { createProtectedEmail, obfuscateEmail, encodeEmailForAttribute } from './email-protection'
