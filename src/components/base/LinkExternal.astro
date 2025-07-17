@@ -11,9 +11,11 @@ const { href, title, icon, class: className, ...props } = Astro.props
     'sm:rounded-xl',
     className
   ]}
+  target='_blank'
+  rel='external nofollow noreferrer noopener'
   {...props}
 >
   {icon && <span class={icon} />}
-  <span class='hidden sm:inline'>{title}</span>
-  <span class='sm:hidden sr-only'>{title}</span>
+  <span class='hidden sm:inline'>{title} ↗</span>
+  <span class='sm:hidden sr-only'>{title} ↗</span>
 </a>
