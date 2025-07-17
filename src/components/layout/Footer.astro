@@ -1,9 +1,8 @@
 ---
-import config from 'virtual:config'
+import config, { footer as fc } from '@/site.config'
 
 import { ProfileLinks } from '@/components'
 
-const fc = config.footer
 const verticalGap = 'gap-2'
 ---
 
@@ -28,7 +27,7 @@ const verticalGap = 'gap-2'
     >
       <span class='whitespace-nowrap'>
         Copyright &copy; <time id='footer-year'></time>
-        {config.author}
+        {config.name}
       </span>
       {
         fc.credits && (
@@ -37,11 +36,11 @@ const verticalGap = 'gap-2'
             <a href='https://astro.build/' target='_blank' rel='noopener noreferrer'>
               Astro
             </a>
-            ,{' '}
+            &{' '}
             <a href='https://unocss.dev/' target='_blank' rel='noopener noreferrer'>
               UnoCSS
-            </a>{' '}
-            &{' '}
+            </a>
+            . Fork of
             <a
               href='https://github.com/cworld1/astro-theme-pure'
               target='_blank'
@@ -49,7 +48,7 @@ const verticalGap = 'gap-2'
             >
               Pure
             </a>{' '}
-            theme
+            theme.
           </span>
         )
       }
@@ -63,18 +62,30 @@ const verticalGap = 'gap-2'
         'lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0'
       ]}
     >
+      {/* Footer links and source links */}
       {
-        fc.links && fc.links.length > 0 && (
+        (fc.links && fc.links.length > 0) || fc.sourceCode || fc.sourceContent ? (
           <div class='flex items-center gap-1 [&>a:not(:last-child)]:after:content-["/"] [&>a:not(:last-child)]:after:text-muted-foreground/50 [&>a:not(:last-child)]:after:ml-1'>
-            {fc.links.map(
-              ({ title, link, style = '' }: { title: string; link: string; style?: string }) => (
-                <a href={link} target='_blank' rel='noopener noreferrer' class={style}>
-                  {title}
-                </a>
-              )
+            {fc.links &&
+              fc.links.map(
+                ({ title, link, style = '' }: { title: string; link: string; style?: string }) => (
+                  <a href={link} target='_blank' rel='noopener noreferrer' class={style}>
+                    {title}
+                  </a>
+                )
+              )}
+            {fc.sourceCode && (
+              <a href={fc.sourceCode} target='_blank' rel='noopener noreferrer'>
+                Source Code
+              </a>
+            )}
+            {fc.sourceContent && (
+              <a href={fc.sourceContent} target='_blank' rel='noopener noreferrer'>
+                Source Content
+              </a>
             )}
           </div>
-        )
+        ) : null
       }
 
       <ProfileLinks includeRss={true} ariaLabel='Social links' />

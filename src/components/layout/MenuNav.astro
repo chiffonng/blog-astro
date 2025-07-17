@@ -1,7 +1,7 @@
 ---
-import config from 'virtual:config'
+import config from '@/site.config'
 
-import SearchBox from '@/components/search/SearchBox.astro'
+import { SearchBox } from '@/components'
 ---
 
 <header-component
@@ -21,7 +21,7 @@ import SearchBox from '@/components/search/SearchBox.astro'
     >
       <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
         {
-          config.header.menu.map((item) => (
+          config.menu.map((item: { title: string; link: string }) => (
             <a
               href={item.link}
               class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
