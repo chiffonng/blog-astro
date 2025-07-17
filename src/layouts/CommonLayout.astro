@@ -2,6 +2,7 @@
 // Original: https://github.com/cworld1/astro-theme-pure/blob/main/src/layouts/IndividualPage.astro
 import type { MarkdownLayoutProps } from 'astro'
 
+import { getFormattedDate } from '@/lib'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { BackToTop, Link } from '@/components'
 
@@ -47,11 +48,7 @@ const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated || new Date().to
                 <span class='i-mingcute:calendar-2-line' />
                 <time datetime={pageLastUpdated}>
                   Last updated:
-                  {new Date(pageLastUpdated || '').toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                  })}
+                  {getFormattedDate(pageLastUpdated)}
                 </time>
               </div>
             )
