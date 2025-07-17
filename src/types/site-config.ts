@@ -119,12 +119,14 @@ export const IntegrationConfigSchema = () =>
     /** A lightbox library that can add zoom effect */
     mediumZoom: z
       .object({
+        enable: z.boolean(),
         /** The selector to apply the zoom effect to. */
-        selector: z.string().default('.prose .zoomable'),
+        selector: z.string(),
         /** Options to pass to the medium zoom library. */
-        options: z.record(z.string(), z.any()).default({ className: 'zoomable' })
+        options: z.record(z.string(), z.any())
       })
       .default({
+        enable: true,
         selector: '.prose .zoomable',
         options: { className: 'zoomable' }
       })

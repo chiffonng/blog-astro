@@ -1,4 +1,4 @@
-export { imgPathSchema, audioPathSchema, dateSchema } from './common'
+export { imgPathSchema, audioPathSchema, dateSchema, faviconSchema } from './common'
 export {
   educationSchema,
   certificateSchema,
@@ -11,4 +11,14 @@ export {
   type ProfileLinkConfig,
   type ProfileLinkType
 } from './profile-links'
-export { aboutSchema, ProfileConfigSchema, type AboutType, type ProfileConfig } from './profile'
+export { ProfileConfigSchema, type ProfileConfig } from './profile'
+export {
+  type HeaderUserConfig,
+  type FooterUserConfig,
+  type IntegrationUserConfig,
+  type ThemeUserConfig,
+  type BlogUserConfig,
+  type Config,
+  ConfigSchema,
+  type UserConfig
+} from './site-config'
