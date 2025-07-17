@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+import config from '@/site.config'
 
 import { ProfileLinks, Pronunciation } from '@/components'
 import type { ProfileProps as Props } from '@/components/types'
@@ -9,14 +10,13 @@ import { Content as About } from 'content/about.md'
 
 const { showLabels = true } = Astro.props
 
-const frmt = aboutSchema.parse(about.frontmatter)
-const name = frmt.name
-const tagline = frmt.tagline
-const location = frmt.location
-const phone = frmt?.phone
-const pronouns = frmt?.pronouns
-const pronunciation = frmt?.pronunciation
-const pronunciationPath = frmt?.pronunciationAudioPath
+const name = config.name
+const tagline = config.tagline
+const location = config.location
+const phone = config.phone
+const pronouns = config.pronouns
+const pronunciation = config.pronunciation
+const pronunciationPath = config.pronunciationAudioPath
 
 const avaSize = 150
 ---
