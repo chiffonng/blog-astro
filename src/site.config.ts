@@ -87,6 +87,7 @@ export const profile: ProfileConfig = {
 export const integ: IntegrationUserConfig = {
   pagefind: true,
   mediumZoom: {
+    enable: true,
     selector: '.prose .zoomable',
     options: {
       className: 'zoomable'
