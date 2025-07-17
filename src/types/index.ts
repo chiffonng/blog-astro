@@ -1,4 +1,12 @@
-export { imgPathSchema, audioPathSchema, dateSchema, faviconSchema } from './common'
+export {
+  imgPathSchema,
+  audioPathSchema,
+  dateSchema,
+  faviconSchema,
+  type ImgPath,
+  type AudioPath,
+  type Favicon
+} from './common'
 export {
   educationSchema,
   certificateSchema,
