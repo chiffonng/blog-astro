@@ -1,29 +1,32 @@
-import { theme } from '@/site.config'
+import config from '@/site.config'
 
-export const formatProjectDate = (date: Date) => {
-  return date.toLocaleDateString(theme.locale.dateLocale, theme.locale.dateOptions)
+const dateFormat = new Intl.DateTimeFormat(config.locale.dateLocale, config.locale.dateOptions)
+
+export function getFormattedDate(
+  date: string | number | Date,
+  options?: Intl.DateTimeFormatOptions
+) {
+  if (typeof options !== 'undefined') {
+    return new Date(date).toLocaleDateString(config.locale.dateLocale, {
+      ...(config.locale.dateOptions as Intl.DateTimeFormatOptions),
+      ...options
+    })
+  }
+
+  return dateFormat.format(new Date(date))
 }
 
-export const formatProjectDateLong = (date: Date) => {
-  return date.toLocaleDateString(theme.locale.dateLocale, {
-    ...theme.locale.dateOptions,
-    month: 'long'
-  })
-}
-
-export const getProjectDateRange = (fromDate?: Date, toDate?: Date) => {
+export function createDateRange(
+  fromDate?: Date,
+  toDate?: Date,
+  options?: Intl.DateTimeFormatOptions
+) {
   if (!fromDate && !toDate) return null
-  if (fromDate && !toDate) return `${formatProjectDate(fromDate)} - Present`
-  if (!fromDate && toDate) return formatProjectDate(toDate)
-  if (fromDate && toDate) return `${formatProjectDate(fromDate)} - ${formatProjectDate(toDate)}`
-  return null
-}
 
-export const getProjectDateRangeLong = (fromDate?: Date, toDate?: Date) => {
-  if (!fromDate && !toDate) return null
-  if (fromDate && !toDate) return `${formatProjectDateLong(fromDate)} - Present`
-  if (!fromDate && toDate) return formatProjectDateLong(toDate)
-  if (fromDate && toDate)
-    return `${formatProjectDateLong(fromDate)} - ${formatProjectDateLong(toDate)}`
+  const formatter = (date: Date) => getFormattedDate(date, options)
+
+  if (fromDate && !toDate) return `${formatter(fromDate)} - Present`
+  if (!fromDate && toDate) return formatter(toDate)
+  if (fromDate && toDate) return `${formatter(fromDate)} - ${formatter(toDate)}`
   return null
 }

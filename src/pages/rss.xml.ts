@@ -2,15 +2,15 @@ import type { AstroGlobal, ImageMetadata } from 'astro'
 import { getImage } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import rss from '@astrojs/rss'
+import config from '@/site.config'
 import type { Root } from 'mdast'
 import rehypeStringify from 'rehype-stringify'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 import { visit } from 'unist-util-visit'
-import config from 'virtual:config'
 
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { getBlogCollection, sortMDByDate } from '@/server/collection'
 
 // Get dynamic import of images as a map collection
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
@@ -65,7 +65,7 @@ const GET = async (context: AstroGlobal) => {
 
     // Contents
     title: config.title,
-    description: config.description,
+    description: config.tagline,
     site: import.meta.env.SITE,
     items: await Promise.all(
       allPostsByDate.map(async (post) => ({

@@ -1,8 +1,7 @@
 ---
-import { sortMDByDate } from 'astro-pure/server'
-import { getBlogCollection } from '@/server'
+import { getBlogCollection, sortMDByDate } from '@/server/collection'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { BlogCard, Card, Link, Profile, Section, SkillLayout } from '@/components'
+import { Card, Link, PreviewCard, Profile, Section, SkillLayout } from '@/components'
 
 import * as misc from 'content/misc.md'
 
@@ -61,7 +60,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
               {allPostsByDate.map((p) => (
                 <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <BlogCard post={p} />
+                  <PreviewCard post={p} />
                 </li>
               ))}
             </ul>

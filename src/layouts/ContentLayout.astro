@@ -1,11 +1,9 @@
 ---
 import type { MarkdownHeading } from 'astro'
 
-import { BackToTop } from 'astro-pure/components/pages'
-import type { SiteMeta } from 'astro-pure/types'
-import { integ } from '@/site-config'
+import type { SiteMeta } from '@/types/site-config'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { Link } from '@/components'
+import { BackToTop, Link } from '@/components'
 
 interface Props {
   meta: SiteMeta
@@ -57,10 +55,7 @@ const hasTOC = headings && headings.length > 0
       </div>
 
       {/* Content */}
-      <div
-        id='content'
-        class:list={['max-w-none animate mt-8 overflow-x-hidden', integ.typography.class]}
-      >
+      <div id='content' class:list={['max-w-none animate mt-8 overflow-x-hidden prose']}>
         <slot />
       </div>
     </article>

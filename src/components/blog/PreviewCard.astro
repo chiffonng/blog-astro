@@ -3,8 +3,7 @@ import { Image } from 'astro:assets'
 import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 import type { HTMLTag, Polymorphic } from 'astro/types'
 
-import { FormattedDate } from 'astro-pure/user'
-import { Link } from '@/components'
+import { FormattedDate, Link } from '@/components'
 
 type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
   post: CollectionEntry<CollectionKey>
@@ -77,16 +76,14 @@ const { remarkPluginFrontmatter } = await render(post)
               {/* published date */}
               <span class='flex items-center gap-1'>
                 <span class='i-mingcute:calendar-2-line' />
-                {/* TEMP FIX: font-sans to revert font-mono in FormattedDate */}
-                <FormattedDate date={data.publishDate} class='!font-sans' />
+                <FormattedDate date={data.publishDate} />
               </span>
               {/* updated date (if exists) */}
               {data.updatedDate && (
                 <>
                   <span class='flex items-center gap-1'>
                     <span class='i-mingcute:clock-line' />
-                    {/* TEMP FIX: font-sans to revert font-mono in FormattedDate */}
-                    <FormattedDate date={data.updatedDate} class='!font-sans' />
+                    <FormattedDate date={data.updatedDate} />
                   </span>
                 </>
               )}
