@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+import { PostActions, PostInfo, PostNavigation } from '@/components'
+
+interface Props {
+  entry: CollectionEntry<'blog'>
+  class?: string
+  prevPost?: CollectionEntry<'blog'> | null
+  nextPost?: CollectionEntry<'blog'> | null
+}
+
+const { entry, class: className, prevPost, nextPost } = Astro.props
+const { data } = entry
+---
+
+<div class:list={['flex flex-col gap-2 my-4', className]}>
+  <div class='relative flex flex-col gap-y-4 rounded-xl border px-3 sm:px-4 py-2 sm:py-3'>
+    <PostInfo {data} />
+    <PostActions {entry} />
+  </div>
+</div>
+<PostNavigation {prevPost} {nextPost} />

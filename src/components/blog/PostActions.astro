@@ -1,0 +1,109 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import config from '@/site.config'
+
+import { shareIconDefinitions } from '@/theme'
+import { getShareUrls } from '@/lib/shares'
+import { Button } from '@/components'
+
+interface Props {
+  entry: CollectionEntry<'blog'>
+  class?: string
+}
+
+const { entry, class: className } = Astro.props
+
+const {
+  data: { title },
+  id: postId
+} = entry
+
+const shareData = {
+  title,
+  url: Astro.url.toString(),
+  description: title,
+  author: config.name
+}
+const shareUrls = getShareUrls(shareData)
+
+// Get enabled platforms (always include copy link and email)
+const enabledPlatforms = ['copyLink', 'email', ...config.sharePlatforms]
+
+// Infer sourceUrl from content collection id
+const sourceContent = config.sourceContent || config.sourceCode + 'src/content'
+let sourceUrl: string | undefined
+
+if (sourceContent && postId) {
+  sourceUrl = `${sourceContent}/blob/main/blog/${postId}.md`
+}
+---
+
+<div class:list={['flex flex-col gap-3', className]}>
+  {/* Share buttons */}
+  <div class='flex flex-row flex-wrap items-center gap-2'>
+    <span class='font-medium'>Share: </span>
+    {
+      enabledPlatforms.map((platform) => {
+        const iconDef = shareIconDefinitions[platform as keyof typeof shareIconDefinitions]
+
+        return iconDef ? (
+          <Button
+            id={platform === 'copyLink' ? 'copy-link' : `share-${platform}`}
+            iconClass={`${iconDef.iconClass} size-5`}
+            label={iconDef.label}
+            class='rounded-full bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground'
+            data-share-url={platform !== 'copyLink' ? shareUrls[platform]?.url : undefined}
+          />
+        ) : null
+      })
+    }
+  </div>
+
+  {/* Edit action */}
+  {
+    sourceUrl && (
+      <div class='flex flex-row items-center gap-2'>
+        <span class='font-medium'>Edit: </span>
+        <a
+          href={sourceUrl}
+          target='_blank'
+          rel='external noreferrer nofollow'
+          class='text-muted-foreground hover:text-primary transition-colors'
+        >
+          View or edit source markdown ↗
+        </a>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  import { showToast } from '@/lib'
+  import { copyToClipboard, openShareWindow } from '@/lib/shares'
+
+  // Copy link functionality
+  document.getElementById('copy-link')?.addEventListener('click', async () => {
+    try {
+      await copyToClipboard(window.location.href)
+      showToast({ message: 'Link copied!' })
+    } catch {
+      showToast({ message: 'Failed to copy link' })
+    }
+  })
+
+  // Social sharing functionality
+  document.querySelectorAll('[id^="share-"]').forEach((button) => {
+    const platform = button.id.replace('share-', '')
+    const shareUrl = button.getAttribute('data-share-url')
+
+    if (shareUrl) {
+      button.addEventListener('click', () => {
+        if (platform === 'email') {
+          window.location.href = shareUrl
+        } else {
+          openShareWindow(shareUrl, platform)
+        }
+      })
+    }
+  })
+</script>
