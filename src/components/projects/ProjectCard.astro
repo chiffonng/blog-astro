@@ -1,8 +1,8 @@
 ---
-import type { ProjectCardProps as Props } from '@/types'
-import { LinkExternal, Pill } from '@/components'
-import { getProjectDateRange } from '@/lib/format-date'
+import { createDateRange } from '@/lib/format-date'
 import { getProjectLinks } from '@/lib/projects'
+import { LinkExternal, Pill } from '@/components'
+import type { ProjectCardProps as Props } from '@/components/types'
 
 const { project } = Astro.props
 const {
@@ -19,7 +19,7 @@ const {
   description
 } = project.data
 
-const dateRange = getProjectDateRange(fromDate, toDate)
+const dateRange = createDateRange(fromDate, toDate)
 const links = getProjectLinks(repo, doc, url, release)
 
 const getContextBadgeClass = (context?: string) => {

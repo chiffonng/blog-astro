@@ -1,12 +1,11 @@
 ---
 import { Image } from 'astro:assets'
 
-import { aboutSchema } from '@/types'
-import type { ProfileProps as Props } from '@/types/components'
 import { ProfileLinks, Pronunciation } from '@/components'
+import type { ProfileProps as Props } from '@/components/types'
 import avatar from '@/assets/avatar.jpg'
 
-import * as about from 'content/about.md'
+import { Content as About } from 'content/about.md'
 
 const { showLabels = true } = Astro.props
 
@@ -82,6 +81,6 @@ const avaSize = 150
   <ProfileLinks showLabels={showLabels} />
 
   <div class='max-w-none prose'>
-    <about.Content />
+    <About />
   </div>
 </div>

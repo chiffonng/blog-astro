@@ -1,7 +1,8 @@
 ---
-import type { ToolProps as Props } from '@/types/components'
-import { ToolTag } from '@/types/components'
-import IconRenderer from '@/components/base/IconRenderer.astro'
+import { IconRenderer } from '@/components'
+import type { ToolProps as Props } from '@/components/types'
+
+import { ToolTag } from './tool-tag'
 
 const tagStyles: Record<ToolTag, string> = {
   [ToolTag.OpenSource]: 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400',

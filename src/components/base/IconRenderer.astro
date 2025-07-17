@@ -2,8 +2,8 @@
 import type { ImageMetadata } from 'astro'
 import { Image } from 'astro:assets'
 
-import type { IconRendererProps as Props } from '@/types/components'
 import { Svg } from '@/components'
+import type { IconRendererProps as Props } from '@/components/types'
 
 function isImageMetadata(obj: unknown): obj is ImageMetadata {
   return !!(obj && typeof obj === 'object' && 'src' in obj)

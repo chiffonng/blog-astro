@@ -72,6 +72,17 @@ export interface ProfileLinksProps {
   ariaLabel?: string
 }
 
+export interface FormattedDateProps extends HTMLAttributes<'time'> {
+  date: Date
+  dateTimeOptions?: Intl.DateTimeFormatOptions
+  class?: string
+}
+
+export interface SvgProps {
+  src: Promise<typeof import('*.svg?raw')>
+  class?: string
+}
+
 export type KbdProps = {
   keys?: (
     | 'cmd'
@@ -97,7 +108,27 @@ export type KbdProps = {
   class?: string
 }
 
-// Layout component props
+export interface BackToTopProps {
+  header: string
+  content: string
+  needPercent?: boolean
+}
+
+export interface PageInfoProps {
+  class?: string
+  hideComment?: boolean
+}
+
+export interface PaginatorProps {
+  nextUrl?: { text: string; url: string }
+  prevUrl?: { text: string; url: string }
+}
+
+export interface MediumZoomProps {
+  selector?: string
+  background?: string
+}
+
 export interface SectionProps {
   class?: string
   title: string
@@ -114,6 +145,21 @@ export interface TOCProps {
   class?: string
   id?: string
   isMobile?: boolean
+}
+
+export interface PreviewCardProps {
+  post: CollectionEntry<'blog'>
+  detailed?: boolean
+  class?: string
+}
+
+export interface PostBottomProps {
+  data: InferEntrySchema<'blog'>
+  class?: string
+}
+
+export interface TOCHeadingProps {
+  heading: MarkdownHeading
 }
 
 // Home component props
@@ -135,23 +181,6 @@ export interface SkillLayoutProps {
 // Project component props
 export interface ProjectCardProps {
   project: CollectionEntry<'projects'>
-}
-
-// Tool component props
-export enum ToolTag {
-  OpenSource = 'oss',
-  SelfHosted = 'self-hosted',
-  Favorite = '🩵',
-  Free = 'free',
-  Paid = 'paid',
-  Gifted = 'gifted',
-  Subscription = 'subscription',
-  Organization = 'org',
-  Bundle = 'bundle',
-  SecondHand = 'second-hand',
-  Web = 'web',
-  Mobile = 'mobile',
-  Desktop = 'desktop'
 }
 
 export interface ToolProps {
@@ -182,4 +211,9 @@ export interface GithubActivityProps {
    */
   username?: string
   class?: string
+}
+
+export interface ProjectSectionProps {
+  class?: string
+  projects: CollectionEntry<'projects'>[]
 }

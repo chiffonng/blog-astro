@@ -1,11 +1,11 @@
 ---
 import { render, type CollectionEntry } from 'astro:content'
 
-import { getProjectsCollection, sortProjectsByDate } from '@/server'
+import { getProjectsCollection, sortProjectsByDate } from '@/server/collection'
+import { getProjectLinks, hasProjectContent } from '@/lib'
+import { createDateRange } from '@/lib/format-date'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { Link, LinkExternal, Pill } from '@/components'
-import { getProjectLinks, hasProjectContent } from '@/lib'
-import { getProjectDateRangeLong } from '@/lib/format-date'
 
 export const prerender = true
 
@@ -29,7 +29,7 @@ const { Content } = await render(project)
 const { title, isHighlighted, fromDate, toDate, repo, doc, url, release, context, tags } =
   project.data
 
-const dateRange = getProjectDateRangeLong(fromDate, toDate)
+const dateRange = createDateRange(fromDate, toDate)
 const links = getProjectLinks(repo, doc, url, release)
 
 const getContextBadgeClass = (context?: string) => {
