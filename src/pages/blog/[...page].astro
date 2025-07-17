@@ -2,9 +2,6 @@
 import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
-import { Paginator } from 'astro-pure/components/pages'
-import { getUniqueTags, sortMDByDate } from 'astro-pure/server'
-import { getBlogCollection } from '@/server'
 import config from '@/site-config'
 import { getBlogCollection, getUniqueTags, sortMDByDate } from '@/server/collection'
 import PageLayout from '@/layouts/BaseLayout.astro'

@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  prevPost?: CollectionEntry<'blog'> | null
+  nextPost?: CollectionEntry<'blog'> | null
+  class?: string
+}
+
+const { prevPost, nextPost, class: className } = Astro.props
+---
+
+{/* Previous and Next Post Navigation */}
+{
+  (prevPost || nextPost) && (
+    <div class:list={['mt-4 flex', className]}>
+      {prevPost && (
+        <a
+          href={`/blog/${prevPost.id}`}
+          rel='prev'
+          class='group flex w-1/2 items-center gap-2 rounded-lg border p-3 transition-colors hover:bg-muted/50'
+        >
+          <span class='i-mingcute:arrow-left-line group-hover:-translate-x-1 transition-transform' />
+          <div class='min-w-0 flex-1'>
+            <div class='text-sm text-muted-foreground'>Previous Post</div>
+            <div class='font-medium line-clamp-2'>{prevPost.data.title}</div>
+          </div>
+        </a>
+      )}
+      {nextPost && (
+        <a
+          href={`/blog/${nextPost.id}`}
+          rel='next'
+          class='group flex w-1/2 items-center gap-2 rounded-lg border p-3 text-end transition-colors hover:bg-muted/50 ml-auto'
+        >
+          <div class='min-w-0 flex-1'>
+            <div class='text-sm text-muted-foreground'>Next Post</div>
+            <div class='font-medium line-clamp-2'>{nextPost.data.title}</div>
+          </div>
+          <span class='i-mingcute:arrow-right-line group-hover:translate-x-1 transition-transform' />
+        </a>
+      )}
+    </div>
+  )
+}
