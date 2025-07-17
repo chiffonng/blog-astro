@@ -1,5 +1,5 @@
-import { ProfileLinkConfigSchema, type ProcessedProfileLink, type ProfileLinkType } from '@/types'
 import { profileLinkDefinitions } from '@/theme'
+import { ProfileLinkConfigSchema, type ProcessedProfileLink, type ProfileLinkType } from '@/types'
 
 /**
  * @description Extract username from URL for different platforms
@@ -11,7 +11,7 @@ import { profileLinkDefinitions } from '@/theme'
 function extractUsername(type: ProfileLinkType, url: string): string {
   try {
     // Handle email separately - show obfuscated display instead of full email
-    if (type === 'mail') {
+    if (type === 'mail' || type === 'email') {
       const cleanEmail = url.replace('mailto:', '')
       const [username, domain] = cleanEmail.split('@')
       return `${username}@${domain.split('.')[0]}...`

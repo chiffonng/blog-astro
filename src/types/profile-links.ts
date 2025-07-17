@@ -18,6 +18,7 @@ export const profileLinkKeys = Object.keys(profileLinkDefinitions) as Array<Prof
 const getLinkSchema = (type: ProfileLinkType): z.ZodString => {
   switch (type) {
     case 'mail':
+    case 'email':
       return z
         .string()
         .min(1, 'Email cannot be empty')
