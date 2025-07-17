@@ -1,23 +1,23 @@
 ---
-import { IconRenderer } from '@/components'
 import type { ToolProps as Props } from '@/components/types'
+import { IconRenderer } from '@/components'
 
 import { ToolTag } from './tool-tag'
 
 const tagStyles: Record<ToolTag, string> = {
-  [ToolTag.OpenSource]: 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400',
-  [ToolTag.SelfHosted]: 'bg-green-500/20 text-green-600 dark:text-green-400',
-  [ToolTag.Favorite]: 'bg-light-blue-500/20 text-light-blue-600 dark:text-light-blue-400',
-  [ToolTag.Free]: 'bg-muted text-muted-foreground',
-  [ToolTag.Gifted]: 'bg-muted text-muted-foreground',
-  [ToolTag.SecondHand]: 'bg-destructive/80 text-destructive-foreground',
-  [ToolTag.Paid]: 'bg-destructive/80 text-destructive-foreground',
-  [ToolTag.Subscription]: 'bg-primary text-primary-foreground',
-  [ToolTag.Organization]: 'bg-primary text-primary-foreground',
-  [ToolTag.Bundle]: 'bg-primary text-primary-foreground',
-  [ToolTag.Web]: 'bg-blue-500/20 text-blue-600 dark:text-blue-400',
-  [ToolTag.Mobile]: 'bg-green-500/20 text-green-600 dark:text-green-400',
-  [ToolTag.Desktop]: 'bg-purple-500/20 text-purple-600 dark:text-purple-400'
+  [ToolTag.OpenSource]: 'badge-yellow',
+  [ToolTag.SelfHosted]: 'badge-green',
+  [ToolTag.Favorite]: 'badge-blue',
+  [ToolTag.Free]: 'badge-gray',
+  [ToolTag.Gifted]: 'badge-gray',
+  [ToolTag.SecondHand]: 'badge-red',
+  [ToolTag.Paid]: 'badge-red',
+  [ToolTag.Subscription]: 'badge-base bg-primary text-primary-foreground',
+  [ToolTag.Organization]: 'badge-base bg-primary text-primary-foreground',
+  [ToolTag.Bundle]: 'badge-base bg-primary text-primary-foreground',
+  [ToolTag.Web]: 'badge-blue',
+  [ToolTag.Mobile]: 'badge-green',
+  [ToolTag.Desktop]: 'badge-purple'
 }
 
 const { name, description, href, icon, tags } = Astro.props
@@ -35,9 +35,7 @@ const { name, description, href, icon, tags } = Astro.props
           {
             tags
               ?.filter((tag: ToolTag) => Object.values(ToolTag).includes(tag))
-              .map((tag: ToolTag) => (
-                <span class:list={['text-xs px-1.5 py-0.5 rounded', tagStyles[tag]]}>{tag}</span>
-              ))
+              .map((tag: ToolTag) => <span class={tagStyles[tag]}>{tag}</span>)
           }
         </div>
       </div>
