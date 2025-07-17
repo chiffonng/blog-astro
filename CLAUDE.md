@@ -44,6 +44,7 @@ Use these commands to analyze changes and identify potential bugs (similar to Cu
 - `git diff origin/main --stat` - Show summary of changes (files and line counts) vs main
 
 **Bug Detection Workflow:**
+
 1. Before committing: `git diff --cached` to review staged changes
 2. After committing: `git diff origin/main` to see all branch changes
 3. Focus on critical files: `git diff origin/main -- src/components/ src/types/`
@@ -58,6 +59,7 @@ uses **UnoCSS** for styling with **presetMini** (Tailwind 3 based). Use TypeScri
 declarations (types, interfaces, utils).
 
 **Key Dependencies:**
+
 - **astro-pure@1.3.1** - Core theme integration
 - **UnoCSS@66.3.3** - CSS framework with Tailwind 3 mini preset and typography
 - **Shiki@3.7.0** - Syntax highlighting with custom transformers
@@ -65,8 +67,8 @@ declarations (types, interfaces, utils).
 
 ### Content Management
 
-- **Content Collections**: Blog posts (`src/content/blog/`) and projects (`src/content/projects/`) are
-  managed via Astro's content collections with Zod schemas
+- **Content Collections**: Blog posts (`src/content/blog/`) and projects (`src/content/projects/`)
+  are managed via Astro's content collections with Zod schemas
 - **Markdown Processing**: Extended with KaTeX for math, custom Shiki transformers for code blocks,
   and rehype plugins for auto-linking headings
 
@@ -90,6 +92,7 @@ Components follow a modular pattern with **consistent prop conventions**:
 - `layouts/` - Page layout templates
 
 **Component Props Convention:**
+
 - All component types centralized in `src/types/components.ts`
 - Props interfaces use `class?: string` (following HTML standard)
 - Components destructure with `{ class: className }` (JavaScript-safe variable)
@@ -139,7 +142,7 @@ corresponding schema and TypeScript types.
 
 - The project excludes 'astro-pure' from Vite optimization due to TypeScript file shipping
 - Pagefind module imports are externalized in Vite config to prevent build errors
-- **CSS Organization**: 
+- **CSS Organization**:
   - `src/assets/styles/app.css` - Build-time styles (fonts, CSS variables, base styles)
   - `public/styles/global.css` - Runtime styles (animations, Shiki, KaTeX, scrollbars)
   - This separation optimizes build performance while maintaining runtime flexibility

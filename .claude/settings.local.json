@@ -24,7 +24,8 @@
       "WebFetch(domain:localhost)",
       "WebFetch(domain:astro-pure.js.org)",
       "WebFetch(domain:context7.com)",
-      "WebFetch(domain:docs.astro.build)"
+      "WebFetch(domain:docs.astro.build)",
+      "Bash(rg:*)"
     ],
     "deny": []
   }

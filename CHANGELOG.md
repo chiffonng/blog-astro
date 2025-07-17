@@ -11,7 +11,8 @@ Major architectural refactor with content management improvements and component 
 
 ### Added
 
-- New components: [Pill](src/components/base/Pill.astro), [Svg](src/components/base/Svg.astro), [LinkExternal](src/components/base/LinkExternal.astro)
+- New components: [Pill](src/components/base/Pill.astro), [Svg](src/components/base/Svg.astro),
+  [LinkExternal](src/components/base/LinkExternal.astro)
 - [Props interfaces](src/types/components.ts) for centralized component type safety
 - Phone number validation and display on home page
 - Project tags deduplication logic in [content.config.ts](src/content.config.ts)
@@ -20,8 +21,11 @@ Major architectural refactor with content management improvements and component 
 ### Changed
 
 - **Content management**: Moved all content to git submodule (`src/content` → separate repository)
-- **Profile links system**: Complete overhaul with simplified [ProfileLinkConfigSchema](src/types/profile-links.ts), enhanced validation, and improved type safety
-- **Architecture**: Consolidated `src/constants/` and `src/utils/` into `src/lib/` directory with better organization
+- **Profile links system**: Complete overhaul with simplified
+  [ProfileLinkConfigSchema](src/types/profile-links.ts), enhanced validation, and improved type
+  safety
+- **Architecture**: Consolidated `src/constants/` and `src/utils/` into `src/lib/` directory with
+  better organization
 - **Component system**: Replaced Button with specialized Link, LinkExternal, and Pill components
 - **UI/UX**: Improved prose styling, set maximum home page width, simplified assets and CSS
 - **Dependencies**: Updated to latest versions, migrated to pnpm@10.13.1
@@ -41,15 +45,20 @@ Major architectural refactor with content management improvements and component 
 
 ### Added
 
-- [Collapse](src/components/base/Collapse.astro), [TOC](src/components/blog/TOC.astro), [TOC Plugin](src/plugins/toc.ts), [Link](src/components/base/Link.astro) components
+- [Collapse](src/components/base/Collapse.astro), [TOC](src/components/blog/TOC.astro),
+  [TOC Plugin](src/plugins/toc.ts), [Link](src/components/base/Link.astro) components
 - TOC auto-scroll functionality to keep highlighted headings visible during scrolling
-- Enhanced [Profile](src/components/home/Profile.astro) with pronouns, pronunciation guide, and location
-- [ProfileLinks](src/components/base/ProfileLinks.astro) component with configurable label visibility
+- Enhanced [Profile](src/components/home/Profile.astro) with pronouns, pronunciation guide, and
+  location
+- [ProfileLinks](src/components/base/ProfileLinks.astro) component with configurable label
+  visibility
 
 ### Changed
 
-- **Navigation**: Complete [MenuNav](src/components/layout/MenuNav.astro) overhaul with responsive search integration, Cmd+K support, and improved animations
-- **TOC system**: Enhanced with mobile/desktop responsive design, sticky interface, and refactored logic to [plugins/toc](src/plugins/toc.ts)
+- **Navigation**: Complete [MenuNav](src/components/layout/MenuNav.astro) overhaul with responsive
+  search integration, Cmd+K support, and improved animations
+- **TOC system**: Enhanced with mobile/desktop responsive design, sticky interface, and refactored
+  logic to [plugins/toc](src/plugins/toc.ts)
 - **Footer**: Simplified using ProfileLinks component for better maintainability
 - **Collapse**: Added `isExpanded` prop and improved visual styling
 - **Code blocks**: Shiki copy button now uses unicode emojis instead of SVG icons
@@ -85,7 +94,8 @@ Initial migration from upstream theme with significant architectural changes.
 - **Tools page**: Complete redesign of [Tools](src/pages/uses/index.astro)
 - **Layout system**: Enhanced frontmatter handling and footer positioning
 - **Components**: Redesigned Footer and ContactBar with profile links integration
-- **Blog cards**: Replaced PostPreview with [BlogCard](src/components/blog/BlogCard.astro), changed `draft` to `publish` property
+- **Post preview**: Replaced PostPreview with [PreviewCard](src/components/blog/PreviewCard.astro),
+  changed `draft` to `publish` property
 
 ### Fixed
 
