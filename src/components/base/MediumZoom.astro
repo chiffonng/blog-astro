@@ -2,10 +2,7 @@
 // https://github.com/francoischalifour/medium-zoom
 import config from '@/site.config'
 
-interface Props {
-  selector?: string
-  background?: string
-}
+import type { MediumZoomProps as Props } from '@/components/types'
 
 const { selector = config.mediumZoom.selector, background = 'hsl(var(--background) / 0.8)' } =
   Astro.props

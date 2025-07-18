@@ -2,9 +2,9 @@
 // import { ClientRouter } from 'astro:transitions'
 
 import config from '@/site-config'
-import type { SiteMeta } from '@/types/site-config'
+import type { SiteMeta as Props } from '@/types/site-config'
 
-type Props = SiteMeta
+
 
 const { articleDate, description, ogImage, title } = Astro.props
 

@@ -97,8 +97,8 @@ export const FooterConfigSchema = () =>
     sourceCode: z.string().url().optional(),
     licenseCode: z
       .object({
-        type: z.string().default('GPL-3'),
-        href: z.string().url().default('https://www.gnu.org/licenses/gpl-3.0.en.html')
+        type: z.string().default('Apache-2.0'),
+        href: z.string().url().default('https://www.apache.org/licenses/LICENSE-2.0.html')
       })
       .optional(),
     sourceContent: z.string().url().optional(),
