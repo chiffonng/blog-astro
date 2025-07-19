@@ -3,7 +3,7 @@
  * @param array - Array of strings to deduplicate
  * @returns Deduplicated array in lowercase
  */
-export function dedupLowerCase(array: readonly string[]): string[] {
+function dedupLowerCase(array: readonly string[]): string[] {
   if (!array || array.length === 0) return []
   return [...new Set(array.map((str) => str.trim().toLowerCase()).filter(Boolean))]
 }
@@ -14,7 +14,7 @@ export function dedupLowerCase(array: readonly string[]): string[] {
  * @param array - Array of strings to deduplicate
  * @returns Deduplicated array with original case preserved
  */
-export function dedupPreserveCase(array: readonly string[]): string[] {
+function dedupPreserveCase(array: readonly string[]): string[] {
   if (!array || array.length === 0) return []
 
   const seen = new Map<string, string>()
@@ -31,3 +31,13 @@ export function dedupPreserveCase(array: readonly string[]): string[] {
 
   return Array.from(seen.values())
 }
+
+function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&[^;]+;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+export { dedupLowerCase, dedupPreserveCase, stripHtml }

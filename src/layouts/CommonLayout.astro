@@ -35,7 +35,7 @@ const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated || new Date().to
   <Link title='Back' href={pageBack} style='back' />
   <main class='mt-6'>
     <article class='min-w-0 grow'>
-      <div id='content-header' class='animate'>
+      <header id='content-header' class='animate'>
         <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>
           {pageTitle}
         </h1>
@@ -66,10 +66,10 @@ const pageLastUpdated = frontmatter?.lastUpdated || lastUpdated || new Date().to
         {/* Description */}
         {
           pageDescription && (
-            <blockquote class='text-muted-foreground mt-4'>{pageDescription}</blockquote>
+            <blockquote class='text-muted-foreground mt-4' set:html={pageDescription} />
           )
         }
-      </div>
+      </header>
 
       <div id='content' class:list={['animate mt-8 max-w-none overflow-x-hidden prose']}>
         <slot />

@@ -7,7 +7,7 @@ export { getFormattedDate, createDateRange } from './format-date'
 // Content utilities
 export { getReadingTime } from './reading-time'
 export { default as toString } from './mdast-util-to-string'
-export { dedupPreserveCase, dedupLowerCase } from './dedup'
+export { dedupPreserveCase, dedupLowerCase, stripHtml } from './string-manipulation'
 export { processProfileLinks } from './process-links'
 export { isMac, modifierKey } from './keyboard'
 
