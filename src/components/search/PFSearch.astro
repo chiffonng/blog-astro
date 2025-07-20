@@ -1,5 +1,5 @@
 ---
-import '@pagefind/default-ui/css/ui.css'
+
 ---
 
 <site-search>
@@ -18,18 +18,25 @@ import '@pagefind/default-ui/css/ui.css'
 
 <script>
   class SiteSearch extends HTMLElement {
+    private initialized = false
+
     constructor() {
       super()
+      this.setupLazyLoading()
+    }
 
-      // const shouldStrip = this.dataset.stripTrailingSlash !== undefined
-      // const stripTrailingSlash = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
-      // const formatURL = shouldStrip ? stripTrailingSlash : (path: string) => path
+    private setupLazyLoading() {
       const formatURL = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
 
-      window.addEventListener('DOMContentLoaded', () => {
-        // if (import.meta.env.DEV) return
-        const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
-        onIdle(async () => {
+      const initializeSearch = async () => {
+        if (this.initialized || import.meta.env.DEV) return
+        this.initialized = true
+
+        try {
+          // Load CSS dynamically
+          await import('@pagefind/default-ui/css/ui.css')
+
+          // Load search UI
           // @ts-expect-error — Missing types for @pagefind/default-ui package.
           const { PagefindUI } = await import('@pagefind/default-ui')
           new PagefindUI({
@@ -46,8 +53,35 @@ import '@pagefind/default-ui/css/ui.css'
               })
             }
           })
+        } catch (error) {
+          console.error('Failed to load search UI:', error)
+        }
+      }
+
+      // Use intersection observer for better performance
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              observer.disconnect()
+              const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
+              onIdle(initializeSearch)
+            }
+          })
+        },
+        { rootMargin: '100px' }
+      )
+
+      // Start observing when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          const searchElement = document.getElementById('site-search')
+          if (searchElement) observer.observe(searchElement)
         })
-      })
+      } else {
+        const searchElement = document.getElementById('site-search')
+        if (searchElement) observer.observe(searchElement)
+      }
     }
   }
   customElements.define('site-search', SiteSearch)
