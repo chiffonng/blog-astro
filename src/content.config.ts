@@ -1,5 +1,5 @@
-import { defineCollection, z, type SchemaContext } from 'astro:content'
 import { glob } from 'astro/loaders'
+import { defineCollection, z, type SchemaContext } from 'astro:content'
 
 import { dateSchema } from '@/types'
 import { dedupLowerCase, dedupPreserveCase } from '@/lib'

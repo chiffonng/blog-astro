@@ -4,8 +4,8 @@
  */
 
 import type { ImageMetadata, MarkdownHeading } from 'astro'
-import type { CollectionEntry, InferEntrySchema } from 'astro:content'
 import type { HTMLAttributes } from 'astro/types'
+import type { CollectionEntry, InferEntrySchema } from 'astro:content'
 
 // Base component props
 export interface CardProps {

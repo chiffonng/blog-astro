@@ -14,7 +14,7 @@
     "sync": "astro sync",
     "check": "astro check",
     "astro": "astro",
-    "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
+    "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro,mjs,cjs}'",
     "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx,astro}'",
     "routine": "pnpm lint && pnpm sync && pnpm check && pnpm format",
     "clean": "rm -rf .astro dist"

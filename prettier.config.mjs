@@ -30,11 +30,11 @@ export default {
   importOrder: [
     '<BUILTIN_MODULES>',
     '',
-    '^(astro$)|^(astro:(.*)$)',
-    '^@astrojs/(.*)$',
+    '^(astro$)|^astro/(.*)$', // core astro
+    '^(astro:(.*)$)|^@astrojs/(.*)$', // astro official plugin
+    '^(.*)/astro|^astro-(.*)', // astro integration from other libraries
     '<THIRD_PARTY_MODULES>',
     '',
-    '^astro-pure/(.*)$',
     '^@/plugins$|^@/plugins/(.*)$',
     '^@/site-config$',
     '^@/theme$',

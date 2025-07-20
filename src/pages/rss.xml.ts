@@ -1,7 +1,7 @@
 import type { AstroGlobal, ImageMetadata } from 'astro'
+import rss from '@astrojs/rss'
 import { getImage } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
-import rss from '@astrojs/rss'
 import config from '@/site.config'
 import type { Root } from 'mdast'
 import rehypeStringify from 'rehype-stringify'
