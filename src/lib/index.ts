@@ -1,9 +1,6 @@
 // Theme utilities
 export { getTheme, listenThemeChange, setTheme, showToast } from './set-theme'
 
-// Date formatting utilities
-export { getFormattedDate, createDateRange } from './format-date'
-
 // Content utilities
 export { getReadingTime } from './reading-time'
 export { default as toString } from './mdast-util-to-string'

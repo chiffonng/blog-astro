@@ -8,6 +8,7 @@ import type {
   ThemeUserConfig,
   UserConfig
 } from '@/types/site-config'
+import { ConfigSchema } from '@/types/site-config'
 
 /**
  * @description Theme configuration for the site
@@ -114,6 +115,7 @@ const userConfig: UserConfig = {
   ...blog
 }
 
-const config: Config = userConfig as Config
+// Validate and add default config
+const config: Config = ConfigSchema.parse(userConfig)
 
 export default config

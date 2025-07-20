@@ -1,6 +1,7 @@
 import { z } from 'astro/zod'
 
-import { faviconSchema, ProfileConfigSchema } from '@/types'
+import { faviconSchema } from './common'
+import { ProfileConfigSchema } from './profile'
 
 export const SiteMetaSchema = z.object({
   title: z.string(),
@@ -13,6 +14,10 @@ export const CoreThemeConfigSchema = z.object({
   title: z.string(),
   favicon: faviconSchema,
   titleDelimiter: z.string(),
+  /**
+   * Whether to
+   * {@link https://docs.astro.build/en/reference/routing-reference/#prerender}
+   */
   prerender: z.boolean().default(true),
   /** Display markdown content */
   content: z.object({
@@ -55,7 +60,8 @@ export const LocaleConfigSchema = z.object({
 export const DevConfigSchema = z.object({
   /** The npm CDN to use for loading npm packages.
    * @example
-   *  	https://unpkg.com/npm
+   * https://cdn.jsdelivr.net/npm
+   * https://unpkg.com/npm
    *
    */
   npmCDN: z
@@ -95,26 +101,15 @@ export const FooterConfigSchema = () =>
   z.object({
     credits: z.boolean(),
     sourceCode: z.string().url().optional(),
-    licenseCode: z
-      .object({
-        type: z.string().default('Apache-2.0'),
-        href: z.string().url().default('https://www.apache.org/licenses/LICENSE-2.0.html')
-      })
-      .optional(),
-    sourceContent: z.string().url().optional(),
-    links: z
-      .array(
-        z.object({
-          title: z.string(),
-          link: z.string(),
-          style: z.string().optional()
-        })
-      )
-      .optional()
+    /** Source of markdown
+     * @note If not provided, infer from sourceCode
+     */
+    sourceContent: z.string().url().optional()
   })
 
 export const IntegrationConfigSchema = () =>
   z.object({
+    /** Static search of the website using pagefind */
     pagefind: z.boolean().default(true),
     /** A lightbox library that can add zoom effect */
     mediumZoom: z
@@ -129,7 +124,9 @@ export const IntegrationConfigSchema = () =>
         enable: true,
         selector: '.prose .zoomable',
         options: { className: 'zoomable' }
-      })
+      }),
+    /** Enable page view tracking with Astro DB */
+    pageView: z.boolean().default(false)
   })
 
 export const BlogConfigSchema = () =>
@@ -144,12 +141,10 @@ export const BlogConfigSchema = () =>
         type: 'CC-BY-NC-4.0',
         href: 'https://creativecommons.org/licenses/by-nc/4.0/'
       }),
-    sharePlatforms: z
-      .array(z.enum(['x', 'bluesky', 'linkedin', 'facebook', 'weibo']))
-      .default([])
-      .describe(
-        'Social platforms to show share buttons for. Copy link and email are always included.'
-      )
+    /** Social platforms to show share buttons for. Copy link and email are always included.
+     * @see 'src/lib/shares.ts' for available platforms
+     */
+    sharePlatforms: z.array(z.enum(['x', 'bluesky', 'linkedin', 'facebook', 'weibo'])).default([])
   })
 
 export const ConfigSchema = ThemeConfigSchema()
