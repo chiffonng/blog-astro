@@ -15,11 +15,12 @@ export {
 } from './data'
 export {
   ProfileLinkConfigSchema,
+  ProfileConfigSchema,
   type ProcessedProfileLink,
   type ProfileLinkConfig,
-  type ProfileLinkType
-} from './profile-links'
-export { ProfileConfigSchema, type ProfileConfig } from './profile'
+  type ProfileLinkType,
+  type ProfileConfig
+} from './profile'
 export {
   type HeaderUserConfig,
   type FooterUserConfig,
