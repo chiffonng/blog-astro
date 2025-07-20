@@ -13,17 +13,18 @@ Personal website for academia, a fork of
 [al-folio](https://github.com/alshedivat/al-folio), and
 [vuepress-theme-hope](https://theme-hope.vuejs.press/).
 
-See [CHANGELOG](CHANGELOG.md) for changes.
-
 # Features
 
 From [astro-pure-theme v.4.0.5](https://github.com/cworld1/astro-theme-pure):
 
-🚀 Fast & high performance 📱 Responsive design 🔍 Full-site search built with pagefind 🗺️ Sitemap &
-RSS feed 🕸️ SEO-friendly 📖 TOC (table of contents) 🖼️ Dynamic open graph generation for posts 🖼️
-Mediumzoom lightbox for images
+- 🚀 Fast & high performance (powered by Astro's island architecture)
+- 🔍 Full-site search built with pagefind
+- 🗺️ Sitemap & RSS feed
+- 🕸️ SEO-friendly
+- 📖 TOC (table of contents)
+- 🔍 Mediumzoom lightbox for images
 
-Added:
+This theme added:
 
 - [x] 🐳 Docker support
 - [ ] 📄 Show publications from a bibtex file
@@ -35,14 +36,13 @@ Added:
 - [x] 🛡️ Safe external links and protected email field
 - [x] ➕ Enhancements for profile links / socials display, menu navigation, and footer
 
-Internally, performance is improved with icon inline CSS (UnoCSS-powered), better prop handling, and
-reusable components.
+We improved performance with [icon in pure CSS](https://unocss.dev/presets/icons), and developer experience with better type and prop handling, and reusable components.
 
 ## Installation
 
 ### If Node.js is installed
 
-Node >= 22, then you can run in your directory of choice (with npm/pnpm/yarn/bun):
+Node >= 20, then you can run in your directory of choice (with npm/pnpm/yarn/bun):
 
 ```sh
 pnpm create astro@latest --template chiffonng/blog-astro
@@ -50,12 +50,9 @@ pnpm create astro@latest --template chiffonng/blog-astro
 
 See [Astro official guide](https://docs.astro.build/en/install-and-setup/) for more information.
 
-### Prerequisites
+### Docker
 
-- Ensure Docker Desktop has at least 8GB RAM allocated (Docker → Settings → Resources → Memory)
-- The project has 685+ dependencies requiring significant memory during installation
-
-### Development
+#### Development
 
 ```bash
 # Build and start development container
@@ -68,13 +65,13 @@ cd docker && docker compose up --build astro-dev-search
 docker compose down
 ```
 
-### Production
+#### Production
 
 ```bash
 cd docker && docker compose up --build astro-prod
 ```
 
-### Troubleshooting
+#### Troubleshooting
 
 - **Memory errors during build**: Increase Docker Desktop memory allocation
 - **Port conflicts**: Change ports in `docker-compose.yaml`
