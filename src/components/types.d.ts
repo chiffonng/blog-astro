@@ -119,10 +119,6 @@ export interface BackToTopProps {
   needPercent?: boolean
 }
 
-export interface PageInfoProps {
-  class?: string
-}
-
 type PaginationLink = {
   url: string
   text?: string

@@ -19,7 +19,6 @@ export { default as MenuNav } from './layout/MenuNav.astro'
 export { default as Section } from './layout/Section.astro'
 export { default as ThemeProvider } from './layout/ThemeProvider.astro'
 export { default as BackToTop } from './layout/BackToTop.astro'
-export { default as PageInfo } from './layout/PageInfo.astro'
 export { default as Paginator } from './layout/Paginator.astro'
 
 // Blog

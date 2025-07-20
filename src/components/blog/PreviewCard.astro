@@ -73,27 +73,20 @@ const { remarkPluginFrontmatter } = await render(post)
               {data.description}
             </p>
             <div class='flex items-center gap-2 py-1.5 text-sm text-muted-foreground sm:py-3'>
+              {/* updated date (if exists) */}
+              {data.updatedDate && (
+                <>
+                  <span class='flex items-center gap-1'>
+                    <span class='i-mingcute:clock-2-line' />
+                    <FormattedDate date={data.updatedDate} />
+                  </span>
+                </>
+              )}
               {/* published date */}
               <span class='flex items-center gap-1'>
                 <span class='i-mingcute:calendar-2-line' />
                 <FormattedDate date={data.publishDate} />
               </span>
-              {/* updated date (if exists) */}
-              {data.updatedDate && (
-                <>
-                  <span class='flex items-center gap-1'>
-                    <span class='i-mingcute:clock-line' />
-                    <FormattedDate date={data.updatedDate} />
-                  </span>
-                </>
-              )}
-              {/* language */}
-              {data.language && (
-                <span class='flex items-center gap-1'>
-                  <span class='i-mingcute:earth-line' />
-                  {data.language}
-                </span>
-              )}
               {/* reading time */}
               <span class='flex items-center gap-1'>
                 <span class='i-mingcute:time-duration-line' />
