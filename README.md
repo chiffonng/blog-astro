@@ -25,7 +25,7 @@ Mediumzoom lightbox for images
 
 Added:
 
-- [ ] 🐳 Docker support
+- [x] 🐳 Docker support
 - [ ] 📄 Show publications from a bibtex file
 - [ ] ✏️ Richer markdown support with wikilinks [[]],
 - [x] 📃 Special pages, including [llms.txt](https://llmstxt.org/), [/uses](https://uses.tech/),
@@ -37,3 +37,45 @@ Added:
 
 Internally, performance is improved with icon inline CSS (UnoCSS-powered), better prop handling, and
 reusable components.
+
+## Installation
+
+### If Node.js is installed
+
+Node >= 22, then you can run in your directory of choice (with npm/pnpm/yarn/bun):
+
+```sh
+pnpm create astro@latest --template chiffonng/blog-astro
+```
+
+See [Astro official guide](https://docs.astro.build/en/install-and-setup/) for more information.
+
+### Prerequisites
+
+- Ensure Docker Desktop has at least 8GB RAM allocated (Docker → Settings → Resources → Memory)
+- The project has 685+ dependencies requiring significant memory during installation
+
+### Development
+
+```bash
+# Build and start development container
+cd docker && docker compose up --build astro-dev
+
+# Development with search functionality
+cd docker && docker compose up --build astro-dev-search
+
+# Stop services
+docker compose down
+```
+
+### Production
+
+```bash
+cd docker && docker compose up --build astro-prod
+```
+
+### Troubleshooting
+
+- **Memory errors during build**: Increase Docker Desktop memory allocation
+- **Port conflicts**: Change ports in `docker-compose.yaml`
+- **Slow builds**: Enable BuildKit with `export DOCKER_BUILDKIT=1`

@@ -1,0 +1,75 @@
+services:
+  astro-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    ports:
+      - '4321:4321'
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - pnpm-cache:/root/.local/share/pnpm/store
+    environment:
+      NODE_ENV: development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4321/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    develop:
+      watch:
+        - action: sync
+          path: ../src
+          target: /app/src
+        - action: sync
+          path: ../public
+          target: /app/public
+        - action: rebuild
+          path: ../package.json
+
+  astro-dev-search:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    ports:
+      - '4322:4321'
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - pnpm-cache:/root/.local/share/pnpm/store
+    command: ["dumb-init", "--", "pnpm", "dev:search", "--host"]
+    environment:
+      NODE_ENV: development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4321/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  astro-prod:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      target: production
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    ports:
+      - '4321:4321'
+    environment:
+      NODE_ENV: production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4321/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  pnpm-cache:
