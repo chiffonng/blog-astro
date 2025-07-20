@@ -1,14 +1,14 @@
+import { defineConfig } from 'astro/config'
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
+import UnoCSS from 'unocss/astro'
 import playformCompress from '@playform/compress'
-import { defineConfig } from 'astro/config'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import { visualizer } from 'rollup-plugin-visualizer'
-import UnoCSS from 'unocss/astro'
 
 // Local integrations
 import { pagefindIntegration } from './src/integrations/pagefind.ts'
