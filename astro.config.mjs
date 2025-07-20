@@ -1,11 +1,13 @@
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
+import playformCompress from '@playform/compress'
 import { defineConfig } from 'astro/config'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
+import { visualizer } from 'rollup-plugin-visualizer'
 import UnoCSS from 'unocss/astro'
 
 // Local integrations
@@ -38,8 +40,9 @@ export default defineConfig({
 
   // Adapter
   // https://docs.astro.build/en/guides/deploy/
-  // ---
+  //
 
+  /** https://docs.astro.build/en/reference/configuration-reference/#imageservice */
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp'
@@ -50,7 +53,8 @@ export default defineConfig({
     sitemap(),
     mdx({ optimize: true }),
     UnoCSS({ injectReset: true }),
-    pagefindIntegration(config.pagefind)
+    pagefindIntegration(config.pagefind),
+    playformCompress()
   ],
 
   prefetch: true,
@@ -108,10 +112,10 @@ export default defineConfig({
       }
     },
     plugins: [
-      //   visualizer({
-      //     emitFile: true,
-      //     filename: 'stats.html'
-      //   })
+      visualizer({
+        template: 'list',
+        filename: 'stats.yaml'
+      })
     ]
   }
 })
