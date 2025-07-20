@@ -4,6 +4,9 @@
 
 import { z } from 'astro/zod'
 
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.svg'] as const
+const AUDIO_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac', '.webm'] as const
+
 /**
  * @description Custom date validation that accepts both YYYY-MM and YYYY-MM-DD formats
  */
@@ -20,8 +23,6 @@ const dateSchema = z
   .refine((date) => !Number.isNaN(date.getTime()), {
     message: 'Invalid date format. Must be YYYY-MM-DD or YYYY-MM'
   })
-
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.svg'] as const
 
 const imgPathSchema = z.string().refine(
   (value) => {
@@ -41,8 +42,6 @@ const isValidImageExtension = (filePath: string): boolean => {
   const ext = filePath.toLowerCase().split('.').pop()
   return ext ? IMAGE_EXTENSIONS.includes(`.${ext}` as (typeof IMAGE_EXTENSIONS)[number]) : false
 }
-
-const AUDIO_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac', '.webm'] as const
 
 const isValidAudioExtension = (filePath: string): boolean => {
   const ext = filePath.toLowerCase().split('.').pop()
@@ -64,24 +63,20 @@ const audioPathSchema = z.string().refine(
   }
 )
 
-const faviconSchema = z.string().refine(
-  (value) => {
-    // Check if it's an emoji (single character or emoji sequence)
-    const emojiRegex = /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u
-    if (emojiRegex.test(value)) return true
-
-    // Check if it's a URL
-    try {
-      const url = new URL(value)
-      return url.protocol === 'http:' || url.protocol === 'https:'
-    } catch {
-      // Check if it's a local path starting with public/ or /
-      return value.startsWith('public/') || value.startsWith('/')
-    }
-  },
-  {
+const faviconSchema = z
+  .union([
+    z.string().regex(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u),
+    z.string().url(),
+    z.string().startsWith('public/'),
+    z.string().startsWith('/')
+  ])
+  .refine(() => true, {
     message: 'Favicon must be an emoji, a valid URL, or a local path starting with public/ or /'
-  }
-)
+  })
 
+export type ImgPath = z.infer<typeof imgPathSchema>
+export type AudioPath = z.infer<typeof audioPathSchema>
+
+/** Favicon must be an emoji, a valid URL, or a local path starting with public/ or / */
+export type Favicon = z.infer<typeof faviconSchema>
 export { imgPathSchema, audioPathSchema, dateSchema, faviconSchema }

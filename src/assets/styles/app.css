@@ -28,7 +28,7 @@ html {
   --secondary: 240 4.8% 95.9%;
   --secondary-foreground: 240 5.9% 10%;
   --muted: 240 4.8% 95%;
-  --muted-foreground: 240 3.8% 28.1%;
+  --muted-foreground: 240 3.8% 40%;
   --accent: 240 4.8% 95.9%;
   --accent-foreground: 240 5.9% 10%;
   --destructive: 0 72.22% 50.59%;
@@ -50,7 +50,7 @@ html {
   --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;
   --muted: 240 5.9% 12%;
-  --muted-foreground: 240 5% 74.9%;
+  --muted-foreground: 240 5% 65%;
   --accent: 240 3.7% 15.9%;
   --accent-foreground: 0 0% 98%;
   --destructive: 0 62.8% 30.6%;
@@ -72,4 +72,36 @@ a {
   &:hover {
     color: hsl(var(--primary) / var(--un-text-opacity, 1));
   }
+}
+
+.medium-zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  will-change: opacity;
+}
+.medium-zoom--opened .medium-zoom-overlay {
+  cursor: pointer;
+  cursor: zoom-out;
+  opacity: 1;
+  z-index: 999;
+}
+.medium-zoom-image {
+  cursor: pointer;
+  cursor: zoom-in;
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+.medium-zoom-image--hidden {
+  visibility: hidden;
+}
+.medium-zoom-image--opened {
+  position: relative;
+  cursor: pointer;
+  cursor: zoom-out;
+  will-change: transform;
+  z-index: 999;
 }

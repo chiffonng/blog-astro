@@ -42,6 +42,11 @@ export interface LinkExternalProps extends HTMLAttributes<'a'> {
   icon?: string
 }
 
+export interface MediumZoomProps {
+  selector?: string
+  background?: string
+}
+
 export interface PillProps {
   title?: string
   class?: string
@@ -114,19 +119,15 @@ export interface BackToTopProps {
   needPercent?: boolean
 }
 
-export interface PageInfoProps {
-  class?: string
-  hideComment?: boolean
+type PaginationLink = {
+  url: string
+  text?: string
+  srLabel?: string
 }
 
 export interface PaginatorProps {
-  nextUrl?: { text: string; url: string }
-  prevUrl?: { text: string; url: string }
-}
-
-export interface MediumZoomProps {
-  selector?: string
-  background?: string
+  nextUrl?: PaginationLink
+  prevUrl?: PaginationLink
 }
 
 export interface SectionProps {
@@ -145,12 +146,6 @@ export interface TOCProps {
   class?: string
   id?: string
   isMobile?: boolean
-}
-
-export interface PreviewCardProps {
-  post: CollectionEntry<'blog'>
-  detailed?: boolean
-  class?: string
 }
 
 export interface PostBottomProps {
@@ -211,9 +206,4 @@ export interface GithubActivityProps {
    */
   username?: string
   class?: string
-}
-
-export interface ProjectSectionProps {
-  class?: string
-  projects: CollectionEntry<'projects'>[]
 }

@@ -1,8 +1,6 @@
 ---
-import type { FormattedDateProps } from '@/components/types'
-import { getFormattedDate } from '@/lib'
-
-type Props = FormattedDateProps
+import type { FormattedDateProps as Props } from '@/components/types'
+import { getFormattedDate } from '@/lib/format-date'
 
 const { date, dateTimeOptions, class: className, ...attrs } = Astro.props
 

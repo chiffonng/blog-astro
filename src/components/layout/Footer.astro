@@ -1,97 +1,104 @@
 ---
-import config, { footer as fc } from '@/site.config'
+import config from '@/site.config'
 
 import { ProfileLinks } from '@/components'
 
-const verticalGap = 'gap-2'
+// Create array of available source links
+const sourceLinks = [
+  config.sourceCode ? { href: config.sourceCode, label: 'Source Code' } : null,
+  config.sourceContent ? { href: config.sourceContent, label: 'Source Content' } : null,
+  ...(config.footerLinks || [])
+].filter(Boolean)
 ---
 
-<footer class='mx-0 mb-5 mt-auto'>
+<footer class='mb-3 mt-auto'>
   <div class='border-t pt-3'></div>
-  {/* On medium screen, the footer is stacked, each section is one row */}
-  {/* On large screen, the footer is one line since sections are col by col on one row*/}
-  <div
-    class:list={[
-      'flex flex-col items-center',
-      verticalGap,
-      'text-center text-muted-foreground text-sm [&_a]:text-foreground hover:[&_a]:text-primary md:flex-col lg:flex-row lg:justify-between lg:text-left'
-    ]}
-  >
-    {/* Copyright + Credits */}
-    <div
-      class:list={[
-        'flex flex-col items-center',
-        verticalGap,
-        'lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0'
-      ]}
-    >
-      <span class='whitespace-nowrap'>
+  <div class='flex flex-col gap-4 text-sm md:flex-row md:items-center md:justify-between'>
+    {/* Left side: Copyright and Credits */}
+    <div class='space-y-1 text-center md:text-left'>
+      <div class='text-muted-foreground'>
         Copyright &copy; <time id='footer-year'></time>
         {config.name}
-      </span>
+      </div>
       {
-        fc.credits && (
-          <span class='whitespace-nowrap'>
-            Powered by{' '}
-            <a href='https://astro.build/' target='_blank' rel='noopener noreferrer'>
+        config.credits && (
+          <div class='text-muted-foreground whitespace-nowrap'>
+            Built with{' '}
+            <a
+              href='https://astro.build/'
+              target='_blank'
+              rel='noopener noreferrer'
+              class='footer-link'
+            >
               Astro
             </a>
-            &{' '}
-            <a href='https://unocss.dev/' target='_blank' rel='noopener noreferrer'>
+            {' + '}
+            <a
+              href='https://unocss.dev/'
+              target='_blank'
+              rel='noopener noreferrer'
+              class='footer-link'
+            >
               UnoCSS
             </a>
-            . Fork of
+            . A fork of{' '}
             <a
               href='https://github.com/cworld1/astro-theme-pure'
               target='_blank'
               rel='noopener noreferrer'
+              class='footer-link'
             >
               Pure
             </a>{' '}
             theme.
-          </span>
+          </div>
         )
       }
     </div>
 
-    {/* Links + Social Icons, with divider | between parts on large screen */}
-    <div
-      class:list={[
-        'flex flex-col items-center',
-        verticalGap,
-        'lg:flex-row lg:items-center lg:divide-x lg:divide-muted-foreground/50 lg:[&>*]:px-2 lg:[&>*:first-child]:pl-0'
-      ]}
-    >
-      {/* Footer links and source links */}
+    {/* Right side: Source Links and Social Icons */}
+    <div class='flex flex-col items-center gap-y-1 md:items-end'>
       {
-        (fc.links && fc.links.length > 0) || fc.sourceCode || fc.sourceContent ? (
-          <div class='flex items-center gap-1 [&>a:not(:last-child)]:after:content-["/"] [&>a:not(:last-child)]:after:text-muted-foreground/50 [&>a:not(:last-child)]:after:ml-1'>
-            {fc.links &&
-              fc.links.map(
-                ({ title, link, style = '' }: { title: string; link: string; style?: string }) => (
-                  <a href={link} target='_blank' rel='noopener noreferrer' class={style}>
-                    {title}
-                  </a>
-                )
-              )}
-            {fc.sourceCode && (
-              <a href={fc.sourceCode} target='_blank' rel='noopener noreferrer'>
-                Source Code
-              </a>
-            )}
-            {fc.sourceContent && (
-              <a href={fc.sourceContent} target='_blank' rel='noopener noreferrer'>
-                Source Content
-              </a>
-            )}
+        sourceLinks.length > 0 && (
+          <div class='flex flex-wrap justify-center gap-x-2 md:justify-end'>
+            {sourceLinks.map((link, index) => (
+              <>
+                <a href={link?.href} target='_blank' rel='noopener noreferrer' class='source-link'>
+                  {link?.label}
+                </a>
+                {index < sourceLinks.length - 1 && <span class='text-muted-foreground/60'>/</span>}
+              </>
+            ))}
           </div>
-        ) : null
+        )
       }
-
-      <ProfileLinks includeRss={true} ariaLabel='Social links' />
+      <ProfileLinks includeRss={true} />
     </div>
   </div>
 </footer>
+
+<style>
+  .source-link {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .source-link:hover {
+    color: hsl(var(--primary));
+    transform: translateY(-1px);
+  }
+
+  .footer-link {
+    color: hsl(var(--foreground));
+    transition: all 200ms ease;
+  }
+
+  .footer-link:hover {
+    color: hsl(var(--primary));
+    text-decoration-color: hsl(var(--primary));
+  }
+</style>
 
 {/* Use client-side JavaScript to get current year when page loads */}
 <script is:inline>

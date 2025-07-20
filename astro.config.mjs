@@ -8,9 +8,6 @@ import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 import UnoCSS from 'unocss/astro'
 
-// Others
-// import { visualizer } from 'rollup-plugin-visualizer'
-
 // Local integrations
 import { pagefindIntegration } from './src/integrations/pagefind.ts'
 // Local rehype & remark plugins
@@ -67,13 +64,13 @@ export default defineConfig({
     remarkPlugins,
     rehypePlugins: [
       [rehypeKatex, {}],
-      rehypeHeadingIds,
+      [rehypeHeadingIds, { headingIdCompat: true }],
       [
         rehypeAutolinkHeadings,
         {
           behavior: 'append',
           properties: { className: ['anchor'] },
-          content: { type: 'text', value: '#' }
+          content: { type: 'text', value: '🔗' }
         }
       ],
       [

@@ -2,7 +2,7 @@
 import type { CollectionKey, InferEntrySchema } from 'astro:content'
 import config from '@/site.config'
 
-import { getFormattedDate } from '@/lib'
+import { getFormattedDate } from '@/lib/format-date'
 
 interface Props<T extends CollectionKey> {
   data: InferEntrySchema<T>

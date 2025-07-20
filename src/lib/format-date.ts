@@ -23,10 +23,17 @@ export function createDateRange(
 ) {
   if (!fromDate && !toDate) return null
 
-  const formatter = (date: Date) => getFormattedDate(date, options)
+  const formatter = (date: Date) => getFormattedDate(date, { day: undefined, ...options })
 
   if (fromDate && !toDate) return `${formatter(fromDate)} - Present`
   if (!fromDate && toDate) return formatter(toDate)
-  if (fromDate && toDate) return `${formatter(fromDate)} - ${formatter(toDate)}`
+  if (fromDate && toDate && fromDate === toDate) {
+    return formatter(fromDate)
+  }
+  if (fromDate && toDate && fromDate != toDate) {
+    const formattedFrom = formatter(fromDate)
+    const formattedTo = formatter(toDate)
+    return formattedFrom === formattedTo ? formattedFrom : `${formattedFrom} - ${formattedTo}`
+  }
   return null
 }
