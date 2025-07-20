@@ -1,4 +1,4 @@
-import type { ProfileConfig } from '@/types/profile'
+import type { ProfileConfig } from './types/profile'
 import type {
   BlogUserConfig,
   Config,
@@ -7,8 +7,8 @@ import type {
   IntegrationUserConfig,
   ThemeUserConfig,
   UserConfig
-} from '@/types/site-config'
-import { ConfigSchema } from '@/types/site-config'
+} from './types/site-config'
+import { ConfigSchema } from './types/site-config'
 
 /**
  * @description Theme configuration for the site
@@ -55,7 +55,8 @@ export const header: HeaderUserConfig = {
 export const footer: FooterUserConfig = {
   credits: true,
   sourceCode: 'https://github.com/chiffonng/blog-astro',
-  sourceContent: 'https://github.com/chiffonng/blog-content'
+  sourceContent: 'https://github.com/chiffonng/blog-content',
+  footerLinks: []
 }
 
 /**

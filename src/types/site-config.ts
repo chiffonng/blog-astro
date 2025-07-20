@@ -104,7 +104,15 @@ export const FooterConfigSchema = () =>
     /** Source of markdown
      * @note If not provided, infer from sourceCode
      */
-    sourceContent: z.string().url().optional()
+    sourceContent: z.string().url().optional(),
+    footerLinks: z
+      .array(
+        z.object({
+          href: z.string().url(),
+          label: z.string()
+        })
+      )
+      .default([])
   })
 
 export const IntegrationConfigSchema = () =>
