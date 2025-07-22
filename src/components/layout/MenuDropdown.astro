@@ -1,0 +1,385 @@
+---
+import config from '@/site.config'
+
+import type { MenuItem, MenuItemConfig } from '@/types/site-config'
+import { createNavigationHelpers } from '@/lib'
+
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+const currentPath = Astro.url.pathname
+const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelpers(currentPath)
+---
+
+<nav class:list={['menu-nav', className]} aria-label='Main navigation'>
+  {
+    config.menu.map((item: MenuItemConfig) => {
+      if (hasChildren(item)) {
+        // Handle submenu items with proper dropdown
+        const isSubmenuActive = hasActiveSubmenuItem(item.submenu)
+
+        return (
+          <div class='menu-submenu-wrapper' data-submenu-wrapper>
+            <button
+              class:list={[
+                'menu-item-base menu-item-desktop group menu-submenu-trigger',
+                isSubmenuActive && 'menu-item-active menu-item-active-desktop'
+              ]}
+              aria-label={`${item.title} menu`}
+              aria-haspopup='true'
+              aria-expanded='false'
+              data-submenu-trigger={item.title}
+            >
+              {item.title}
+              <span
+                class='menu-submenu-arrow i-mingcute-down-line'
+                aria-hidden='true'
+                data-submenu-arrow
+              />
+            </button>
+
+            <div class='menu-submenu-content' data-submenu-content={item.title} role='menu'>
+              {item.submenu.map((subItem: MenuItem) => (
+                <a
+                  href={subItem.link}
+                  class={`menu-submenu-item${isActiveLink(subItem.link) ? ' menu-item-active' : ''}`}
+                  role='menuitem'
+                  aria-label={`Navigate to ${subItem.title}`}
+                  aria-current={isActiveLink(subItem.link) ? 'page' : undefined}
+                >
+                  {subItem.title}
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      } else {
+        // Handle regular menu items
+        return (
+          <a
+            href={item.link}
+            class={`menu-item-base menu-item-desktop${isActiveLink(item.link) ? ' menu-item-active menu-item-active-desktop' : ''}`}
+            aria-label={`Navigate to ${item.title}`}
+            aria-current={isActiveLink(item.link) ? 'page' : undefined}
+          >
+            {item.title}
+          </a>
+        )
+      }
+    })
+  }
+</nav>
+
+<style>
+  .menu-nav {
+    /* Base navigation container */
+  }
+
+  .menu-item-base {
+    font-weight: 500;
+    position: relative;
+    transition: color 0.2s ease;
+  }
+
+  .menu-item-base:hover {
+    color: hsl(var(--primary));
+  }
+
+  .menu-item-desktop {
+    padding: 0.5rem;
+  }
+
+  .menu-item-active {
+    color: hsl(var(--primary));
+  }
+
+  .menu-item-active-desktop::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1.5rem;
+    height: 0.125rem;
+    background-color: hsl(var(--primary));
+    border-radius: 9999px;
+  }
+
+  .menu-submenu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .menu-submenu-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .menu-submenu-content {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+    width: 12rem;
+    padding: 0.5rem 0;
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.375rem;
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 50;
+  }
+
+  .menu-submenu-content.opacity-100 {
+    opacity: 1;
+  }
+
+  .menu-submenu-content.visible {
+    visibility: visible;
+  }
+
+  .menu-submenu-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .menu-submenu-item:hover {
+    color: hsl(var(--primary));
+    background-color: hsl(var(--muted) / 0.5);
+  }
+
+  .menu-submenu-arrow {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .menu-submenu-arrow.rotate-180 {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  interface SubmenuElements {
+    button: HTMLButtonElement
+    content: HTMLElement
+    arrow: HTMLElement
+  }
+
+  function initializeDesktopSubmenuHandlers() {
+    const submenuTriggers = document.querySelectorAll('[data-submenu-trigger]')
+    if (submenuTriggers.length === 0) return
+
+    // Cache submenu elements for better performance
+    const submenuCache = new Map<string, SubmenuElements>()
+    submenuTriggers.forEach((trigger) => {
+      const triggerButton = trigger as HTMLButtonElement
+      const triggerValue = triggerButton.dataset.submenuTrigger
+      if (!triggerValue) return
+
+      const content = document.querySelector(
+        `[data-submenu-content="${triggerValue}"]`
+      ) as HTMLElement
+      const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
+
+      if (content && arrow) {
+        submenuCache.set(triggerValue, { button: triggerButton, content, arrow })
+      }
+    })
+
+    const closeAllSubmenus = () => {
+      submenuCache.forEach(({ button, content, arrow }) => {
+        try {
+          button.setAttribute('aria-expanded', 'false')
+          content.classList.add('opacity-0', 'invisible')
+          content.classList.remove('opacity-100', 'visible')
+          arrow.classList.remove('rotate-180')
+        } catch (error) {
+          console.warn('Error closing submenu:', error)
+        }
+      })
+    }
+
+    const setSubmenuState = (elements: SubmenuElements, isOpen: boolean) => {
+      const { button, content, arrow } = elements
+
+      try {
+        button.setAttribute('aria-expanded', String(isOpen))
+
+        if (isOpen) {
+          content.classList.remove('opacity-0', 'invisible')
+          content.classList.add('opacity-100', 'visible')
+          arrow.classList.add('rotate-180')
+
+          // Focus first menu item with delay for better UX
+          requestAnimationFrame(() => {
+            const firstMenuItem = content.querySelector('a') as HTMLElement
+            firstMenuItem?.focus()
+          })
+        } else {
+          content.classList.add('opacity-0', 'invisible')
+          content.classList.remove('opacity-100', 'visible')
+          arrow.classList.remove('rotate-180')
+        }
+      } catch (error) {
+        console.warn('Error setting submenu state:', error)
+      }
+    }
+
+    const toggleSubmenu = (triggerValue: string) => {
+      const elements = submenuCache.get(triggerValue)
+      if (!elements) return
+
+      const isOpen = elements.button.getAttribute('aria-expanded') === 'true'
+
+      if (isOpen) {
+        setSubmenuState(elements, false)
+      } else {
+        closeAllSubmenus()
+        setSubmenuState(elements, true)
+      }
+    }
+
+    const handleKeydown = (e: KeyboardEvent, elements: SubmenuElements) => {
+      const { button, content } = elements
+      const triggerValue = button.dataset.submenuTrigger
+      const isOpen = button.getAttribute('aria-expanded') === 'true'
+
+      switch (e.key) {
+        case 'Enter':
+        case ' ': // Space key
+          e.preventDefault()
+          if (triggerValue) toggleSubmenu(triggerValue)
+          break
+        case 'ArrowDown':
+          if (isOpen) {
+            e.preventDefault()
+            const firstItem = content.querySelector('a') as HTMLElement
+            firstItem?.focus()
+          }
+          break
+        case 'ArrowUp':
+          if (isOpen) {
+            e.preventDefault()
+            const menuItems = content.querySelectorAll('a')
+            const lastItem = menuItems[menuItems.length - 1] as HTMLElement
+            lastItem?.focus()
+          }
+          break
+        case 'Escape':
+          if (isOpen) {
+            e.preventDefault()
+            closeAllSubmenus()
+            button.focus()
+          }
+          break
+      }
+    }
+
+    const handleSubmenuKeydown = (e: KeyboardEvent, content: HTMLElement) => {
+      const menuItems = Array.from(content.querySelectorAll('a')) as HTMLElement[]
+      const currentIndex = menuItems.findIndex((item) => item === document.activeElement)
+
+      switch (e.key) {
+        case 'ArrowDown': {
+          e.preventDefault()
+          const nextIndex = (currentIndex + 1) % menuItems.length
+          menuItems[nextIndex]?.focus()
+          break
+        }
+        case 'ArrowUp': {
+          e.preventDefault()
+          const prevIndex = currentIndex <= 0 ? menuItems.length - 1 : currentIndex - 1
+          menuItems[prevIndex]?.focus()
+          break
+        }
+        case 'Escape': {
+          e.preventDefault()
+          const triggerValue = content.dataset.submenuContent
+          const elements = submenuCache.get(triggerValue!)
+          closeAllSubmenus()
+          elements?.button.focus()
+          break
+        }
+        case 'Tab':
+          // Let tab work naturally but close menu
+          closeAllSubmenus()
+          break
+      }
+    }
+
+    // Setup event listeners for cached elements
+    submenuCache.forEach((elements, triggerValue) => {
+      const { button, content } = elements
+
+      // Click handler
+      button.addEventListener('click', (e: Event) => {
+        e.preventDefault()
+        e.stopPropagation()
+        toggleSubmenu(triggerValue)
+      })
+
+      // Keyboard handlers
+      button.addEventListener('keydown', (e: KeyboardEvent) => handleKeydown(e, elements))
+      content.addEventListener('keydown', (e: KeyboardEvent) => handleSubmenuKeydown(e, content))
+    })
+
+    // Close submenus when clicking outside
+    const handleOutsideClick = (e: Event) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('[data-submenu-wrapper]')) {
+        closeAllSubmenus()
+      }
+    }
+
+    // Global escape handler
+    const handleGlobalKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeAllSubmenus()
+      }
+    }
+
+    document.addEventListener('click', handleOutsideClick, { passive: true })
+    document.addEventListener('keydown', handleGlobalKeydown)
+
+    // Return cleanup function
+    return () => {
+      try {
+        document.removeEventListener('click', handleOutsideClick)
+        document.removeEventListener('keydown', handleGlobalKeydown)
+
+        // Clean up individual element listeners
+        submenuCache.forEach(({ button, content }) => {
+          button.removeEventListener('click', () => {})
+          button.removeEventListener('keydown', () => {})
+          content.removeEventListener('keydown', () => {})
+        })
+
+        submenuCache.clear()
+      } catch (error) {
+        console.warn('Error during submenu cleanup:', error)
+      }
+    }
+  }
+
+  // Handle initialization based on document ready state
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initializeDesktopSubmenuHandlers())
+  } else {
+    // DOM already loaded, initialize immediately
+    initializeDesktopSubmenuHandlers()
+  }
+</script>

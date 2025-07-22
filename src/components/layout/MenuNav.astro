@@ -1,33 +1,25 @@
 ---
 import config from '@/site.config'
 
-import { MenuItems, SearchBox, SlideOut } from '@/components'
+import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
 ---
 
-<header-component
-  class='group sticky top-4 z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
->
-  <a
-    class='z-30 text-xl font-semibold brand-link flex items-center gap-2'
-    href='/'
-    aria-label='Website name'
-  >
+<menu-header class='header-main'>
+  <a class='brand-link' href='/' aria-label='Website name'>
     <span class='i-mingcute:home-4-line size-6 shrink'></span>
-    <span class='group-[.not-top]:text-base whitespace-nowrap overflow-hidden'>{config.title}</span>
+    <span class='brand-text'>{config.title}</span>
   </a>
 
   <div class='flex items-center gap-x-1'>
     {/* Desktop Menu links */}
-    <div class='hidden sm:flex sm:items-center sm:gap-1'>
-      <MenuItems variant='desktop' />
-    </div>
+    <MenuDropdown class='hidden sm:flex sm:items-center sm:gap-1' />
 
     {/* buttons */}
     <div class='z-30 flex gap-x-4 buttons-container'>
       <SearchBox />
       <button
         id='changeTheme'
-        class='theme-btn group box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl flex items-center justify-center'
+        class='theme-btn'
         aria-label='Change Theme'
         data-theme='system'
         transition:persist
@@ -37,33 +29,21 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
         <span class='theme-icon light i-mingcute:sun-line hover:text-primary'></span>
         <span class='theme-icon dark i-mingcute:moon-line hover:text-primary'></span>
       </button>
-      <button
-        data-panel-trigger='mobile-menu'
-        class='menu-btn rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl flex items-center justify-center'
-        aria-label='Toggle Menu'
-      >
+      <button data-panel-trigger='mobile-menu' class='menu-btn' aria-label='Toggle Menu'>
         <span class='sr-only'>Menu</span>
         <span class='i-mingcute:menu-line size-5'></span>
       </button>
     </div>
   </div>
-</header-component>
+</menu-header>
 
 {/* Mobile Menu Panel */}
 <SlideOut id='mobile-menu' title='Menu' side='right'>
-  <nav class='space-y-0.5'>
-    <MenuItems variant='mobile' />
-  </nav>
+  <MenuDrawer />
 
   <div class='mt-6 pt-6 border-t border-border'>
-    <h4 class='px-4 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider'>
-      Theme
-    </h4>
-    <button
-      id='panelThemeToggle'
-      class='w-full flex items-center gap-3 px-4 py-3 font-medium transition-colors hover:text-primary hover:bg-muted/50 rounded-md text-left'
-      data-theme='system'
-    >
+    <h4 class='panel-title'>Theme</h4>
+    <button id='panelThemeToggle' class='panel-theme-btn' data-theme='system'>
       <span class='theme-icon system i-mingcute:computer-line size-5'></span>
       <span class='theme-icon light i-mingcute:sun-line size-5'></span>
       <span class='theme-icon dark i-mingcute:moon-line size-5'></span>
@@ -113,14 +93,12 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
     }
 
     private updateHeaderState(isNotTop: boolean) {
-      // Use single class toggle instead of multiple operations
       this.classList.toggle('not-top', isNotTop)
 
-      // Batch CSS property updates
-      const brandMargin = isNotTop ? (window.innerWidth >= 640 ? '0.75rem' : '0.5rem') : '0'
-      const buttonsGap = isNotTop ? '0.5rem' : '1rem'
-
-      this.style.cssText += `--brand-margin:${brandMargin};--buttons-gap:${buttonsGap};`
+      // Update CSS custom properties efficiently
+      const isDesktop = window.innerWidth >= 640
+      this.style.setProperty('--brand-margin', isNotTop ? (isDesktop ? '0.75rem' : '0.5rem') : '0')
+      this.style.setProperty('--buttons-gap', isNotTop ? '0.5rem' : '1rem')
     }
 
     private createScrollHandler() {
@@ -133,8 +111,9 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
           const isNotTop = currentScrollY > 20
           const shouldShow = currentScrollY < 350 || currentScrollY < this.lastScrollY
 
+          // Batch DOM updates
           this.updateHeaderState(isNotTop)
-          this.dataset.show = shouldShow.toString()
+          this.dataset.show = String(shouldShow)
 
           this.lastScrollY = currentScrollY
           this.scrollTicking = false
@@ -163,8 +142,8 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
     }
 
     private initializeTheme() {
-      // Cache DOM queries
-      this.themeBtn = this.querySelector('#changeTheme')
+      // Cache DOM queries with more specific selectors
+      this.themeBtn = this.querySelector('#changeTheme') as HTMLButtonElement
       this.panelThemeBtn = document.getElementById('panelThemeToggle') as HTMLButtonElement
 
       // Initialize theme from localStorage with fallback
@@ -172,8 +151,12 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
       this.updateThemeButtons(currentTheme)
 
       // Set up event listeners with pre-bound handler
-      this.themeBtn?.addEventListener('click', this.handleThemeChange)
-      this.panelThemeBtn?.addEventListener('click', this.handleThemeChange)
+      if (this.themeBtn) {
+        this.themeBtn.addEventListener('click', this.handleThemeChange)
+      }
+      if (this.panelThemeBtn) {
+        this.panelThemeBtn.addEventListener('click', this.handleThemeChange)
+      }
     }
 
     private createThemeHandler() {
@@ -185,14 +168,14 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
     }
 
     private updateThemeButtons(theme: string) {
-      // Batch DOM updates
+      // Use optional chaining and batch updates
       if (this.themeBtn) {
         this.themeBtn.dataset.theme = theme
       }
 
       if (this.panelThemeBtn) {
         this.panelThemeBtn.dataset.theme = theme
-        const themeText = this.panelThemeBtn.querySelector('.theme-text')
+        const themeText = this.panelThemeBtn.querySelector('.theme-text') as HTMLElement
         if (themeText) {
           themeText.textContent = theme.charAt(0).toUpperCase() + theme.slice(1)
         }
@@ -201,13 +184,13 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
   }
 
   // Define custom element only once
-  if (!customElements.get('header-component')) {
-    customElements.define('header-component', Header)
+  if (!customElements.get('menu-header')) {
+    customElements.define('menu-header', Header)
   }
 </script>
 
 <style>
-  header-component {
+  menu-header {
     --brand-margin: 0;
     --buttons-gap: 1rem;
 
@@ -258,7 +241,7 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
   }
 
   /* Dark theme styles */
-  :global(.dark) header-component.not-top {
+  :global(.dark) menu-header.not-top {
     --un-bg-opacity: 1;
     background-color: hsl(var(--muted) / var(--un-bg-opacity));
   }
@@ -293,5 +276,143 @@ import { MenuItems, SearchBox, SlideOut } from '@/components'
         display: block;
       }
     }
+  }
+
+  /* Header layout */
+  .header-main {
+    position: sticky;
+    top: 1rem;
+    z-index: 30;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.75rem;
+    border: 1px solid transparent;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .header-main {
+      border-radius: 1rem;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  /* Brand link */
+  .brand-link {
+    z-index: 30;
+    font-size: 1.25rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-inline-start: var(--brand-margin);
+    transition: margin-inline-start 0.3s ease-out;
+    contain: layout;
+  }
+
+  .brand-text {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .header-main.not-top .brand-text {
+    font-size: 1rem;
+  }
+
+  /* Header actions */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .desktop-menu {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .desktop-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+  }
+
+  /* Buttons */
+  .buttons-container {
+    z-index: 30;
+    display: flex;
+    gap: var(--buttons-gap);
+    transition: gap 0.3s ease-out;
+    contain: layout;
+  }
+
+  .theme-btn,
+  .menu-btn {
+    box-sizing: content-box;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.375rem;
+    border: 1px solid hsl(var(--border));
+    padding: 0.375rem;
+    transition:
+      colors 0.2s ease,
+      background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-btn:hover,
+  .menu-btn:hover {
+    background-color: hsl(var(--border));
+  }
+
+  .menu-btn {
+    display: flex;
+  }
+
+  @media (min-width: 640px) {
+    .menu-btn {
+      display: none;
+    }
+
+    .header-main.not-top .theme-btn,
+    .header-main.not-top .menu-btn {
+      border-radius: 0.75rem;
+    }
+  }
+
+  /* Panel styles */
+  .panel-title {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .panel-theme-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+    border-radius: 0.375rem;
+    text-align: left;
+  }
+
+  .panel-theme-btn:hover {
+    color: hsl(var(--primary));
+    background-color: hsl(var(--muted) / 0.5);
   }
 </style>

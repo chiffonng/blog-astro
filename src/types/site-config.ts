@@ -102,9 +102,11 @@ const SubmenuItemSchema = z.object({
   submenu: z.array(MenuItemSchema)
 })
 
+const MenuItemSchemas = z.union([MenuItemSchema, SubmenuItemSchema])
+
 export const HeaderConfigSchema = () =>
   z.object({
-    menu: z.array(z.union([MenuItemSchema, SubmenuItemSchema]))
+    menu: z.array(MenuItemSchemas)
   })
 
 export const FooterConfigSchema = () =>
@@ -180,6 +182,11 @@ export const ConfigSchema = ThemeConfigSchema()
     message: 'Pagefind search is not supported with prerendering disabled.'
   })
 
+//
+export type MenuItem = z.infer<typeof MenuItemSchema>
+export type SubmenuItem = z.infer<typeof SubmenuItemSchema>
+export type MenuItemConfig = MenuItem | SubmenuItem
+
 // Input TypeScript types (what user provides - partial with defaults)
 export type SiteMeta = z.infer<typeof SiteMetaSchema>
 export type IntegrationUserConfig = z.input<ReturnType<typeof IntegrationConfigSchema>>
@@ -190,6 +197,7 @@ export type BlogUserConfig = z.input<ReturnType<typeof BlogConfigSchema>>
 export type UserConfig = z.input<typeof ConfigSchema>
 
 // Output types (what gets processed - complete with defaults applied)
+
 export type ThemeConfig = z.output<ReturnType<typeof ThemeConfigSchema>>
 export type HeaderConfig = z.output<ReturnType<typeof HeaderConfigSchema>>
 export type FooterConfig = z.output<ReturnType<typeof FooterConfigSchema>>

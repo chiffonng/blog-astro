@@ -10,3 +10,5 @@ export { isMac, modifierKey } from './keyboard'
 
 // Project
 export { getProjectLinks, hasProjectContent, getProjectDescription } from './projects'
+
+export { createNavigationHelpers } from './menu-helper'
