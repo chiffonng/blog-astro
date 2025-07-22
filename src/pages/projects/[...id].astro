@@ -2,10 +2,10 @@
 import { render, type CollectionEntry } from 'astro:content'
 
 import { getProjectsCollection, sortProjectsByDate } from '@/server/collection'
-import { getProjectLinks, hasProjectContent } from '@/lib'
 import { createDateRange } from '@/lib/format-date'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { Link, LinkExternal, Pill } from '@/components'
+import { getProjectLinks, hasProjectContent } from '@/components/projects'
 
 export const prerender = true
 
