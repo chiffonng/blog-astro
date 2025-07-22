@@ -41,6 +41,8 @@ const { id, title, side = 'right', class: className } = Astro.props
     private backdrop: HTMLElement | null = null
     private content: HTMLElement | null = null
     private closeBtn: HTMLElement | null = null
+    private handleClick: ((e: Event) => void) | null = null
+    private handleKeydown: ((e: KeyboardEvent) => void) | null = null
 
     constructor() {
       super()
@@ -54,8 +56,35 @@ const { id, title, side = 'right', class: className } = Astro.props
       this.setupEventListeners()
     }
 
+    disconnectedCallback() {
+      this.cleanup()
+    }
+
+    private cleanup() {
+      // Remove event listeners to prevent memory leaks
+      if (this.handleClick) {
+        document.removeEventListener('click', this.handleClick)
+      }
+      if (this.handleKeydown) {
+        document.removeEventListener('keydown', this.handleKeydown)
+      }
+      
+      // Restore body scroll if panel was left open
+      if (this.isOpen) {
+        document.body.style.overflow = ''
+      }
+      
+      // Reset references
+      this.handleClick = null
+      this.handleKeydown = null
+      this.backdrop = null
+      this.content = null
+      this.closeBtn = null
+    }
+
     private setupEventListeners() {
-      const handleClick = (e: Event) => {
+      // Create bound handlers to store references for cleanup
+      this.handleClick = (e: Event) => {
         const target = e.target as Element
 
         // Handle trigger buttons
@@ -79,15 +108,15 @@ const { id, title, side = 'right', class: className } = Astro.props
         }
       }
 
-      const handleKeydown = (e: KeyboardEvent) => {
+      this.handleKeydown = (e: KeyboardEvent) => {
         if (e.key === 'Escape' && this.isOpen) {
           this.close()
         }
       }
 
       // Use single event listeners with delegation
-      document.addEventListener('click', handleClick)
-      document.addEventListener('keydown', handleKeydown)
+      document.addEventListener('click', this.handleClick)
+      document.addEventListener('keydown', this.handleKeydown)
     }
 
     open() {
@@ -100,11 +129,23 @@ const { id, title, side = 'right', class: className } = Astro.props
       // Prevent body scroll
       document.body.style.overflow = 'hidden'
 
-      // Focus management
-      const firstFocusable = this.content?.querySelector(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      ) as HTMLElement
-      firstFocusable?.focus()
+      // Focus management - use comprehensive selector for all focusable elements
+      const focusableSelector = [
+        'a[href]',
+        'button:not([disabled])',
+        'textarea:not([disabled])',
+        'input:not([disabled]):not([type="hidden"])',
+        'select:not([disabled])',
+        '[tabindex]:not([tabindex="-1"]):not([disabled])',
+        'details',
+        'summary'
+      ].join(', ')
+      
+      const firstFocusable = this.content?.querySelector(focusableSelector) as HTMLElement
+      if (firstFocusable) {
+        // Use requestAnimationFrame to ensure panel is visible before focusing
+        requestAnimationFrame(() => firstFocusable.focus())
+      }
 
       // Dispatch custom event
       this.dispatchEvent(new CustomEvent('panel:open', { bubbles: true }))

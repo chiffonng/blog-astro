@@ -162,103 +162,178 @@ function getItemClass(link?: string, hasSubmenu?: boolean): string[] {
 </nav>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Handle desktop submenu toggles
+  function initializeSubmenuHandlers() {
     const submenuTriggers = document.querySelectorAll('[data-submenu-trigger]')
-    const submenuWrappers = document.querySelectorAll('[data-submenu-wrapper]')
+    if (submenuTriggers.length === 0) return
 
-    submenuTriggers.forEach((trigger) => {
-      const triggerButton = trigger as HTMLButtonElement
-      const triggerValue = triggerButton.dataset.submenuTrigger
-      const content = document.querySelector(
-        `[data-submenu-content="${triggerValue}"]`
-      ) as HTMLElement
-      const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
+    const closeAllSubmenus = () => {
+      submenuTriggers.forEach((trigger) => {
+        const triggerButton = trigger as HTMLButtonElement
+        const triggerValue = triggerButton.dataset.submenuTrigger
+        if (!triggerValue) return
+        
+        const content = document.querySelector(`[data-submenu-content="${triggerValue}"]`) as HTMLElement
+        const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
 
-      if (!content || !arrow) return
-
-      // Handle click events
-      triggerButton.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        const isOpen = triggerButton.getAttribute('aria-expanded') === 'true'
-
-        // Close all other submenus first
-        submenuTriggers.forEach((otherTrigger) => {
-          if (otherTrigger !== triggerButton) {
-            const otherButton = otherTrigger as HTMLButtonElement
-            const otherValue = otherButton.dataset.submenuTrigger
-            const otherContent = document.querySelector(
-              `[data-submenu-content="${otherValue}"]`
-            ) as HTMLElement
-            const otherArrow = otherButton.querySelector('[data-submenu-arrow]') as HTMLElement
-
-            if (otherContent && otherArrow) {
-              otherButton.setAttribute('aria-expanded', 'false')
-              otherContent.classList.add('opacity-0', 'invisible')
-              otherContent.classList.remove('opacity-100', 'visible')
-              otherArrow.classList.remove('rotate-180')
-            }
-          }
-        })
-
-        // Toggle current submenu
-        if (isOpen) {
+        if (content && arrow) {
           triggerButton.setAttribute('aria-expanded', 'false')
           content.classList.add('opacity-0', 'invisible')
           content.classList.remove('opacity-100', 'visible')
           arrow.classList.remove('rotate-180')
-        } else {
-          triggerButton.setAttribute('aria-expanded', 'true')
-          content.classList.remove('opacity-0', 'invisible')
-          content.classList.add('opacity-100', 'visible')
-          arrow.classList.add('rotate-180')
         }
+      })
+    }
+
+    const toggleSubmenu = (triggerButton: HTMLButtonElement, content: HTMLElement, arrow: HTMLElement) => {
+      const isOpen = triggerButton.getAttribute('aria-expanded') === 'true'
+      
+      if (isOpen) {
+        triggerButton.setAttribute('aria-expanded', 'false')
+        content.classList.add('opacity-0', 'invisible')
+        content.classList.remove('opacity-100', 'visible')
+        arrow.classList.remove('rotate-180')
+      } else {
+        // Close all other submenus first
+        closeAllSubmenus()
+        // Open current submenu
+        triggerButton.setAttribute('aria-expanded', 'true')
+        content.classList.remove('opacity-0', 'invisible')
+        content.classList.add('opacity-100', 'visible')
+        arrow.classList.add('rotate-180')
+        // Focus first menu item for accessibility
+        const firstMenuItem = content.querySelector('a')
+        if (firstMenuItem) {
+          requestAnimationFrame(() => firstMenuItem.focus())
+        }
+      }
+    }
+
+    const handleKeydown = (e: KeyboardEvent, triggerButton: HTMLButtonElement, content: HTMLElement) => {
+      const isOpen = triggerButton.getAttribute('aria-expanded') === 'true'
+      
+      switch (e.key) {
+        case 'Enter':
+        case ' ': // Space key
+          e.preventDefault()
+          const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
+          if (arrow) toggleSubmenu(triggerButton, content, arrow)
+          break
+        case 'ArrowDown':
+          if (isOpen) {
+            e.preventDefault()
+            const firstItem = content.querySelector('a') as HTMLElement
+            firstItem?.focus()
+          }
+          break
+        case 'ArrowUp':
+          if (isOpen) {
+            e.preventDefault()
+            const menuItems = content.querySelectorAll('a')
+            const lastItem = menuItems[menuItems.length - 1] as HTMLElement
+            lastItem?.focus()
+          }
+          break
+        case 'Escape':
+          if (isOpen) {
+            e.preventDefault()
+            closeAllSubmenus()
+            triggerButton.focus()
+          }
+          break
+      }
+    }
+
+    const handleSubmenuKeydown = (e: KeyboardEvent, content: HTMLElement) => {
+      const menuItems = Array.from(content.querySelectorAll('a')) as HTMLElement[]
+      const currentIndex = menuItems.findIndex(item => item === document.activeElement)
+      
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault()
+          const nextIndex = (currentIndex + 1) % menuItems.length
+          menuItems[nextIndex]?.focus()
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          const prevIndex = currentIndex <= 0 ? menuItems.length - 1 : currentIndex - 1
+          menuItems[prevIndex]?.focus()
+          break
+        case 'Escape':
+          e.preventDefault()
+          const triggerValue = content.dataset.submenuContent
+          const trigger = document.querySelector(`[data-submenu-trigger="${triggerValue}"]`) as HTMLButtonElement
+          closeAllSubmenus()
+          trigger?.focus()
+          break
+        case 'Tab':
+          // Let tab work naturally but close menu
+          closeAllSubmenus()
+          break
+      }
+    }
+
+    // Setup event listeners for each trigger
+    submenuTriggers.forEach((trigger) => {
+      const triggerButton = trigger as HTMLButtonElement
+      const triggerValue = triggerButton.dataset.submenuTrigger
+      if (!triggerValue) return
+
+      const content = document.querySelector(`[data-submenu-content="${triggerValue}"]`) as HTMLElement
+      const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
+
+      if (!content || !arrow) {
+        console.warn(`Missing content or arrow for submenu: ${triggerValue}`)
+        return
+      }
+
+      // Click handler
+      triggerButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        toggleSubmenu(triggerButton, content, arrow)
+      })
+
+      // Keyboard handler for trigger
+      triggerButton.addEventListener('keydown', (e) => {
+        handleKeydown(e, triggerButton, content)
+      })
+
+      // Keyboard handler for submenu items
+      content.addEventListener('keydown', (e) => {
+        handleSubmenuKeydown(e, content)
       })
     })
 
     // Close submenus when clicking outside
-    document.addEventListener('click', (e) => {
+    const handleOutsideClick = (e: Event) => {
       const target = e.target as HTMLElement
       if (!target.closest('[data-submenu-wrapper]')) {
-        submenuTriggers.forEach((trigger) => {
-          const triggerButton = trigger as HTMLButtonElement
-          const triggerValue = triggerButton.dataset.submenuTrigger
-          const content = document.querySelector(
-            `[data-submenu-content="${triggerValue}"]`
-          ) as HTMLElement
-          const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
-
-          if (content && arrow) {
-            triggerButton.setAttribute('aria-expanded', 'false')
-            content.classList.add('opacity-0', 'invisible')
-            content.classList.remove('opacity-100', 'visible')
-            arrow.classList.remove('rotate-180')
-          }
-        })
+        closeAllSubmenus()
       }
-    })
+    }
 
-    // Close submenus on escape key
-    document.addEventListener('keydown', (e) => {
+    // Global escape handler
+    const handleGlobalKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        submenuTriggers.forEach((trigger) => {
-          const triggerButton = trigger as HTMLButtonElement
-          const triggerValue = triggerButton.dataset.submenuTrigger
-          const content = document.querySelector(
-            `[data-submenu-content="${triggerValue}"]`
-          ) as HTMLElement
-          const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
-
-          if (content && arrow) {
-            triggerButton.setAttribute('aria-expanded', 'false')
-            content.classList.add('opacity-0', 'invisible')
-            content.classList.remove('opacity-100', 'visible')
-            arrow.classList.remove('rotate-180')
-          }
-        })
+        closeAllSubmenus()
       }
-    })
-  })
+    }
+
+    document.addEventListener('click', handleOutsideClick)
+    document.addEventListener('keydown', handleGlobalKeydown)
+
+    // Return cleanup function
+    return () => {
+      document.removeEventListener('click', handleOutsideClick)
+      document.removeEventListener('keydown', handleGlobalKeydown)
+    }
+  }
+
+  // Handle initialization based on document ready state
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSubmenuHandlers)
+  } else {
+    // DOM already loaded, initialize immediately
+    initializeSubmenuHandlers()
+  }
 </script>
