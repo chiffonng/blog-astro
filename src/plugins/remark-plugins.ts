@@ -2,8 +2,8 @@ import type { Node, Root } from 'mdast'
 import type { Plugin } from 'unified'
 import { visit } from 'unist-util-visit'
 
-import mdastToString from '../lib/mdast-util-to-string'
-import getReadingTime from '../lib/reading-time'
+import mdastToString from './mdast-util-to-string'
+import getReadingTime from './reading-time'
 
 export const remarkAddZoomable: Plugin<[{ className?: string }], Root> = function ({
   className = 'zoomable'

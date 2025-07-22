@@ -1,0 +1,110 @@
+---
+import config from '@/site.config'
+
+import type { MenuItemConfig } from '@/types/site-config'
+import { createNavigationHelpers } from './helper'
+
+export interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+const currentPath = Astro.url.pathname
+const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelpers(currentPath)
+---
+
+<nav class:list={['menu-nav', className]} aria-label='Main navigation'>
+  {
+    config.menu.map((item: MenuItemConfig) => {
+      if (hasChildren(item)) {
+        // Handle submenu items as flat list with title
+        const isSubmenuActive = hasActiveSubmenuItem(item.submenu)
+
+        return [
+          <div
+            class:list={[
+              'menu-item-base menu-item-mobile menu-title-mobile',
+              isSubmenuActive && 'menu-item-active menu-item-active-mobile'
+            ]}
+          >
+            {item.title}
+          </div>,
+          ...item.submenu.map((subItem) => (
+            <a
+              href={subItem.link}
+              class:list={[
+                'menu-item-base menu-item-mobile menu-item-indent',
+                isActiveLink(subItem.link) && 'menu-item-active menu-item-active-mobile'
+              ]}
+              aria-label={`Navigate to ${subItem.title}`}
+              aria-current={isActiveLink(subItem.link) ? 'page' : undefined}
+            >
+              {subItem.title}
+            </a>
+          ))
+        ]
+      } else {
+        // Handle regular menu items
+        return (
+          <a
+            href={item.link}
+            class={`menu-item-base menu-item-mobile${isActiveLink(item.link) ? ' menu-item-active menu-item-active-mobile' : ''}`}
+            aria-label={`Navigate to ${item.title}`}
+            aria-current={isActiveLink(item.link) ? 'page' : undefined}
+          >
+            {item.title}
+          </a>
+        )
+      }
+    })
+  }
+</nav>
+
+<style>
+  .menu-nav {
+    /* Base navigation container */
+  }
+
+  .menu-item-base {
+    font-weight: 500;
+    position: relative;
+    transition: color 0.2s ease;
+  }
+
+  .menu-item-base:hover {
+    color: hsl(var(--primary));
+  }
+
+  .menu-item-mobile {
+    display: block;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+  }
+
+  .menu-item-mobile:hover {
+    background-color: hsl(var(--muted) / 0.5);
+  }
+
+  .menu-item-active {
+    color: hsl(var(--primary));
+  }
+
+  .menu-item-active-mobile {
+    background-color: hsl(var(--muted) / 0.5);
+    border-left: 2px solid hsl(var(--primary));
+  }
+
+  .menu-title-mobile {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .menu-item-indent {
+    margin-left: 1rem;
+    font-size: 0.875rem;
+  }
+</style>
