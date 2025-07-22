@@ -68,12 +68,12 @@ const { id, title, side = 'right', class: className } = Astro.props
       if (this.handleKeydown) {
         document.removeEventListener('keydown', this.handleKeydown)
       }
-      
+
       // Restore body scroll if panel was left open
       if (this.isOpen) {
         document.body.style.overflow = ''
       }
-      
+
       // Reset references
       this.handleClick = null
       this.handleKeydown = null
@@ -140,7 +140,7 @@ const { id, title, side = 'right', class: className } = Astro.props
         'details',
         'summary'
       ].join(', ')
-      
+
       const firstFocusable = this.content?.querySelector(focusableSelector) as HTMLElement
       if (firstFocusable) {
         // Use requestAnimationFrame to ensure panel is visible before focusing
