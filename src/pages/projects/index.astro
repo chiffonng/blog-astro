@@ -9,12 +9,16 @@ const otherProjects = allProjects.filter((project) => !project.data.isHighlighte
 ---
 
 <PageLayout title='Projects'>
+  <p>
+    If you think it would be useful or interesting to collaborate on a project, please contact me to
+    discuss.
+  </p>
   <div class='flex flex-col gap-6'>
     {/* Featured Projects */}
     {
       featuredProjects.length > 0 && (
         <Section title='Featured Projects'>
-          <div class='grid gap-4 md:grid-cols-1 lg:grid-cols-2'>
+          <div class='grid gap-x-2 gap-y-4 md:grid-cols-1 lg:grid-cols-2'>
             {featuredProjects.map((project) => (
               <ProjectCard {project} />
             ))}
@@ -38,13 +42,5 @@ const otherProjects = allProjects.filter((project) => !project.data.isHighlighte
 
     {/* Github Activity */}
     <GithubActivity />
-
-    {/* Collaboration */}
-    <Section title='Collaboration'>
-      <p class='text-muted-foreground leading-relaxed'>
-        If you think it would be useful or interesting to collaborate on a project, you can contact
-        me to discuss a project.
-      </p>
-    </Section>
   </div>
 </PageLayout>
