@@ -9,25 +9,23 @@ const toc = generateToc(headings)
 const tocText = 'Table of Contents'
 ---
 
-<toc-content class={className} {...props}>
-  <nav aria-label='Table of contents' class='toc-container'>
-    {
-      !isMobile && (
-        <h2 class='text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wide'>
-          {tocText}
-        </h2>
-      )
-    }
-    <ol class='text-card-foreground space-y-1'>
-      {toc.map((heading) => <TOCHeading heading={heading} />)}
-    </ol>
-  </nav>
-</toc-content>
+<toc-nav aria-label='Table of contents' class:list={['toc-container', className]} {...props}>
+  {
+    !isMobile && (
+      <h2 class='text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wide'>
+        {tocText}
+      </h2>
+    )
+  }
+  <ol class='text-card-foreground space-y-1'>
+    {toc.map((heading) => <TOCHeading heading={heading} />)}
+  </ol>
+</toc-nav>
 
 <script>
   import { TOCScrollManager } from '@/plugins/toc'
 
-  class TOCContent extends HTMLElement {
+  class TOCNav extends HTMLElement {
     private scrollManager: TOCScrollManager | null = null
 
     connectedCallback() {
@@ -46,11 +44,11 @@ const tocText = 'Table of Contents'
     }
   }
 
-  customElements.define('toc-content', TOCContent)
+  customElements.define('toc-nav', TOCNav)
 </script>
 
 <style>
-  toc-content {
+  toc-nav {
     display: block;
     width: 100%;
     overflow: hidden;
@@ -62,8 +60,8 @@ const tocText = 'Table of Contents'
   }
 
   /* Remove default list styling for semantic ol/ul */
-  toc-content :global(ol),
-  toc-content :global(ul) {
+  toc-nav :global(ol),
+  toc-nav :global(ul) {
     list-style: none;
     padding-left: 0;
     margin: 0;
