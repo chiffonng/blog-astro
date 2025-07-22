@@ -101,6 +101,8 @@ export class TOCScrollManager {
   headingProgress: Record<string, HeadingProgress> = {}
   element: HTMLElement
   private containerId: string = 'sidebar'
+  private intersectionObserver: IntersectionObserver | null = null
+  private scrollTimeout: number | null = null
 
   constructor(element: HTMLElement) {
     this.element = element
@@ -214,17 +216,93 @@ export class TOCScrollManager {
           )
           directHeading.scrollIntoView({ behavior: 'smooth' })
         } else {
-          console.warn(`No heading found for slug: ${link.slug}`)
+          this.handleMissingHeading(link.slug, link.element)
         }
       })
     })
   }
 
-  init() {
-    this.setupSmoothScroll()
+  private handleMissingHeading(slug: string, linkElement: HTMLElement) {
+    console.warn(`TOC: No heading found for slug "${slug}". Link will be disabled.`)
 
-    // Initial first and listen to scroll event
-    setInterval(this.updatePositionAndStyle, 100)
-    window.addEventListener('scroll', this.updatePositionAndStyle)
+    // Gracefully handle missing heading
+    linkElement.setAttribute('aria-disabled', 'true')
+    linkElement.style.opacity = '0.5'
+    linkElement.style.pointerEvents = 'none'
+    linkElement.title = `Heading "${slug}" not found on this page`
+  }
+
+  private setupIntersectionObserver() {
+    try {
+      const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: [0, 0.25, 0.5, 0.75, 1]
+      }
+
+      this.intersectionObserver = new IntersectionObserver(() => {
+        // Use requestAnimationFrame to batch updates
+        if (this.scrollTimeout) {
+          cancelAnimationFrame(this.scrollTimeout)
+        }
+
+        this.scrollTimeout = requestAnimationFrame(() => {
+          this.updatePositionAndStyle()
+        })
+      }, observerOptions)
+
+      // Observe all headings
+      this.headings.forEach((heading) => {
+        if (this.intersectionObserver) {
+          this.intersectionObserver.observe(heading)
+        }
+      })
+    } catch (error) {
+      console.error('TOC: Failed to setup IntersectionObserver:', error)
+      // Fallback to throttled scroll listener
+      this.setupFallbackScrollListener()
+    }
+  }
+
+  private setupFallbackScrollListener() {
+    let ticking = false
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          this.updatePositionAndStyle()
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+  }
+
+  init() {
+    try {
+      this.setupSmoothScroll()
+
+      // Use IntersectionObserver for better performance
+      this.setupIntersectionObserver()
+
+      // Initial update
+      this.updatePositionAndStyle()
+    } catch (error) {
+      console.error('TOC: Failed to initialize scroll manager:', error)
+    }
+  }
+
+  destroy() {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect()
+      this.intersectionObserver = null
+    }
+
+    if (this.scrollTimeout) {
+      cancelAnimationFrame(this.scrollTimeout)
+      this.scrollTimeout = null
+    }
   }
 }
