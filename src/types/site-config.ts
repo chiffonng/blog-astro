@@ -19,6 +19,7 @@ export const CoreThemeConfigSchema = z.object({
    * {@link https://docs.astro.build/en/reference/routing-reference/#prerender}
    */
   prerender: z.boolean().default(true),
+  highlightColor: z.string().optional(),
   /** Display markdown content */
   content: z.object({
     /** Whether to add an arrow to specify external link */
