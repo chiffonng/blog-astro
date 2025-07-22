@@ -1,37 +1,27 @@
 ---
 import { generateToc } from '@/plugins/toc'
 import type { TOCProps as Props } from '@/components/types'
-import { Collapse, TOCHeading } from '@/components'
+import { TOCHeading } from '@/components'
 
 const { headings, class: className, isMobile = false, ...props } = Astro.props
 
 const toc = generateToc(headings)
-const tocText = 'TABLE OF CONTENTS'
+const tocText = 'Table of Contents'
 ---
 
 <toc-content class={className} {...props}>
-  {
-    isMobile ? (
-      <div class='toc-mobile'>
-        <h3 class='font-medium text-sm mb-4 text-foreground sticky top-0 bg-background'>
+  <nav aria-label='Table of contents' class='toc-container'>
+    {
+      !isMobile && (
+        <h2 class='text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wide'>
           {tocText}
-        </h3>
-        <ul class='text-card-foreground space-y-1'>
-          {toc.map((heading) => (
-            <TOCHeading heading={heading} />
-          ))}
-        </ul>
-      </div>
-    ) : (
-      <Collapse title={tocText} isExpanded={true}>
-        <ul class='text-card-foreground'>
-          {toc.map((heading) => (
-            <TOCHeading heading={heading} />
-          ))}
-        </ul>
-      </Collapse>
-    )
-  }
+        </h2>
+      )
+    }
+    <ol class='text-card-foreground space-y-1'>
+      {toc.map((heading) => <TOCHeading heading={heading} />)}
+    </ol>
+  </nav>
 </toc-content>
 
 <script>
@@ -60,7 +50,23 @@ const tocText = 'TABLE OF CONTENTS'
 </script>
 
 <style>
-  toc-content :global(.toc-item) {
-    display: flow-root;
+  toc-content {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .toc-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Remove default list styling for semantic ol/ul */
+  toc-content :global(ol),
+  toc-content :global(ul) {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    width: 100%;
   }
 </style>
