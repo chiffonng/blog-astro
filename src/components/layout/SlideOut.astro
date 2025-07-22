@@ -44,9 +44,6 @@ const { id, title, side = 'right', class: className } = Astro.props
     private handleClick: ((e: Event) => void) | null = null
     private handleKeydown: ((e: KeyboardEvent) => void) | null = null
 
-    constructor() {
-      super()
-    }
 
     connectedCallback() {
       this.backdrop = this.querySelector('.panel-backdrop')
@@ -166,11 +163,7 @@ const { id, title, side = 'right', class: className } = Astro.props
     }
 
     toggle() {
-      if (this.isOpen) {
-        this.close()
-      } else {
-        this.open()
-      }
+      this.isOpen ? this.close() : this.open()
     }
   }
 
@@ -286,8 +279,4 @@ const { id, title, side = 'right', class: className } = Astro.props
     overflow-y: auto;
   }
 
-  /* Dark theme styles */
-  :global(.dark) .slide-out .panel-backdrop {
-    background-color: hsl(0 0% 0% / 0.5);
-  }
 </style>
