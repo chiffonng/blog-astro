@@ -3,8 +3,8 @@ import type { CollectionEntry } from 'astro:content'
 import config from '@/site.config'
 
 import { shareIconDefinitions } from '@/theme'
-import { getShareUrls } from '@/lib/shares'
 import { Button } from '@/components'
+import { getShareUrls } from './shares'
 
 interface Props {
   entry: CollectionEntry<'blog'>
@@ -79,7 +79,7 @@ if (sourceContent && postId) {
 
 <script>
   import { showToast } from '@/lib'
-  import { copyToClipboard, openShareWindow } from '@/lib/shares'
+  import { copyToClipboard, openShareWindow } from './shares'
 
   // Copy link functionality
   document.getElementById('copy-link')?.addEventListener('click', async () => {
