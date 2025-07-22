@@ -17,7 +17,7 @@ const tocText = 'Table of Contents'
       </h2>
     )
   }
-  <ol class='text-card-foreground space-y-1'>
+  <ol class='toc-list-reset text-card-foreground space-y-1'>
     {toc.map((heading) => <TOCHeading heading={heading} />)}
   </ol>
 </toc-nav>
@@ -27,20 +27,82 @@ const tocText = 'Table of Contents'
 
   class TOCNav extends HTMLElement {
     private scrollManager: TOCScrollManager | null = null
+    private isInMobileToc: boolean = false
 
     connectedCallback() {
       // Determine which container this TOC is in
-      const isInMobileToc = this.closest('#mobile-toc') !== null
+      this.isInMobileToc = this.closest('#mobile-toc') !== null
 
       this.scrollManager = new TOCScrollManager(this)
       this.scrollManager.init()
 
       // Set the container ID for auto-scroll
-      if (isInMobileToc) {
+      if (this.isInMobileToc) {
         this.scrollManager.setContainerId('mobile-toc')
+        this.setupMobileFocusManagement()
       } else {
         this.scrollManager.setContainerId('sidebar')
       }
+
+      this.setupKeyboardNavigation()
+    }
+
+    private setupMobileFocusManagement() {
+      // Focus management for mobile slide-out
+      const slideOut = this.closest('#mobile-toc')
+      if (slideOut) {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-state') {
+              const target = mutation.target as HTMLElement
+              if (target.dataset.state === 'open') {
+                // Focus first TOC link when slide-out opens
+                const firstLink = this.querySelector('a')
+                if (firstLink) {
+                  setTimeout(() => (firstLink as HTMLElement).focus(), 100)
+                }
+              }
+            }
+          })
+        })
+
+        observer.observe(slideOut, { attributes: true })
+      }
+    }
+
+    private setupKeyboardNavigation() {
+      // Improve keyboard navigation within TOC
+      this.addEventListener('keydown', (e) => {
+        const links = Array.from(this.querySelectorAll('a')) as HTMLElement[]
+        const currentIndex = links.findIndex((link) => link === document.activeElement)
+
+        switch (e.key) {
+          case 'ArrowDown': {
+            e.preventDefault()
+            const nextIndex = (currentIndex + 1) % links.length
+            links[nextIndex]?.focus()
+            break
+          }
+          case 'ArrowUp': {
+            e.preventDefault()
+            const prevIndex = currentIndex <= 0 ? links.length - 1 : currentIndex - 1
+            links[prevIndex]?.focus()
+            break
+          }
+          case 'Home':
+            e.preventDefault()
+            links[0]?.focus()
+            break
+          case 'End':
+            e.preventDefault()
+            links[links.length - 1]?.focus()
+            break
+        }
+      })
+    }
+
+    disconnectedCallback() {
+      this.scrollManager?.destroy()
     }
   }
 
@@ -59,7 +121,8 @@ const tocText = 'Table of Contents'
     overflow: hidden;
   }
 
-  /* Remove default list styling for semantic ol/ul */
+  /* Shared TOC list reset - applied globally for all TOC components */
+  :global(.toc-list-reset),
   toc-nav :global(ol),
   toc-nav :global(ul) {
     list-style: none;
