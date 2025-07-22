@@ -5,12 +5,14 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Satoshi';
   src: url('/fonts/Satoshi-VariableItalic.ttf');
   font-style: italic;
   font-display: swap;
 }
+
 html {
   font-family: 'Satoshi', sans-serif;
 }
@@ -38,6 +40,7 @@ html {
   --ring: 240 5.9% 10%;
   --radius: 0.5rem;
 }
+
 .dark {
   --background: 240 20.54% 5.2%;
   --foreground: 0 0% 98%;
@@ -59,19 +62,24 @@ html {
   --input: 240 3.7% 15.9%;
   --ring: 240 4.9% 83.9%;
 }
+
 :root {
   --un-default-border-color: hsl(var(--border) / 1);
 }
+
 html.dark {
   color-scheme: dark;
 }
 
-/* Global */
+/* Global link styles */
 a {
-  transition: color 0.2s ease;
-  &:hover {
-    color: hsl(var(--primary) / var(--un-text-opacity, 1));
-  }
+
+  transition: all 200ms ease;
+}
+
+a:hover {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary));
 }
 
 .medium-zoom-overlay {
@@ -84,20 +92,24 @@ a {
   transition: opacity 0.3s;
   will-change: opacity;
 }
+
 .medium-zoom--opened .medium-zoom-overlay {
   cursor: pointer;
   cursor: zoom-out;
   opacity: 1;
   z-index: 999;
 }
+
 .medium-zoom-image {
   cursor: pointer;
   cursor: zoom-in;
   transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1) !important;
 }
+
 .medium-zoom-image--hidden {
   visibility: hidden;
 }
+
 .medium-zoom-image--opened {
   position: relative;
   cursor: pointer;

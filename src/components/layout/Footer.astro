@@ -32,7 +32,7 @@ const sourceLinks = [
             >
               Astro
             </a>
-            {' + '}
+            &
             <a
               href='https://unocss.dev/'
               target='_blank'
@@ -63,7 +63,7 @@ const sourceLinks = [
           <div class='flex flex-wrap justify-center gap-x-2 md:justify-end'>
             {sourceLinks.map((link, index) => (
               <>
-                <a href={link?.href} target='_blank' rel='noopener noreferrer' class='source-link'>
+                <a href={link?.href} target='_blank' rel='noopener noreferrer' class='footer-link'>
                   {link?.label}
                 </a>
                 {index < sourceLinks.length - 1 && <span class='text-muted-foreground/60'>/</span>}
@@ -78,17 +78,6 @@ const sourceLinks = [
 </footer>
 
 <style>
-  .source-link {
-    color: hsl(var(--foreground));
-    text-decoration: none;
-    transition: color 200ms ease;
-  }
-
-  .source-link:hover {
-    color: hsl(var(--primary));
-    transform: translateY(-1px);
-  }
-
   .footer-link {
     color: hsl(var(--foreground));
     transition: all 200ms ease;
@@ -96,7 +85,7 @@ const sourceLinks = [
 
   .footer-link:hover {
     color: hsl(var(--primary));
-    text-decoration-color: hsl(var(--primary));
+    transform: translateY(-1px);
   }
 </style>
 
