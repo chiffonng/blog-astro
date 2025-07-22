@@ -12,12 +12,14 @@ export { default as Pill } from './base/Pill.astro'
 export { default as ProfileLinks } from './base/ProfileLinks.astro'
 export { default as Svg } from './base/Svg.astro'
 
+// Layout builders
+export { default as MenuDrawer } from './menu/MenuDrawer.astro'
+export { default as MenuDropdown } from './menu/MenuDropdown.astro'
+
 // Layout
 export { default as BackToTop } from './layout/BackToTop.astro'
 export { default as BaseHead } from './layout/BaseHead.astro'
 export { default as Footer } from './layout/Footer.astro'
-export { default as MenuDrawer } from './layout/MenuDrawer.astro'
-export { default as MenuDropdown } from './layout/MenuDropdown.astro'
 export { default as MenuNav } from './layout/MenuNav.astro'
 export { default as Paginator } from './layout/Paginator.astro'
 export { default as Section } from './layout/Section.astro'
@@ -44,8 +46,7 @@ export { default as Pronunciation } from './home/Pronunciation.astro'
 export { default as SkillLayout } from './home/SkillLayout.astro'
 
 // Projects
-export { default as ProjectCard } from './projects/ProjectCard.astro'
-export { default as GithubActivity } from './projects/GithubActivity.astro'
+export { ProjectCard, GithubActivity } from './projects'
 
 // Tools/Uses
 export { default as ToolSection } from './tools/ToolSection.astro'
