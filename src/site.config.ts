@@ -122,7 +122,9 @@ const userConfig: UserConfig = {
   ...blog
 }
 
-// Validate and add default config
-const config: Config = ConfigSchema.parse(userConfig)
+// Use Zod validation in development for better DX, skip in production for smaller bundle
+const config: Config = import.meta.env.DEV 
+  ? ConfigSchema.parse(userConfig)
+  : userConfig as Config
 
 export default config
