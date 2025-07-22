@@ -321,20 +321,37 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
       }
     }
 
+    // Store event handlers for proper cleanup
+    const eventHandlers = new Map<string, {
+      buttonClick: (e: Event) => void
+      buttonKeydown: (e: KeyboardEvent) => void
+      contentKeydown: (e: KeyboardEvent) => void
+    }>()
+
     // Setup event listeners for cached elements
     submenuCache.forEach((elements, triggerValue) => {
       const { button, content } = elements
 
-      // Click handler
-      button.addEventListener('click', (e: Event) => {
+      // Create handlers
+      const buttonClickHandler = (e: Event) => {
         e.preventDefault()
         e.stopPropagation()
         toggleSubmenu(triggerValue)
+      }
+      const buttonKeydownHandler = (e: KeyboardEvent) => handleKeydown(e, elements)
+      const contentKeydownHandler = (e: KeyboardEvent) => handleSubmenuKeydown(e, content)
+
+      // Store handlers for cleanup
+      eventHandlers.set(triggerValue, {
+        buttonClick: buttonClickHandler,
+        buttonKeydown: buttonKeydownHandler,
+        contentKeydown: contentKeydownHandler
       })
 
-      // Keyboard handlers
-      button.addEventListener('keydown', (e: KeyboardEvent) => handleKeydown(e, elements))
-      content.addEventListener('keydown', (e: KeyboardEvent) => handleSubmenuKeydown(e, content))
+      // Add event listeners
+      button.addEventListener('click', buttonClickHandler)
+      button.addEventListener('keydown', buttonKeydownHandler)
+      content.addEventListener('keydown', contentKeydownHandler)
     })
 
     // Close submenus when clicking outside
@@ -362,13 +379,17 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
         document.removeEventListener('keydown', handleGlobalKeydown)
 
         // Clean up individual element listeners
-        submenuCache.forEach(({ button, content }) => {
-          button.removeEventListener('click', () => {})
-          button.removeEventListener('keydown', () => {})
-          content.removeEventListener('keydown', () => {})
+        submenuCache.forEach(({ button, content }, triggerValue) => {
+          const handlers = eventHandlers.get(triggerValue)
+          if (handlers) {
+            button.removeEventListener('click', handlers.buttonClick)
+            button.removeEventListener('keydown', handlers.buttonKeydown)
+            content.removeEventListener('keydown', handlers.contentKeydown)
+          }
         })
 
         submenuCache.clear()
+        eventHandlers.clear()
       } catch (error) {
         console.warn('Error during submenu cleanup:', error)
       }
