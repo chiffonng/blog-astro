@@ -4,7 +4,8 @@
 
 ![](public/img/social-preview.png)
 
-> [!WARNING] This theme is still under active development. There are no releases or tag versions.
+> [!WARNING] ⚠️
+> This theme is still under active development. There are no releases or tag versions.
 > Use at your own risk.
 
 Personal website for academia, a fork of
@@ -26,17 +27,18 @@ From [astro-pure-theme v.4.0.5](https://github.com/cworld1/astro-theme-pure):
 
 This theme added:
 
-- [x] 🐳 Docker support
 - [ ] 📄 Show publications from a bibtex file
 - [ ] ✏️ Richer markdown support with wikilinks [[]],
+- [x] 🐳 Docker support
+- [x] 💄 Improve and modernize UI
 - [x] 📃 Special pages, including [llms.txt](https://llmstxt.org/), [/uses](https://uses.tech/),
       [/now](https://nownownow.com/about)
 - [x] 🌐 Improved accessibility: pronouns, name pronunciation,
 - [x] 🔧 Easier configuration
 - [x] 🛡️ Safe external links and protected email field
-- [x] ➕ Enhancements for profile links / socials display, menu navigation, and footer
 
-We improved performance with [icon in pure CSS](https://unocss.dev/presets/icons), and developer experience with better type and prop handling, and reusable components.
+We improved performance with [icon in pure CSS](https://unocss.dev/presets/icons), and developer
+experience with better type and prop handling, and reusable components.
 
 ## Installation
 

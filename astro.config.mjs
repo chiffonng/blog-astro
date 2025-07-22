@@ -8,7 +8,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
-import { visualizer } from 'rollup-plugin-visualizer'
+// import { visualizer } from 'rollup-plugin-visualizer'
 
 // Local integrations
 import { pagefindIntegration } from './src/integrations/pagefind.ts'
@@ -31,7 +31,6 @@ if (config.mediumZoom.enable) {
   remarkPlugins.push([remarkAddZoomable, config.mediumZoom.options])
 }
 
-// https://astro.build/config
 export default defineConfig({
   // Top-Level Options
   site: 'https://mychiffonn.com',
@@ -111,11 +110,11 @@ export default defineConfig({
         external: ['/pagefind/pagefind.js', '/pagefind/pagefind.js?url']
       }
     },
-    plugins: [
-      visualizer({
-        template: 'list',
-        filename: 'stats.yaml'
-      })
-    ]
+    // plugins: [
+    //   visualizer({
+    //     template: 'list',
+    //     filename: 'stats.yaml'
+    //   })
+    // ]
   }
 })
