@@ -1,55 +1,46 @@
 ---
 import config from '@/site.config'
 
-import { SearchBox } from '@/components'
+import { MenuItems, SearchBox, SlideOut } from '@/components'
 ---
 
 <header-component
   class='group sticky top-4 z-30 mb-12 flex items-center justify-between rounded-xl border border-transparent max-sm:py-1 sm:rounded-2xl'
 >
   <a
-    class='z-30 text-xl font-semibold group-[.not-top]:ms-2 sm:group-[.not-top]:ms-3 brand-link'
+    class='z-30 text-xl font-semibold brand-link flex items-center gap-2'
     href='/'
-    aria-label='Brand'>{config.title}</a
+    aria-label='Website name'
   >
+    <span class='i-mingcute:home-4-line size-6 shrink'></span>
+    <span class='group-[.not-top]:text-base whitespace-nowrap overflow-hidden'>{config.title}</span>
+  </a>
 
   <div class='flex items-center gap-x-1'>
-    {/* Menu links */}
-    <div
-      id='headerExpandContent'
-      class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1'
-    >
-      <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
-        {
-          config.menu.map((item: { title: string; link: string }) => (
-            <a
-              href={item.link}
-              class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
-              aria-label='Nav menu item'
-            >
-              {item.title}
-            </a>
-          ))
-        }
-      </div>
+    {/* Desktop Menu links */}
+    <div class='hidden sm:flex sm:items-center sm:gap-1'>
+      <MenuItems variant='desktop' />
     </div>
 
     {/* buttons */}
-    <div class='z-30 flex gap-x-4 group-[.not-top]:gap-x-2 transition-gap'>
+    <div class='z-30 flex gap-x-4 buttons-container'>
       <SearchBox />
       <button
         id='changeTheme'
-        class='group box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl flex items-center justify-center'
+        class='theme-btn group box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl flex items-center justify-center'
         aria-label='Change Theme'
+        data-theme='system'
+        transition:persist
       >
         <span class='sr-only'>Change theme</span>
-        <span class='system i-mingcute:computer-line hover:text-primary'></span>
-        <span class='light i-mingcute:sun-line hidden hover:text-primary'></span>
-        <span class='dark i-mingcute:moon-line hidden hover:text-primary'></span>
+        <span class='theme-icon system i-mingcute:computer-line hover:text-primary'></span>
+        <span class='theme-icon light i-mingcute:sun-line hover:text-primary'></span>
+        <span class='theme-icon dark i-mingcute:moon-line hover:text-primary'></span>
       </button>
       <button
-        id='toggleMenu'
-        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl flex items-center justify-center'
+        data-panel-trigger='mobile-menu'
+        class='menu-btn rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl flex items-center justify-center'
+        aria-label='Toggle Menu'
       >
         <span class='sr-only'>Menu</span>
         <span class='i-mingcute:menu-line size-5'></span>
@@ -58,79 +49,176 @@ import { SearchBox } from '@/components'
   </div>
 </header-component>
 
-<script is:inline>
-  const changeThemeElement = document.getElementById('changeTheme')
-  if (changeThemeElement) {
-    changeThemeElement.dataset.theme = localStorage.getItem('theme') || 'system'
-  }
-</script>
+{/* Mobile Menu Panel */}
+<SlideOut id='mobile-menu' title='Menu' side='right'>
+  <nav class='space-y-0.5'>
+    <MenuItems variant='mobile' />
+  </nav>
+
+  <div class='mt-6 pt-6 border-t border-border'>
+    <h4 class='px-4 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider'>
+      Theme
+    </h4>
+    <button
+      id='panelThemeToggle'
+      class='w-full flex items-center gap-3 px-4 py-3 font-medium transition-colors hover:text-primary hover:bg-muted/50 rounded-md text-left'
+      data-theme='system'
+    >
+      <span class='theme-icon system i-mingcute:computer-line size-5'></span>
+      <span class='theme-icon light i-mingcute:sun-line size-5'></span>
+      <span class='theme-icon dark i-mingcute:moon-line size-5'></span>
+      <span class='theme-text'>System</span>
+    </button>
+  </div>
+</SlideOut>
+
 <script>
   import { setTheme, showToast } from '@/lib/set-theme'
 
   class Header extends HTMLElement {
+    private scrollTicking = false
+    private lastScrollY = window.scrollY
+    private themeBtn: HTMLButtonElement | null = null
+    private panelThemeBtn: HTMLButtonElement | null = null
+    private handleScroll: () => void
+    private handleThemeChange: () => void
+    private resizeObserver: ResizeObserver | null = null
+
     constructor() {
       super()
+
+      // Pre-bind methods to avoid recreation
+      this.handleScroll = this.createScrollHandler()
+      this.handleThemeChange = this.createThemeHandler()
     }
 
     connectedCallback() {
-      // Header with throttled scroll listener
-      let preScrollY = window.scrollY
-      let ticking = false
+      this.initializeHeader()
+      this.setupScrollListener()
+      this.initializeTheme()
+      this.setupResizeObserver()
+    }
 
-      const updateHeader = () => {
-        const currentScrollY = window.scrollY
-        this.classList.toggle('not-top', currentScrollY > 20)
-        this.dataset.show = (currentScrollY < 350 || currentScrollY < preScrollY).toString()
-        preScrollY = currentScrollY
-        ticking = false
+    disconnectedCallback() {
+      // Clean up event listeners and observers
+      window.removeEventListener('scroll', this.handleScroll)
+      this.themeBtn?.removeEventListener('click', this.handleThemeChange)
+      this.panelThemeBtn?.removeEventListener('click', this.handleThemeChange)
+      this.resizeObserver?.disconnect()
+    }
+
+    private initializeHeader() {
+      const isNotTop = this.lastScrollY > 20
+      this.updateHeaderState(isNotTop)
+    }
+
+    private updateHeaderState(isNotTop: boolean) {
+      // Use single class toggle instead of multiple operations
+      this.classList.toggle('not-top', isNotTop)
+
+      // Batch CSS property updates
+      const brandMargin = isNotTop ? (window.innerWidth >= 640 ? '0.75rem' : '0.5rem') : '0'
+      const buttonsGap = isNotTop ? '0.5rem' : '1rem'
+
+      this.style.cssText += `--brand-margin:${brandMargin};--buttons-gap:${buttonsGap};`
+    }
+
+    private createScrollHandler() {
+      return () => {
+        if (this.scrollTicking) return
+
+        this.scrollTicking = true
+        requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY
+          const isNotTop = currentScrollY > 20
+          const shouldShow = currentScrollY < 350 || currentScrollY < this.lastScrollY
+
+          this.updateHeaderState(isNotTop)
+          this.dataset.show = shouldShow.toString()
+
+          this.lastScrollY = currentScrollY
+          this.scrollTicking = false
+        })
+      }
+    }
+
+    private setupScrollListener() {
+      // Use passive listeners for better performance
+      window.addEventListener('scroll', this.handleScroll, {
+        passive: true,
+        capture: false
+      })
+    }
+
+    private setupResizeObserver() {
+      // Optimize for viewport changes that affect responsive behavior
+      if ('ResizeObserver' in window) {
+        this.resizeObserver = new ResizeObserver(() => {
+          if (this.classList.contains('not-top')) {
+            this.updateHeaderState(true)
+          }
+        })
+        this.resizeObserver.observe(document.documentElement)
+      }
+    }
+
+    private initializeTheme() {
+      // Cache DOM queries
+      this.themeBtn = this.querySelector('#changeTheme')
+      this.panelThemeBtn = document.getElementById('panelThemeToggle') as HTMLButtonElement
+
+      // Initialize theme from localStorage with fallback
+      const currentTheme = localStorage.getItem('theme') ?? 'system'
+      this.updateThemeButtons(currentTheme)
+
+      // Set up event listeners with pre-bound handler
+      this.themeBtn?.addEventListener('click', this.handleThemeChange)
+      this.panelThemeBtn?.addEventListener('click', this.handleThemeChange)
+    }
+
+    private createThemeHandler() {
+      return () => {
+        const newTheme = setTheme(undefined, true) ?? 'system'
+        this.updateThemeButtons(newTheme)
+        showToast({ message: `Set theme to ${newTheme}` })
+      }
+    }
+
+    private updateThemeButtons(theme: string) {
+      // Batch DOM updates
+      if (this.themeBtn) {
+        this.themeBtn.dataset.theme = theme
       }
 
-      this.classList.toggle('not-top', preScrollY > 20)
-      window.addEventListener(
-        'scroll',
-        () => {
-          if (!ticking) {
-            requestAnimationFrame(updateHeader)
-            ticking = true
-          }
-        },
-        { passive: true }
-      )
-
-      // Dark Mode
-      const darkModeBtn = this.querySelector('#changeTheme') as HTMLElement
-      darkModeBtn.addEventListener('click', () => {
-        const newTheme = setTheme(undefined, true)
-        darkModeBtn.dataset.theme = newTheme
-        showToast({ message: `Set theme to ${newTheme}` })
-      })
-
-      // Menu
-      this.querySelector('#toggleMenu')?.addEventListener('click', () => {
-        this.classList.toggle('expanded')
-      })
+      if (this.panelThemeBtn) {
+        this.panelThemeBtn.dataset.theme = theme
+        const themeText = this.panelThemeBtn.querySelector('.theme-text')
+        if (themeText) {
+          themeText.textContent = theme.charAt(0).toUpperCase() + theme.slice(1)
+        }
+      }
     }
   }
 
-  customElements.define('header-component', Header)
+  // Define custom element only once
+  if (!customElements.get('header-component')) {
+    customElements.define('header-component', Header)
+  }
 </script>
 
 <style>
-  .brand-link {
-    transition: margin-inline 0.3s;
-  }
-
-  .transition-gap {
-    transition: gap 0.3s;
-  }
-
   header-component {
+    --brand-margin: 0;
+    --buttons-gap: 1rem;
+
     transition:
-      padding 0.3s,
-      transform 0.3s,
-      margin-inline 0.3s,
-      border 0.15s,
-      background-color 0.15s;
+      padding 0.3s ease-out,
+      transform 0.3s ease-out,
+      margin-inline 0.3s ease-out,
+      border-color 0.15s ease-out,
+      background-color 0.15s ease-out;
+    will-change: transform;
+    contain: layout style;
 
     &.not-top {
       --un-border-opacity: 1;
@@ -140,97 +228,68 @@ import { SearchBox } from '@/components'
       padding-left: 0.375rem;
       padding-right: 0.375rem;
       box-shadow:
-        rgb(255, 255, 255) 0px 0px 0px 0px,
-        rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
-        rgba(39, 39, 42, 0.08) 0px 10px 15px -3px,
-        rgba(39, 39, 42, 0.08) 0px 4px 6px -4px;
+        0 0 0 0 hsl(var(--background)),
+        0 0 0 1px hsl(var(--border) / 0.08),
+        0 10px 15px -3px hsl(var(--foreground) / 0.08),
+        0 4px 6px -4px hsl(var(--foreground) / 0.08);
     }
-    &[data-show='false']:not(.expanded) {
+
+    &[data-show='false'] {
       transform: translateY(-5rem);
     }
-  }
-  @media (min-width: 800px) {
-    header-component.not-top {
-      margin-inline: 8%;
+
+    @media (min-width: 800px) {
+      &.not-top {
+        margin-inline: 5%;
+      }
     }
   }
+
+  .brand-link {
+    margin-inline-start: var(--brand-margin);
+    transition: margin-inline-start 0.3s ease-out;
+    contain: layout;
+  }
+
+  .buttons-container {
+    gap: var(--buttons-gap);
+    transition: gap 0.3s ease-out;
+    contain: layout;
+  }
+
+  /* Dark theme styles */
   :global(.dark) header-component.not-top {
+    --un-bg-opacity: 1;
     background-color: hsl(var(--muted) / var(--un-bg-opacity));
   }
 
-  /* header menu */
-  @media (max-width: 640px) {
-    #headerExpandContent {
-      grid-template-rows: 0fr;
-      transition:
-        opacity 0.3s,
-        padding 0.3s,
-        border-color 0.15s,
-        grid-template-rows 0.3s;
-    }
-    .expanded #headerExpandContent {
-      grid-template-rows: 1fr;
-    }
-    .expanded.not-top #headerExpandContent {
-      box-shadow:
-        rgb(255, 255, 255) 0px 0px 0px 0px,
-        rgba(24, 24, 27, 0.08) 0px 0px 0px 1px,
-        rgba(39, 39, 42, 0.08) 0px 10px 15px -3px,
-        rgba(39, 39, 42, 0.08) 0px 4px 6px -4px;
-    }
-
-    /* header component after */
-    header-component #headerExpandContent::after {
-      box-sizing: content-box;
-      content: '';
-      position: absolute;
-      inset-inline: calc(-1rem - 1px);
-      bottom: 0;
-      top: -5rem;
-      z-index: -1;
-      transition: 0.3s;
-      visibility: hidden;
-      opacity: 0;
-      border-bottom: 1px solid transparent;
-    }
-    header-component:not(.not-top) #headerExpandContent::after {
-      visibility: visible;
-      bottom: -1rem;
-      opacity: 1;
-      background-color: hsl(var(--muted) / var(--un-bg-opacity, 1));
-      border-bottom-color: hsl(var(--border) / var(--un-border-opacity, 1));
-    }
-  }
-
-  /* dark light mode toggle - show action icon, not current state */
-  #changeTheme {
-    /* Default: show system icon when theme is system */
-    & .light,
-    & .dark {
+  /* Shared theme toggle styles */
+  .theme-btn,
+  #panelThemeToggle {
+    .theme-icon {
       display: none;
     }
-    & .system {
+
+    .theme-icon.system {
       display: block;
     }
 
-    /* When dark theme is active, show sun icon (action: switch to light) */
     &[data-theme='dark'] {
-      & .system,
-      & .dark {
+      .theme-icon.system,
+      .theme-icon.dark {
         display: none;
       }
-      & .light {
+      .theme-icon.light {
         display: block;
       }
     }
 
-    /* When light theme is active, show moon icon (action: switch to dark) */
     &[data-theme='light'] {
-      & .system,
-      & .light {
+      .theme-icon.system,
+      .theme-icon.light {
         display: none;
       }
-      & .dark {
+      .theme-icon.dark {
         display: block;
       }
     }

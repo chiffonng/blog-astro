@@ -13,13 +13,15 @@ export { default as ProfileLinks } from './base/ProfileLinks.astro'
 export { default as Svg } from './base/Svg.astro'
 
 // Layout
+export { default as BackToTop } from './layout/BackToTop.astro'
 export { default as BaseHead } from './layout/BaseHead.astro'
 export { default as Footer } from './layout/Footer.astro'
 export { default as MenuNav } from './layout/MenuNav.astro'
-export { default as Section } from './layout/Section.astro'
-export { default as ThemeProvider } from './layout/ThemeProvider.astro'
-export { default as BackToTop } from './layout/BackToTop.astro'
+export { default as MenuItems } from './layout/MenuItems.astro'
 export { default as Paginator } from './layout/Paginator.astro'
+export { default as Section } from './layout/Section.astro'
+export { default as SlideOut } from './layout/SlideOut.astro'
+export { default as ThemeProvider } from './layout/ThemeProvider.astro'
 
 // Blog
 export { default as PostInfo } from './blog/PostInfo.astro'

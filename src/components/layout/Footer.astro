@@ -17,7 +17,7 @@ const sourceLinks = [
     {/* Left side: Copyright and Credits */}
     <div class='space-y-1 text-center md:text-left'>
       <div class='text-muted-foreground'>
-        Copyright &copy; <time id='footer-year'></time>
+        Copyright &copy; <time id='footer-year'>{new Date().getFullYear()}</time>
         {config.name}
       </div>
       {

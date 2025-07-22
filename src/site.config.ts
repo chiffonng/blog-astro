@@ -44,8 +44,13 @@ export const header: HeaderUserConfig = {
     { title: 'Projects', link: '/projects' },
     { title: 'Teaching', link: '/teaching' },
     { title: 'Blog', link: '/blog' },
-    { title: 'Uses', link: '/uses' },
-    { title: 'Now', link: '/now' }
+    {
+      title: 'More',
+      submenu: [
+        { title: 'Uses', link: '/uses' },
+        { title: 'Now', link: '/now' }
+      ]
+    }
   ]
 }
 

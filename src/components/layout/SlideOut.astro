@@ -1,0 +1,293 @@
+---
+export interface Props {
+  id: string
+  title?: string
+  side?: 'left' | 'right'
+  class?: string
+}
+
+const { id, title, side = 'right', class: className } = Astro.props
+---
+
+<slide-out
+  id={id}
+  class:list={['slide-out', className]}
+  data-side={side}
+  role='dialog'
+  aria-modal='true'
+  aria-hidden='true'
+>
+  <div class='panel-backdrop' aria-hidden='true'></div>
+  <aside class='panel-content' role='complementary'>
+    {
+      title && (
+        <header class='panel-header'>
+          <h2 class='panel-title'>{title}</h2>
+          <button class='panel-close' type='button' aria-label='Close panel'>
+            <span class='i-mingcute:close-line size-4' aria-hidden='true' />
+          </button>
+        </header>
+      )
+    }
+    <main class='panel-body'>
+      <slot />
+    </main>
+  </aside>
+</slide-out>
+
+<script>
+  class SlideOut extends HTMLElement {
+    private isOpen = false
+    private backdrop: HTMLElement | null = null
+    private content: HTMLElement | null = null
+    private closeBtn: HTMLElement | null = null
+    private handleClick: ((e: Event) => void) | null = null
+    private handleKeydown: ((e: KeyboardEvent) => void) | null = null
+
+    constructor() {
+      super()
+    }
+
+    connectedCallback() {
+      this.backdrop = this.querySelector('.panel-backdrop')
+      this.content = this.querySelector('.panel-content')
+      this.closeBtn = this.querySelector('.panel-close')
+
+      this.setupEventListeners()
+    }
+
+    disconnectedCallback() {
+      this.cleanup()
+    }
+
+    private cleanup() {
+      // Remove event listeners to prevent memory leaks
+      if (this.handleClick) {
+        document.removeEventListener('click', this.handleClick)
+      }
+      if (this.handleKeydown) {
+        document.removeEventListener('keydown', this.handleKeydown)
+      }
+      
+      // Restore body scroll if panel was left open
+      if (this.isOpen) {
+        document.body.style.overflow = ''
+      }
+      
+      // Reset references
+      this.handleClick = null
+      this.handleKeydown = null
+      this.backdrop = null
+      this.content = null
+      this.closeBtn = null
+    }
+
+    private setupEventListeners() {
+      // Create bound handlers to store references for cleanup
+      this.handleClick = (e: Event) => {
+        const target = e.target as Element
+
+        // Handle trigger buttons
+        const trigger = target.closest(`[data-panel-trigger="${this.id}"]`)
+        if (trigger) {
+          e.preventDefault()
+          this.toggle()
+          return
+        }
+
+        // Handle close button
+        if (this.closeBtn?.contains(target)) {
+          this.close()
+          return
+        }
+
+        // Handle backdrop click
+        if (this.backdrop === target) {
+          this.close()
+          return
+        }
+      }
+
+      this.handleKeydown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape' && this.isOpen) {
+          this.close()
+        }
+      }
+
+      // Use single event listeners with delegation
+      document.addEventListener('click', this.handleClick)
+      document.addEventListener('keydown', this.handleKeydown)
+    }
+
+    open() {
+      if (this.isOpen) return
+
+      this.isOpen = true
+      this.classList.add('panel-open')
+      this.setAttribute('aria-hidden', 'false')
+
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden'
+
+      // Focus management - use comprehensive selector for all focusable elements
+      const focusableSelector = [
+        'a[href]',
+        'button:not([disabled])',
+        'textarea:not([disabled])',
+        'input:not([disabled]):not([type="hidden"])',
+        'select:not([disabled])',
+        '[tabindex]:not([tabindex="-1"]):not([disabled])',
+        'details',
+        'summary'
+      ].join(', ')
+      
+      const firstFocusable = this.content?.querySelector(focusableSelector) as HTMLElement
+      if (firstFocusable) {
+        // Use requestAnimationFrame to ensure panel is visible before focusing
+        requestAnimationFrame(() => firstFocusable.focus())
+      }
+
+      // Dispatch custom event
+      this.dispatchEvent(new CustomEvent('panel:open', { bubbles: true }))
+    }
+
+    close() {
+      if (!this.isOpen) return
+
+      this.isOpen = false
+      this.classList.remove('panel-open')
+      this.setAttribute('aria-hidden', 'true')
+
+      // Restore body scroll
+      document.body.style.overflow = ''
+
+      // Dispatch custom event
+      this.dispatchEvent(new CustomEvent('panel:close', { bubbles: true }))
+    }
+
+    toggle() {
+      if (this.isOpen) {
+        this.close()
+      } else {
+        this.open()
+      }
+    }
+  }
+
+  customElements.define('slide-out', SlideOut)
+</script>
+
+<style>
+  .slide-out {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+
+    &.panel-open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    &[aria-hidden='true'] {
+      visibility: hidden;
+    }
+  }
+
+  .panel-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: hsl(0 0% 0% / 0.5);
+    backdrop-filter: blur(4px);
+    transition: background-color 0.3s ease-out;
+  }
+
+  .panel-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: min(280px, 75vw);
+    background-color: hsl(var(--background));
+    transition: transform 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Right side panel - only left border and shadow */
+  .slide-out[data-side='right'] .panel-content {
+    right: 0;
+    border-left: 1px solid hsl(var(--border));
+    border-radius: 1rem 0 0 1rem;
+    transform: translateX(100%);
+    box-shadow:
+      -25px 0 25px -5px hsl(0 0% 0% / 0.1),
+      -10px 0 10px -5px hsl(0 0% 0% / 0.04);
+  }
+
+  /* Left side panel - only right border and shadow */
+  .slide-out[data-side='left'] .panel-content {
+    left: 0;
+    border-right: 1px solid hsl(var(--border));
+    border-radius: 0 1rem 1rem 0;
+    transform: translateX(-100%);
+    box-shadow:
+      25px 0 25px -5px hsl(0 0% 0% / 0.1),
+      10px 0 10px -5px hsl(0 0% 0% / 0.04);
+  }
+
+  .slide-out.panel-open .panel-content {
+    transform: translateX(0);
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid hsl(var(--border));
+    flex-shrink: 0;
+  }
+
+  .panel-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    color: hsl(var(--foreground));
+  }
+
+  .panel-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.375rem;
+    background-color: transparent;
+    color: hsl(var(--muted-foreground));
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+
+    &:hover {
+      background-color: hsl(var(--muted));
+      color: hsl(var(--foreground));
+    }
+
+    &:focus {
+      outline: 2px solid hsl(var(--ring));
+      outline-offset: 2px;
+    }
+  }
+
+  .panel-body {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+
+  /* Dark theme styles */
+  :global(.dark) .slide-out .panel-backdrop {
+    background-color: hsl(0 0% 0% / 0.5);
+  }
+</style>
