@@ -1,66 +1,133 @@
 ---
 import { generateToc } from '@/plugins/toc'
 import type { TOCProps as Props } from '@/components/types'
-import { Collapse, TOCHeading } from '@/components'
+import { TOCHeading } from '@/components'
 
 const { headings, class: className, isMobile = false, ...props } = Astro.props
 
 const toc = generateToc(headings)
-const tocText = 'TABLE OF CONTENTS'
+const tocText = 'Table of Contents'
 ---
 
-<toc-content class={className} {...props}>
+<toc-nav aria-label='Table of contents' class:list={['toc-container', className]} {...props}>
   {
-    isMobile ? (
-      <div class='toc-mobile'>
-        <h3 class='font-medium text-sm mb-4 text-foreground sticky top-0 bg-background'>
-          {tocText}
-        </h3>
-        <ul class='text-card-foreground space-y-1'>
-          {toc.map((heading) => (
-            <TOCHeading heading={heading} />
-          ))}
-        </ul>
-      </div>
-    ) : (
-      <Collapse title={tocText} isExpanded={true}>
-        <ul class='text-card-foreground'>
-          {toc.map((heading) => (
-            <TOCHeading heading={heading} />
-          ))}
-        </ul>
-      </Collapse>
+    !isMobile && (
+      <h2 class='text-sm font-semibold text-muted-foreground mb-2 uppercase tracking-wide'>
+        {tocText}
+      </h2>
     )
   }
-</toc-content>
+  <ol class='toc-list-reset text-card-foreground space-y-1'>
+    {toc.map((heading) => <TOCHeading heading={heading} />)}
+  </ol>
+</toc-nav>
 
 <script>
   import { TOCScrollManager } from '@/plugins/toc'
 
-  class TOCContent extends HTMLElement {
+  class TOCNav extends HTMLElement {
     private scrollManager: TOCScrollManager | null = null
+    private isInMobileToc: boolean = false
 
     connectedCallback() {
       // Determine which container this TOC is in
-      const isInMobileToc = this.closest('#mobile-toc') !== null
+      this.isInMobileToc = this.closest('#mobile-toc') !== null
 
       this.scrollManager = new TOCScrollManager(this)
       this.scrollManager.init()
 
       // Set the container ID for auto-scroll
-      if (isInMobileToc) {
+      if (this.isInMobileToc) {
         this.scrollManager.setContainerId('mobile-toc')
+        this.setupMobileFocusManagement()
       } else {
         this.scrollManager.setContainerId('sidebar')
       }
+
+      this.setupKeyboardNavigation()
+    }
+
+    private setupMobileFocusManagement() {
+      // Focus management for mobile slide-out
+      const slideOut = this.closest('#mobile-toc')
+      if (slideOut) {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-state') {
+              const target = mutation.target as HTMLElement
+              if (target.dataset.state === 'open') {
+                // Focus first TOC link when slide-out opens
+                const firstLink = this.querySelector('a')
+                if (firstLink) {
+                  setTimeout(() => (firstLink as HTMLElement).focus(), 100)
+                }
+              }
+            }
+          })
+        })
+
+        observer.observe(slideOut, { attributes: true })
+      }
+    }
+
+    private setupKeyboardNavigation() {
+      // Improve keyboard navigation within TOC
+      this.addEventListener('keydown', (e) => {
+        const links = Array.from(this.querySelectorAll('a')) as HTMLElement[]
+        const currentIndex = links.findIndex((link) => link === document.activeElement)
+
+        switch (e.key) {
+          case 'ArrowDown': {
+            e.preventDefault()
+            const nextIndex = (currentIndex + 1) % links.length
+            links[nextIndex]?.focus()
+            break
+          }
+          case 'ArrowUp': {
+            e.preventDefault()
+            const prevIndex = currentIndex <= 0 ? links.length - 1 : currentIndex - 1
+            links[prevIndex]?.focus()
+            break
+          }
+          case 'Home':
+            e.preventDefault()
+            links[0]?.focus()
+            break
+          case 'End':
+            e.preventDefault()
+            links[links.length - 1]?.focus()
+            break
+        }
+      })
+    }
+
+    disconnectedCallback() {
+      this.scrollManager?.destroy()
     }
   }
 
-  customElements.define('toc-content', TOCContent)
+  customElements.define('toc-nav', TOCNav)
 </script>
 
 <style>
-  toc-content :global(.toc-item) {
-    display: flow-root;
+  toc-nav {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .toc-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Shared TOC list reset - applied globally for all TOC components */
+  :global(.toc-list-reset),
+  toc-nav :global(ol),
+  toc-nav :global(ul) {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    width: 100%;
   }
 </style>

@@ -3,16 +3,17 @@ import type { MarkdownHeading } from 'astro'
 
 import type { SiteMeta } from '@/types/site-config'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { BackToTop, Link } from '@/components'
+import { BackToTop, Link, SlideOut } from '@/components'
 
 interface Props {
   meta: SiteMeta
   highlightColor?: string
   back?: string
   headings?: MarkdownHeading[]
+  sidebarHeight?: string
 }
 
-const { meta, highlightColor, back = '/', headings, ...props } = Astro.props
+const { meta, highlightColor, back = '/', headings, sidebarHeight = '50vh', ...props } = Astro.props
 const hasTOC = headings && headings.length > 0
 ---
 
@@ -20,33 +21,9 @@ const hasTOC = headings && headings.length > 0
   <Link title='Back' href={back} style='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Desktop Sidebar */}
-    <aside
-      class='animate top-20 min-w-48 basis-60 overflow-y-auto max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 h-[50vh]'
-      id='sidebar'
-    >
+    <aside class='sidebar-container' id='sidebar' style={`--sidebar-height: ${sidebarHeight}`}>
       <slot name='sidebar' />
     </aside>
-
-    {/* TOC Overlay */}
-    {
-      hasTOC && (
-        <>
-          <div
-            id='mobile-toc-shade'
-            class='md:hidden fixed top-0 left-0 w-full h-full transition-opacity duration-300 opacity-0 pointer-events-none'
-            style='background-color:#00000091;z-index:40'
-          />
-          <div
-            id='mobile-toc'
-            class='md:hidden fixed top-0 right-0 w-80 sm:w-64 h-full bg-background border-l z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl'
-          >
-            <div class='flex-1 overflow-y-auto p-4'>
-              <slot name='mobile-sidebar' />
-            </div>
-          </div>
-        </>
-      )
-    }
 
     <article class='min-w-0 grow'>
       {/* Content header */}
@@ -78,79 +55,58 @@ const hasTOC = headings && headings.length > 0
           slot='other-icons'
           aria-label='Toggle table of contents'
           class='size-10 flex items-center justify-center rounded-full border-2 bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
-          id='mobile-toc-btn'
+          data-panel-trigger='mobile-toc'
         >
           <span class='i-mingcute:list-check-line' />
         </button>
       )
     }
   </BackToTop>
+
+  {/* Mobile TOC SlideOut */}
+  {
+    hasTOC && (
+      <SlideOut id='mobile-toc' title='Table of Contents' side='right' class='md:hidden'>
+        <slot name='mobile-sidebar' />
+      </SlideOut>
+    )
+  }
 </PageLayout>
 
-<script>
-  // Toggle mobile TOC visibility
-  const mobileTocButton = document.getElementById('mobile-toc-btn')
-  const mobileToc = document.getElementById('mobile-toc')
-  const mobileTocShade = document.getElementById('mobile-toc-shade')
-
-  function toggleMobileToc() {
-    if (!mobileToc || !mobileTocShade) {
-      console.warn('Mobile TOC or shade not found')
-      return
-    }
-
-    if (mobileToc.classList.contains('show')) {
-      // Close
-      mobileToc.classList.remove('show')
-      mobileToc.style.transform = 'translateX(100%)'
-      mobileTocShade.style.opacity = '0'
-      mobileTocShade.style.pointerEvents = 'none'
-    } else {
-      // Open
-      mobileToc.classList.add('show')
-      mobileToc.style.transform = 'translateX(0)'
-      mobileTocShade.style.opacity = '1'
-      mobileTocShade.style.pointerEvents = 'auto'
-    }
-  }
-
-  function closeMobileToc() {
-    if (mobileToc?.classList.contains('show')) {
-      mobileToc.classList.remove('show')
-      mobileToc.style.transform = 'translateX(100%)'
-      if (mobileTocShade) {
-        mobileTocShade.style.opacity = '0'
-        mobileTocShade.style.pointerEvents = 'none'
-      }
-    }
-  }
-
-  mobileTocButton?.addEventListener('click', () => {
-    toggleMobileToc()
-  })
-
-  // Close mobile TOC when clicking on shade
-  mobileTocShade?.addEventListener('click', () => {
-    closeMobileToc()
-  })
-
-  // Close mobile TOC when clicking outside (but not on the button)
-  document.addEventListener('click', (e) => {
-    if (!mobileToc?.contains(e.target as Node) && !mobileTocButton?.contains(e.target as Node)) {
-      if (mobileToc?.classList.contains('show')) {
-        closeMobileToc()
-      }
-    }
-  })
-</script>
 <style>
-  /* Mobile TOC scrollbar styling */
-  #mobile-toc .overflow-y-auto::-webkit-scrollbar {
-    width: 6px;
+  .sidebar-container {
+    /* Configurable sidebar with CSS custom properties */
+    --sidebar-height: 50vh; /* Default fallback */
+
+    animation: var(--animate, none);
+    top: 5rem;
+    min-width: 12rem;
+    flex-basis: 15rem;
+    overflow-y: auto;
+    z-index: 40;
+    position: fixed;
+    height: var(--sidebar-height);
   }
 
-  #mobile-toc .overflow-y-auto::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground));
-    border-radius: 3px;
+  /* Hide on mobile */
+  @media (max-width: 768px) {
+    .sidebar-container {
+      display: none;
+    }
+  }
+
+  /* Desktop styles */
+  @media (min-width: 768px) {
+    .sidebar-container {
+      position: sticky;
+      order: 2;
+    }
+  }
+
+  /* Large screen adjustments */
+  @media (min-width: 1024px) {
+    .sidebar-container {
+      flex-shrink: 0;
+    }
   }
 </style>

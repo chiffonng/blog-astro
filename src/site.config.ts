@@ -28,6 +28,7 @@ export const theme: ThemeUserConfig = {
   },
   titleDelimiter: '•',
   prerender: true,
+  highlightColor: '#659EB9',
   head: [],
   content: {
     externalLinkArrow: true,

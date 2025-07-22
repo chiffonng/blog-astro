@@ -14,7 +14,7 @@ interface Props {
 
 const {
   meta: { articleDate, description = config.tagline, ogImage, title },
-  highlightColor,
+  highlightColor = config.highlightColor,
   ...props
 } = Astro.props
 ---
@@ -37,7 +37,7 @@ const {
     }
     <div class='content-container flex flex-col px-4 lg:px-10 sm:px-7 w-full'>
       <MenuNav slot='header' />
-      <main data-pagefind-body class='flex-1'>
+      <main data-pagefind-body class='flex-1' transition:animate='slide'>
         <slot />
       </main>
       <Footer slot='footer' />
@@ -58,7 +58,7 @@ const {
       /* Match original theme width constraints */
       @media (min-width: 800px) {
         .content-container {
-          margin-inline: 8%;
+          margin-inline: 5%;
         }
       }
     </style>

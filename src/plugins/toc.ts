@@ -15,37 +15,81 @@ export interface HeadingProgress {
   progress: number
 }
 
-function diveChildren(item: TocItem, depth: number): TocItem[] {
-  if (depth === 1 || !item.subheadings.length) {
-    return item.subheadings
-  } else {
-    // e.g., 2
-    return diveChildren(item.subheadings[item.subheadings.length - 1] as TocItem, depth - 1)
+function validateHeadingHierarchy(headings: readonly MarkdownHeading[]) {
+  if (headings.length === 0) return
+
+  let previousDepth = 0
+  const orphanHeadings: MarkdownHeading[] = []
+
+  headings.forEach((heading, index) => {
+    const { depth } = heading
+
+    // Skip first heading
+    if (index === 0) {
+      previousDepth = depth
+      return
+    }
+
+    // Check for orphan headings (jumping more than 1 level)
+    const depthJump = depth - previousDepth
+    if (depthJump > 1) {
+      orphanHeadings.push(heading)
+    }
+
+    previousDepth = depth
+  })
+
+  // Warn about orphan headings
+  if (orphanHeadings.length > 0) {
+    console.warn('⚠️  TOC: Found orphan headings with improper hierarchy:')
+    orphanHeadings.forEach(({ depth, text, slug }) => {
+      console.warn(`   h${depth}: "${text}" (${slug}) - Consider using proper heading levels`)
+    })
+    console.warn('   Learn more: https://webaim.org/articles/screenreader/#headings')
   }
 }
 
 export function generateToc(headings: readonly MarkdownHeading[]) {
-  // this ignores/filters out h1 element(s)
-  const bodyHeadings = [...headings.filter(({ depth }) => depth > 1)]
-  const toc: TocItem[] = []
+  // Only include h1, h2, h3 headings (depths 1-3)
+  const bodyHeadings = [...headings.filter(({ depth }) => depth >= 1 && depth <= 3)]
 
-  bodyHeadings.forEach((h) => {
+  if (bodyHeadings.length === 0) return []
+
+  // Validate heading hierarchy and warn about orphans
+  validateHeadingHierarchy(bodyHeadings)
+
+  // Find the first heading's depth and use it as the base level
+  const firstHeadingDepth = bodyHeadings[0].depth
+
+  // Normalize all headings relative to the first heading (treat first heading as depth 2)
+  const normalizedHeadings = bodyHeadings
+    .map((heading) => ({
+      ...heading,
+      depth: heading.depth - firstHeadingDepth + 2 // Normalize: first heading becomes depth 2
+    }))
+    .filter((heading) => heading.depth <= 3) // Only keep up to 3 levels from the first heading (depths 2-4)
+
+  const toc: TocItem[] = []
+  const stack: TocItem[] = []
+
+  normalizedHeadings.forEach((h) => {
     const heading: TocItem = { ...h, subheadings: [] }
 
-    // add h2 elements into the top level
-    if (heading.depth === 2) {
-      toc.push(heading)
-    } else {
-      const lastItemInToc = toc[toc.length - 1]!
-      if (heading.depth < lastItemInToc.depth) {
-        throw new Error(`Orphan heading found: ${heading.text}.`)
-      }
+    // Find the correct parent for this heading
+    while (stack.length > 0 && stack[stack.length - 1].depth >= heading.depth) {
+      stack.pop()
+    }
 
-      // higher depth
-      // push into children, or children's children
-      const gap = heading.depth - lastItemInToc.depth
-      const target = diveChildren(lastItemInToc, gap)
-      target.push(heading)
+    // If no parent exists or this is depth 2 (normalized), add to top level
+    if (stack.length === 0 || heading.depth === 2) {
+      toc.push(heading)
+      stack.length = 0 // Clear stack for new top-level item
+      stack.push(heading)
+    } else {
+      // Add as child to the most recent valid parent
+      const parent = stack[stack.length - 1]
+      parent.subheadings.push(heading)
+      stack.push(heading)
     }
   })
   return toc
@@ -57,6 +101,8 @@ export class TOCScrollManager {
   headingProgress: Record<string, HeadingProgress> = {}
   element: HTMLElement
   private containerId: string = 'sidebar'
+  private intersectionObserver: IntersectionObserver | null = null
+  private scrollTimeout: number | null = null
 
   constructor(element: HTMLElement) {
     this.element = element
@@ -69,9 +115,7 @@ export class TOCScrollManager {
 
   private initializeElements() {
     // Initialize the headings and tocLinks
-    this.headings = Array.from(
-      document.querySelectorAll('article h2, article h3, article h4, article h5, article h6')
-    )
+    this.headings = Array.from(document.querySelectorAll('article h2, article h3'))
     this.tocLinks = Array.from(this.element.querySelectorAll('a[href^="#"]')).map((link) => ({
       element: link as HTMLAnchorElement,
       progressBar: link.previousElementSibling as HTMLElement,
@@ -172,17 +216,93 @@ export class TOCScrollManager {
           )
           directHeading.scrollIntoView({ behavior: 'smooth' })
         } else {
-          console.warn(`No heading found for slug: ${link.slug}`)
+          this.handleMissingHeading(link.slug, link.element)
         }
       })
     })
   }
 
-  init() {
-    this.setupSmoothScroll()
+  private handleMissingHeading(slug: string, linkElement: HTMLElement) {
+    console.warn(`TOC: No heading found for slug "${slug}". Link will be disabled.`)
 
-    // Initial first and listen to scroll event
-    setInterval(this.updatePositionAndStyle, 100)
-    window.addEventListener('scroll', this.updatePositionAndStyle)
+    // Gracefully handle missing heading
+    linkElement.setAttribute('aria-disabled', 'true')
+    linkElement.style.opacity = '0.5'
+    linkElement.style.pointerEvents = 'none'
+    linkElement.title = `Heading "${slug}" not found on this page`
+  }
+
+  private setupIntersectionObserver() {
+    try {
+      const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: [0, 0.25, 0.5, 0.75, 1]
+      }
+
+      this.intersectionObserver = new IntersectionObserver(() => {
+        // Use requestAnimationFrame to batch updates
+        if (this.scrollTimeout) {
+          cancelAnimationFrame(this.scrollTimeout)
+        }
+
+        this.scrollTimeout = requestAnimationFrame(() => {
+          this.updatePositionAndStyle()
+        })
+      }, observerOptions)
+
+      // Observe all headings
+      this.headings.forEach((heading) => {
+        if (this.intersectionObserver) {
+          this.intersectionObserver.observe(heading)
+        }
+      })
+    } catch (error) {
+      console.error('TOC: Failed to setup IntersectionObserver:', error)
+      // Fallback to throttled scroll listener
+      this.setupFallbackScrollListener()
+    }
+  }
+
+  private setupFallbackScrollListener() {
+    let ticking = false
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          this.updatePositionAndStyle()
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+  }
+
+  init() {
+    try {
+      this.setupSmoothScroll()
+
+      // Use IntersectionObserver for better performance
+      this.setupIntersectionObserver()
+
+      // Initial update
+      this.updatePositionAndStyle()
+    } catch (error) {
+      console.error('TOC: Failed to initialize scroll manager:', error)
+    }
+  }
+
+  destroy() {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect()
+      this.intersectionObserver = null
+    }
+
+    if (this.scrollTimeout) {
+      cancelAnimationFrame(this.scrollTimeout)
+      this.scrollTimeout = null
+    }
   }
 }

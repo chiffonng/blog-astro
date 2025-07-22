@@ -5,26 +5,27 @@ const { class: className, title, isExpanded = false, ...props } = Astro.props
 ---
 
 <collapse-component class:list={['group/expand', isExpanded && 'expanded']}>
-  <div
+  <details
     class:list={[
       'rounded-xl border px-3 my-4 sm:px-4 group-[.expanded]/expand:bg-muted',
       className
     ]}
     {...props}
+    open={isExpanded}
   >
     <slot name='before' />
-    <div
-      class='expand-title group/highlight sticky top-0 z-20 flex cursor-pointer items-center justify-between py-1.5 group-[.expanded]/expand:bg-muted sm:py-2'
+    <summary
+      class='expand-title group/highlight sticky top-0 z-20 flex cursor-pointer items-center justify-between py-1.5 group-[.expanded]/expand:bg-muted sm:py-2 list-none'
     >
-      <p class='group-hover/highlight:text-primary'>{title}</p>
+      <span class='group-hover/highlight:text-primary'>{title}</span>
       <span
         class='expand-button i-mingcute:up-line size-4 transition-transform group-hover/highlight:text-primary group-[.expanded]/expand:rotate-180'
-      ></span>
-    </div>
+        aria-hidden='true'></span>
+    </summary>
     <div class='expand-content group-[.expanded]/expand:block'>
       <slot />
     </div>
-  </div>
+  </details>
 </collapse-component>
 
 <script>
@@ -34,11 +35,17 @@ const { class: className, title, isExpanded = false, ...props } = Astro.props
     }
 
     connectedCallback() {
-      const expandTitle = this.querySelector('.expand-title')
-      // const expandable = this.querySelector('.expandable')
-      expandTitle?.addEventListener('click', () => {
-        this.classList.toggle('expanded')
-      })
+      const details = this.querySelector('details')
+
+      if (details) {
+        // Sync custom expanded class with details open state
+        details.addEventListener('toggle', () => {
+          this.classList.toggle('expanded', details.open)
+        })
+
+        // Initialize expanded state
+        this.classList.toggle('expanded', details.open)
+      }
     }
   }
   customElements.define('collapse-component', Collapse)
