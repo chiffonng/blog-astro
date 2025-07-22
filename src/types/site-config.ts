@@ -21,8 +21,12 @@ export const CoreThemeConfigSchema = z.object({
   prerender: z.boolean().default(true),
   /** Display markdown content */
   content: z.object({
-    externalLinksContent: z.string().default(' ↗'),
-    externalLinkArrow: z.boolean().default(true)
+    /** Whether to add an arrow to specify external link */
+    externalLinkArrow: z.boolean().default(true),
+    /** The arrow (unicode string) for external link.
+     * @example: ↗, ⤴, 🔗,
+     */
+    externalLinksContent: z.string().default(' ↗')
   })
 })
 
@@ -87,14 +91,19 @@ export const DevConfigSchema = z.object({
 export const ThemeConfigSchema = () =>
   CoreThemeConfigSchema.merge(LocaleConfigSchema).merge(DevConfigSchema)
 
+const MenuItemSchema = z.object({
+  title: z.string(),
+  link: z.string()
+})
+
+const SubmenuItemSchema = z.object({
+  title: z.string(),
+  submenu: z.array(MenuItemSchema)
+})
+
 export const HeaderConfigSchema = () =>
   z.object({
-    menu: z.array(
-      z.object({
-        title: z.string(),
-        link: z.string()
-      })
-    )
+    menu: z.array(z.union([MenuItemSchema, SubmenuItemSchema]))
   })
 
 export const FooterConfigSchema = () =>

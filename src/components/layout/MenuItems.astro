@@ -1,0 +1,264 @@
+---
+import config from '@/site.config'
+
+export interface Props {
+  variant?: 'desktop' | 'mobile'
+  class?: string
+}
+
+const { variant = 'desktop', class: className } = Astro.props
+const currentPath = Astro.url.pathname
+
+const baseClasses = 'font-medium transition-colors hover:text-primary relative'
+const desktopClasses = 'p-2'
+const mobileClasses = 'block p-2 hover:bg-muted/50 rounded-md'
+const activeClasses = 'text-primary'
+const desktopActiveIndicator =
+  'after:content-[""] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-6 after:h-0.5 after:bg-primary after:rounded-full'
+const mobileActiveIndicator = 'bg-muted/50 border-l-2 border-primary'
+
+type MenuItem = {
+  title: string
+  link: string
+}
+
+type SubmenuItem = {
+  title: string
+  submenu: MenuItem[]
+}
+
+type MenuConfig = MenuItem | SubmenuItem
+
+function hasChildren(item: MenuConfig): item is SubmenuItem {
+  return 'submenu' in item
+}
+
+function isActiveLink(link: string): boolean {
+  if (link === '/' && currentPath === '/') return true
+  if (link !== '/' && currentPath.startsWith(link)) return true
+  return false
+}
+
+function hasActiveSubmenuItem(submenu: MenuItem[]): boolean {
+  return submenu.some((item) => isActiveLink(item.link))
+}
+
+function getItemClass(link?: string, hasSubmenu?: boolean): string[] {
+  const isActive = link ? isActiveLink(link) : false
+  const variantClasses = variant === 'desktop' ? desktopClasses : mobileClasses
+  const activeIndicator = variant === 'desktop' ? desktopActiveIndicator : mobileActiveIndicator
+
+  return [
+    baseClasses,
+    variantClasses,
+    isActive ? activeClasses : '',
+    isActive ? activeIndicator : '',
+    hasSubmenu && variant === 'desktop' ? 'group' : ''
+  ]
+}
+---
+
+<nav class={className} aria-label='Main navigation'>
+  {
+    config.menu.map((item: MenuConfig) => {
+      if (hasChildren(item)) {
+        // Handle submenu items with proper dropdown
+        const isSubmenuActive = hasActiveSubmenuItem(item.submenu)
+
+        if (variant === 'mobile') {
+          return [
+            // Parent title (highlighted if any child is active)
+            <div
+              class:list={[
+                baseClasses,
+                mobileClasses,
+                isSubmenuActive ? activeClasses : '',
+                isSubmenuActive ? mobileActiveIndicator : '',
+                'text-sm font-semibold text-muted-foreground uppercase tracking-wider'
+              ]}
+            >
+              {item.title}
+            </div>,
+            // Individual submenu items, slightly indented
+            ...item.submenu.map((subItem) => (
+              <a
+                href={subItem.link}
+                class:list={[
+                  baseClasses,
+                  mobileClasses,
+                  isActiveLink(subItem.link) ? activeClasses : '',
+                  isActiveLink(subItem.link) ? mobileActiveIndicator : '',
+                  'ml-4 text-sm'
+                ]}
+                aria-label={`Navigate to ${subItem.title}`}
+                aria-current={isActiveLink(subItem.link) ? 'page' : undefined}
+              >
+                {subItem.title}
+              </a>
+            ))
+          ]
+        } else {
+          // Desktop: render as dropdown menu (inline with other items)
+          return (
+            <div class='relative inline-block' data-submenu-wrapper>
+              <button
+                class:list={[
+                  ...getItemClass(undefined, true),
+                  isSubmenuActive ? activeClasses : '',
+                  isSubmenuActive ? desktopActiveIndicator : '',
+                  'flex items-center gap-1'
+                ]}
+                aria-label={`${item.title} menu`}
+                aria-haspopup='true'
+                aria-expanded='false'
+                data-submenu-trigger={item.title}
+              >
+                {item.title}
+                <span
+                  class='i-mingcute-down-line size-4 transition-transform duration-200'
+                  aria-hidden='true'
+                  data-submenu-arrow
+                />
+              </button>
+
+              <div
+                class='absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 py-2 bg-background border border-border rounded-md shadow-lg opacity-0 invisible transition-all duration-200 z-50'
+                data-submenu-content={item.title}
+                role='menu'
+              >
+                {item.submenu.map((subItem) => (
+                  <a
+                    href={subItem.link}
+                    class:list={[
+                      'block px-4 py-2 text-sm font-medium transition-colors hover:text-primary hover:bg-muted/50',
+                      isActiveLink(subItem.link) ? activeClasses : ''
+                    ]}
+                    role='menuitem'
+                    aria-label={`Navigate to ${subItem.title}`}
+                    aria-current={isActiveLink(subItem.link) ? 'page' : undefined}
+                  >
+                    {subItem.title}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      } else {
+        // Handle regular menu items
+        return (
+          <a
+            href={item.link}
+            class:list={getItemClass(item.link)}
+            aria-label={`Navigate to ${item.title}`}
+            aria-current={isActiveLink(item.link) ? 'page' : undefined}
+          >
+            {item.title}
+          </a>
+        )
+      }
+    })
+  }
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Handle desktop submenu toggles
+    const submenuTriggers = document.querySelectorAll('[data-submenu-trigger]')
+    const submenuWrappers = document.querySelectorAll('[data-submenu-wrapper]')
+
+    submenuTriggers.forEach((trigger) => {
+      const triggerButton = trigger as HTMLButtonElement
+      const triggerValue = triggerButton.dataset.submenuTrigger
+      const content = document.querySelector(
+        `[data-submenu-content="${triggerValue}"]`
+      ) as HTMLElement
+      const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
+
+      if (!content || !arrow) return
+
+      // Handle click events
+      triggerButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const isOpen = triggerButton.getAttribute('aria-expanded') === 'true'
+
+        // Close all other submenus first
+        submenuTriggers.forEach((otherTrigger) => {
+          if (otherTrigger !== triggerButton) {
+            const otherButton = otherTrigger as HTMLButtonElement
+            const otherValue = otherButton.dataset.submenuTrigger
+            const otherContent = document.querySelector(
+              `[data-submenu-content="${otherValue}"]`
+            ) as HTMLElement
+            const otherArrow = otherButton.querySelector('[data-submenu-arrow]') as HTMLElement
+
+            if (otherContent && otherArrow) {
+              otherButton.setAttribute('aria-expanded', 'false')
+              otherContent.classList.add('opacity-0', 'invisible')
+              otherContent.classList.remove('opacity-100', 'visible')
+              otherArrow.classList.remove('rotate-180')
+            }
+          }
+        })
+
+        // Toggle current submenu
+        if (isOpen) {
+          triggerButton.setAttribute('aria-expanded', 'false')
+          content.classList.add('opacity-0', 'invisible')
+          content.classList.remove('opacity-100', 'visible')
+          arrow.classList.remove('rotate-180')
+        } else {
+          triggerButton.setAttribute('aria-expanded', 'true')
+          content.classList.remove('opacity-0', 'invisible')
+          content.classList.add('opacity-100', 'visible')
+          arrow.classList.add('rotate-180')
+        }
+      })
+    })
+
+    // Close submenus when clicking outside
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('[data-submenu-wrapper]')) {
+        submenuTriggers.forEach((trigger) => {
+          const triggerButton = trigger as HTMLButtonElement
+          const triggerValue = triggerButton.dataset.submenuTrigger
+          const content = document.querySelector(
+            `[data-submenu-content="${triggerValue}"]`
+          ) as HTMLElement
+          const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
+
+          if (content && arrow) {
+            triggerButton.setAttribute('aria-expanded', 'false')
+            content.classList.add('opacity-0', 'invisible')
+            content.classList.remove('opacity-100', 'visible')
+            arrow.classList.remove('rotate-180')
+          }
+        })
+      }
+    })
+
+    // Close submenus on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        submenuTriggers.forEach((trigger) => {
+          const triggerButton = trigger as HTMLButtonElement
+          const triggerValue = triggerButton.dataset.submenuTrigger
+          const content = document.querySelector(
+            `[data-submenu-content="${triggerValue}"]`
+          ) as HTMLElement
+          const arrow = triggerButton.querySelector('[data-submenu-arrow]') as HTMLElement
+
+          if (content && arrow) {
+            triggerButton.setAttribute('aria-expanded', 'false')
+            content.classList.add('opacity-0', 'invisible')
+            content.classList.remove('opacity-100', 'visible')
+            arrow.classList.remove('rotate-180')
+          }
+        })
+      }
+    })
+  })
+</script>
