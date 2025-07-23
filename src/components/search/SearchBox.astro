@@ -1,5 +1,6 @@
 ---
 import type { SearchBoxProps as Props } from '@/components/types'
+import { keyMap } from '@/lib/constants'
 
 const { class: className } = Astro.props
 ---
@@ -20,8 +21,10 @@ const { class: className } = Astro.props
   <span class='i-mingcute:search-2-line flex-shrink-0'></span>
   <span class='hidden lg:inline'>Search</span>
   <kbd
-    class='hidden md:inline-flex items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 text-xs font-mono text-muted-foreground'
+    class='hidden md:inline-flex rounded border border-border bg-background px-1.5 py-0.5 text-xs font-mono text-muted-foreground'
+    id='search-kbd'
   >
+    {keyMap.Cmd}K
   </kbd>
 </a>
 
@@ -31,7 +34,7 @@ const { class: className } = Astro.props
   // Handle keyboard shortcut navigation to search page
   document.addEventListener('DOMContentLoaded', () => {
     const searchTrigger = document.getElementById('search-trigger')
-    const kbd = searchTrigger?.querySelector('kbd')
+    const kbd = document.getElementById('search-kbd')
 
     if (kbd) {
       kbd.textContent = `${modifierKey}K`
