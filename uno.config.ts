@@ -212,9 +212,6 @@ export default defineConfig({
   safelist: [
     ...getProfileIconClasses(config.links),
     ...getShareIconClasses(config.sharePlatforms),
-    // TOC
-    'rounded-t-2xl',
-    'rounded-b-2xl',
     // Typography
     'text-base'
   ]

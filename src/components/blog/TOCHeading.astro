@@ -13,7 +13,7 @@ const {
 <li>
   <div class='relative'>
     <span
-      class='absolute top-[5%] w-[2px] transition-colors duration-300 [&.highlight-bg]:bg-primary [&.is-read]:bg-input'
+      class='absolute top-[5%] w-0.5 transition-colors duration-300 [&.highlight-bg]:bg-primary [&.is-read]:bg-input'
       aria-hidden='true'></span>
     <a
       aria-label={`Jump to section: ${text}`}
@@ -33,6 +33,10 @@ const {
 </li>
 
 <style>
+  /* Use shared TOC list reset class */
+  ol {
+    @apply toc-list-reset;
+  }
   li {
     width: 100%;
     overflow: hidden;
@@ -84,6 +88,17 @@ const {
     background-color: hsl(var(--muted));
   }
 
+  /* TOC highlight styling - semantic classes from plugin */
+  .toc-item.toc-highlight-first {
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+  }
+
+  .toc-item.toc-highlight-last {
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+
   /* Depth-specific indentation */
   .toc-depth-2 {
     padding-inline-start: var(--toc-indent-2);
@@ -96,22 +111,7 @@ const {
   .toc-depth-4 {
     padding-inline-start: var(--toc-indent-4);
   }
-
-  /* Override the highlight box rounding - make it less rounded */
-  .toc-item.rounded-t-2xl {
-    border-top-left-radius: 0.375rem !important; /* rounded-md instead of rounded-2xl */
-    border-top-right-radius: 0.375rem !important;
-  }
-
-  .toc-item.rounded-b-2xl {
-    border-bottom-left-radius: 0.375rem !important; /* rounded-md instead of rounded-2xl */
-    border-bottom-right-radius: 0.375rem !important;
-  }
-
-  /* Use shared TOC list reset class */
-  ol {
-    @apply toc-list-reset;
-  }
+  
   /* Accessibility enhancements */
   .toc-item:focus {
     outline: 2px solid hsl(var(--primary));

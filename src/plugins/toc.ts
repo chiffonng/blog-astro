@@ -149,11 +149,11 @@ export class TOCScrollManager {
         el.classList.toggle('highlight', inView)
         el.classList.toggle('highlight-bg-translucent', inView)
         el.classList.toggle(
-          'rounded-t-2xl',
+          'toc-highlight-first',
           inView && (i == 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
         )
         el.classList.toggle(
-          'rounded-b-2xl',
+          'toc-highlight-last',
           inView &&
             (i == this.tocLinks.length - 1 ||
               !this.headingProgress[this.tocLinks[i + 1]?.slug].inView)
