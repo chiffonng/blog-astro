@@ -9,11 +9,8 @@ const { class: className } = Astro.props
   id='search-trigger'
   href='/search'
   class:list={[
-    // Base styles
     'flex items-center transition-colors text-sm text-muted-foreground hover:text-foreground',
-    // Small screen: icon button style (like theme toggle)
     'rounded-md border p-1.5 hover:bg-border justify-center lg:justify-start',
-    // Medium+ screen: search box style
     'lg:gap-2 lg:border-border lg:bg-muted/50 lg:hover:bg-muted lg:px-3 lg:py-1.5 lg:w-fit',
     'relative',
     className
@@ -21,11 +18,7 @@ const { class: className } = Astro.props
   title='Search'
 >
   <span class='i-mingcute:search-2-line flex-shrink-0'></span>
-
-  <!-- Text - hidden until large screens -->
-  <span class='hidden lg:inline'>Search...</span>
-
-  <!-- Keyboard shortcut - hidden until large screens -->
+  <span class='hidden lg:inline'>Search</span>
   <kbd
     class='hidden md:inline-flex items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 text-xs font-mono text-muted-foreground'
   >

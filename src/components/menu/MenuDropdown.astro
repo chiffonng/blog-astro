@@ -389,10 +389,12 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
       const target = e.target as HTMLElement
 
       // Don't interfere with theme button, search, or menu button clicks
-      if (target.closest('#changeTheme') || 
-          target.closest('.theme-btn') ||
-          target.closest('#search-trigger') ||
-          target.closest('[data-panel-trigger]')) {
+      if (
+        target.closest('#changeTheme') ||
+        target.closest('.theme-btn') ||
+        target.closest('#search-trigger') ||
+        target.closest('[data-panel-trigger]')
+      ) {
         return
       }
 
