@@ -1,7 +1,8 @@
 ---
 import CommonLayout from '@/layouts/CommonLayout.astro'
+import CurrentReads from '@/components/_extra/CurrentReads.astro'
 
-import * as nowData from '../content/now.md'
+import * as nowData from 'src/content/now.md'
 
 const nowDescription =
   "This is a now page, a page that tells you what I am focusing on at this point in my life. Learn more about now pages and browse others at <a href='https://nownownow.com/' class='text-primary hover:underline' target='_blank' rel='noopener'>nownownow.com</a>."
@@ -15,4 +16,5 @@ const nowDescription =
   <div class='prose max-w-none'>
     <nowData.Content />
   </div>
+  <CurrentReads storygraphUser='chiffonng' />
 </CommonLayout>
