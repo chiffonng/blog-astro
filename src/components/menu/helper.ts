@@ -13,7 +13,14 @@ export function createNavigationHelpers(currentPath: string): NavHelpers {
 
   const isActiveLink = (link: string): boolean => {
     if (link === '/' && currentPath === '/') return true
-    if (link !== '/' && currentPath.startsWith(link)) return true
+    if (link !== '/') {
+      // Ensure we match complete path segments to avoid false positives
+      // e.g. /blog should not match /blog-archive
+      const normalizedLink = link.endsWith('/') ? link.slice(0, -1) : link
+      const normalizedPath = currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath
+
+      return normalizedPath === normalizedLink || normalizedPath.startsWith(normalizedLink + '/')
+    }
     return false
   }
 

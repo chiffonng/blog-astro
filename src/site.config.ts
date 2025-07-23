@@ -124,8 +124,6 @@ const userConfig: UserConfig = {
 
 // Use Zod validation in development for better DX,
 // skip in production for smaller bundle
-const config: Config = import.meta.env.DEV
-  ? ConfigSchema.parse(userConfig)
-  : userConfig as Config
+const config: Config = import.meta.env.DEV ? ConfigSchema.parse(userConfig) : (userConfig as Config)
 
 export default config

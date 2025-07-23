@@ -43,6 +43,14 @@ const {
       <Footer slot='footer' />
     </div>
 
+    {/* Accessibility: Screen reader announcements */}
+    <div
+      id='aria-announcer'
+      class='sr-only'
+      aria-live='polite'
+      aria-atomic='true'
+    ></div>
+
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
       :global(.highlight) {

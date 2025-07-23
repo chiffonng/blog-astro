@@ -13,7 +13,7 @@ export { default as ProfileLinks } from './base/ProfileLinks.astro'
 export { default as Svg } from './base/Svg.astro'
 
 // Layout builders
-export { default as MenuDrawer } from './menu/MenuDrawer.astro'
+export { default as MenuList } from './menu/MenuList.astro'
 export { default as MenuDropdown } from './menu/MenuDropdown.astro'
 
 // Layout

@@ -2,6 +2,7 @@
 import config from '@/site.config'
 
 import type { MenuItem, MenuItemConfig } from '@/types/site-config'
+
 import { createNavigationHelpers } from './helper'
 
 export interface Props {
@@ -95,6 +96,11 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
     color: hsl(var(--primary));
   }
 
+  .menu-item-active .menu-submenu-trigger {
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
   .menu-item-active-desktop::after {
     content: '';
     position: absolute;
@@ -105,12 +111,19 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
     height: 0.125rem;
     background-color: hsl(var(--primary));
     border-radius: 9999px;
+    pointer-events: none;
+    z-index: -1;
   }
 
   .menu-submenu-trigger {
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
   }
 
   .menu-submenu-wrapper {
@@ -181,7 +194,10 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
 
   function initializeDesktopSubmenuHandlers() {
     const submenuTriggers = document.querySelectorAll('[data-submenu-trigger]')
-    if (submenuTriggers.length === 0) return
+    if (submenuTriggers.length === 0) {
+      // Return empty cleanup function if no submenus exist
+      return () => {}
+    }
 
     // Cache submenu elements for better performance
     const submenuCache = new Map<string, SubmenuElements>()
@@ -240,6 +256,11 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
     }
 
     const toggleSubmenu = (triggerValue: string) => {
+      // Prevent submenu actions during page transitions
+      if (document.documentElement.classList.contains('astro-transitioning')) {
+        return
+      }
+
       const elements = submenuCache.get(triggerValue)
       if (!elements) return
 
@@ -322,11 +343,14 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
     }
 
     // Store event handlers for proper cleanup
-    const eventHandlers = new Map<string, {
-      buttonClick: (e: Event) => void
-      buttonKeydown: (e: KeyboardEvent) => void
-      contentKeydown: (e: KeyboardEvent) => void
-    }>()
+    const eventHandlers = new Map<
+      string,
+      {
+        buttonClick: (e: Event) => void
+        buttonKeydown: (e: KeyboardEvent) => void
+        contentKeydown: (e: KeyboardEvent) => void
+      }
+    >()
 
     // Setup event listeners for cached elements
     submenuCache.forEach((elements, triggerValue) => {
@@ -334,8 +358,14 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
 
       // Create handlers
       const buttonClickHandler = (e: Event) => {
+        // Prevent submenu actions during page transitions
+        if (document.documentElement.classList.contains('astro-transitioning')) {
+          return
+        }
+
         e.preventDefault()
-        e.stopPropagation()
+        e.stopImmediatePropagation()
+        // Ensure the button is still functional even when marked active
         toggleSubmenu(triggerValue)
       }
       const buttonKeydownHandler = (e: KeyboardEvent) => handleKeydown(e, elements)
@@ -357,7 +387,28 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
     // Close submenus when clicking outside
     const handleOutsideClick = (e: Event) => {
       const target = e.target as HTMLElement
-      if (!target.closest('[data-submenu-wrapper]')) {
+
+      // Don't interfere with theme button, search, or menu button clicks
+      if (
+        target.closest('#changeTheme') ||
+        target.closest('.theme-btn') ||
+        target.closest('#search-trigger') ||
+        target.closest('[data-panel-trigger]')
+      ) {
+        return
+      }
+
+      // Don't close submenus if clicking on submenu wrappers
+      if (target.closest('[data-submenu-wrapper]')) {
+        return
+      }
+
+      // Only close submenus if any are actually open
+      const hasOpenSubmenu = Array.from(submenuCache.values()).some(
+        ({ button }) => button.getAttribute('aria-expanded') === 'true'
+      )
+
+      if (hasOpenSubmenu) {
         closeAllSubmenus()
       }
     }
@@ -396,11 +447,52 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
     }
   }
 
-  // Handle initialization based on document ready state
+  // Global cleanup function for proper transition handling
+  let cleanupSubmenuHandlers: (() => void) | null = null
+  let setupTimeoutId: ReturnType<typeof setTimeout> | null = null
+
+  function setupSubmenus() {
+    // Clear any pending setup to prevent race conditions
+    if (setupTimeoutId !== null) {
+      clearTimeout(setupTimeoutId)
+      setupTimeoutId = null
+    }
+
+    // Clean up any existing handlers first
+    if (cleanupSubmenuHandlers) {
+      cleanupSubmenuHandlers()
+      cleanupSubmenuHandlers = null
+    }
+
+    // Small delay to ensure DOM is ready after transitions
+    setupTimeoutId = setTimeout(() => {
+      cleanupSubmenuHandlers = initializeDesktopSubmenuHandlers()
+      setupTimeoutId = null
+    }, 50)
+  }
+
+  // Close all submenus before navigation to prevent state conflicts
+  document.addEventListener('astro:before-preparation', () => {
+    if (cleanupSubmenuHandlers) {
+      // Force close all submenus before navigation
+      const allSubmenus = document.querySelectorAll('[data-submenu-content]')
+      allSubmenus.forEach((submenu) => {
+        const submenuElement = submenu as HTMLElement
+        submenuElement.classList.add('opacity-0', 'invisible')
+        submenuElement.classList.remove('opacity-100', 'visible')
+      })
+    }
+  })
+
+  // Handle Astro view transitions
+  document.addEventListener('astro:page-load', setupSubmenus)
+  document.addEventListener('astro:after-swap', setupSubmenus)
+
+  // Handle initial page load
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => initializeDesktopSubmenuHandlers())
+    document.addEventListener('DOMContentLoaded', setupSubmenus)
   } else {
     // DOM already loaded, initialize immediately
-    initializeDesktopSubmenuHandlers()
+    setupSubmenus()
   }
 </script>

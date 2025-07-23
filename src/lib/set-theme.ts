@@ -39,6 +39,23 @@ export function setTheme(theme?: string, save = false) {
   return theme
 }
 
+// Check if user prefers reduced motion
+export function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+// Enhanced toast with aria-live region support
 export function showToast(detail: { message: string }) {
+  // Dispatch the existing toast event
   document.dispatchEvent(new CustomEvent('toast', { detail }))
+  
+  // Also announce via aria-live region for screen readers
+  const announcer = document.getElementById('aria-announcer')
+  if (announcer) {
+    announcer.textContent = detail.message
+    // Clear after announcing to avoid repetition
+    setTimeout(() => {
+      announcer.textContent = ''
+    }, 1000)
+  }
 }
