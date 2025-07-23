@@ -4,8 +4,7 @@
 
 ![](public/img/social-preview.png)
 
-> [!WARNING] ⚠️
-> This theme is still under active development. There are no releases or tag versions.
+> [!WARNING] ⚠️ This theme is still under active development. There are no releases or tag versions.
 > Use at your own risk.
 
 Personal website for academia, a fork of
