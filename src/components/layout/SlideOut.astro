@@ -44,6 +44,16 @@ const { id, title, side = 'right', class: className } = Astro.props
     private handleClick: ((e: Event) => void) | null = null
     private handleKeydown: ((e: KeyboardEvent) => void) | null = null
 
+    private readonly focusableSelector = [
+      'a[href]',
+      'button:not([disabled])',
+      'textarea:not([disabled])',
+      'input:not([disabled]):not([type="hidden"])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"]):not([disabled])',
+      'details',
+      'summary'
+    ].join(', ')
 
     connectedCallback() {
       this.backdrop = this.querySelector('.panel-backdrop')
@@ -116,6 +126,23 @@ const { id, title, side = 'right', class: className } = Astro.props
       document.addEventListener('keydown', this.handleKeydown)
     }
 
+    private updateTriggerButton(expanded: boolean) {
+      const triggerButton = document.querySelector(
+        `[data-panel-trigger="${this.id}"]`
+      ) as HTMLButtonElement
+      if (triggerButton) {
+        triggerButton.setAttribute('aria-expanded', String(expanded))
+      }
+    }
+
+    private toggleBodyScroll(prevent: boolean) {
+      document.body.style.overflow = prevent ? 'hidden' : ''
+    }
+
+    private dispatchPanelEvent(type: 'open' | 'close') {
+      this.dispatchEvent(new CustomEvent(`panel:${type}`, { bubbles: true }))
+    }
+
     open() {
       if (this.isOpen) return
 
@@ -123,29 +150,17 @@ const { id, title, side = 'right', class: className } = Astro.props
       this.classList.add('panel-open')
       this.setAttribute('aria-hidden', 'false')
 
-      // Prevent body scroll
-      document.body.style.overflow = 'hidden'
+      this.updateTriggerButton(true)
+      this.toggleBodyScroll(true)
 
-      // Focus management - use comprehensive selector for all focusable elements
-      const focusableSelector = [
-        'a[href]',
-        'button:not([disabled])',
-        'textarea:not([disabled])',
-        'input:not([disabled]):not([type="hidden"])',
-        'select:not([disabled])',
-        '[tabindex]:not([tabindex="-1"]):not([disabled])',
-        'details',
-        'summary'
-      ].join(', ')
-
-      const firstFocusable = this.content?.querySelector(focusableSelector) as HTMLElement
+      // Focus management
+      const firstFocusable = this.content?.querySelector(this.focusableSelector) as HTMLElement
       if (firstFocusable) {
         // Use requestAnimationFrame to ensure panel is visible before focusing
         requestAnimationFrame(() => firstFocusable.focus())
       }
 
-      // Dispatch custom event
-      this.dispatchEvent(new CustomEvent('panel:open', { bubbles: true }))
+      this.dispatchPanelEvent('open')
     }
 
     close() {
@@ -154,12 +169,9 @@ const { id, title, side = 'right', class: className } = Astro.props
       this.isOpen = false
       this.classList.remove('panel-open')
       this.setAttribute('aria-hidden', 'true')
-
-      // Restore body scroll
-      document.body.style.overflow = ''
-
-      // Dispatch custom event
-      this.dispatchEvent(new CustomEvent('panel:close', { bubbles: true }))
+      this.updateTriggerButton(false)
+      this.toggleBodyScroll(false)
+      this.dispatchPanelEvent('close')
     }
 
     toggle() {
@@ -278,5 +290,4 @@ const { id, title, side = 'right', class: className } = Astro.props
     padding: 1.5rem;
     overflow-y: auto;
   }
-
 </style>
