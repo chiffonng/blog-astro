@@ -1,7 +1,7 @@
 ---
 import config from '@/site.config'
 
-import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
+import { MenuDropdown, MenuList, SearchBox, SlideOut } from '@/components'
 ---
 
 <menu-header class='header-main'>
@@ -29,7 +29,14 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
         <span class='theme-icon light i-mingcute:sun-line hover:text-primary'></span>
         <span class='theme-icon dark i-mingcute:moon-line hover:text-primary'></span>
       </button>
-      <button data-panel-trigger='mobile-menu' class='menu-btn' aria-label='Toggle Menu'>
+      <button
+        data-panel-trigger='mobile-menu'
+        class='menu-btn'
+        type='button'
+        aria-label='Toggle Menu'
+        aria-controls='mobile-menu'
+        aria-expanded='false'
+      >
         <span class='sr-only'>Menu</span>
         <span class='i-mingcute:menu-line size-5'></span>
       </button>
@@ -39,7 +46,7 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
 
 {/* Mobile Menu Panel */}
 <SlideOut id='mobile-menu' title='Menu' side='right'>
-  <MenuDrawer />
+  <MenuList />
 
   <div class='mt-6 pt-6 border-t border-border'>
     <h4 class='panel-title'>Theme</h4>
@@ -61,7 +68,7 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
     private themeBtn: HTMLButtonElement | null = null
     private panelThemeBtn: HTMLButtonElement | null = null
     private handleScroll: () => void
-    private handleThemeChange: () => void
+    private handleThemeChange: (e: Event) => void
     private resizeObserver: ResizeObserver | null = null
 
     constructor() {
@@ -141,7 +148,15 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
       }
     }
 
-    private initializeTheme() {
+    initializeTheme() {
+      // Clean up existing listeners first
+      if (this.themeBtn) {
+        this.themeBtn.removeEventListener('click', this.handleThemeChange)
+      }
+      if (this.panelThemeBtn) {
+        this.panelThemeBtn.removeEventListener('click', this.handleThemeChange)
+      }
+
       // Cache DOM queries with more specific selectors
       this.themeBtn = this.querySelector('#changeTheme') as HTMLButtonElement
       this.panelThemeBtn = document.getElementById('panelThemeToggle') as HTMLButtonElement
@@ -160,7 +175,8 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
     }
 
     private createThemeHandler() {
-      return () => {
+      return (e: Event) => {
+        e.stopPropagation() // Prevent event from bubbling to submenu handlers
         const newTheme = setTheme(undefined, true) ?? 'system'
         this.updateThemeButtons(newTheme)
         showToast({ message: `Set theme to ${newTheme}` })
@@ -210,11 +226,11 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
       background-color: hsl(var(--background) / var(--un-bg-opacity));
       padding-left: 0.375rem;
       padding-right: 0.375rem;
+      backdrop-filter: blur(12px);
       box-shadow:
-        0 0 0 0 hsl(var(--background)),
-        0 0 0 1px hsl(var(--border) / 0.08),
-        0 10px 15px -3px hsl(var(--foreground) / 0.08),
-        0 4px 6px -4px hsl(var(--foreground) / 0.08);
+        0 0 0 1px hsl(var(--border) / 0.05),
+        0 2px 8px -2px hsl(var(--foreground) / 0.03),
+        0 1px 3px -1px hsl(var(--foreground) / 0.06);
     }
 
     &[data-show='false'] {
@@ -226,18 +242,6 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
         margin-inline: 5%;
       }
     }
-  }
-
-  .brand-link {
-    margin-inline-start: var(--brand-margin);
-    transition: margin-inline-start 0.3s ease-out;
-    contain: layout;
-  }
-
-  .buttons-container {
-    gap: var(--buttons-gap);
-    transition: gap 0.3s ease-out;
-    contain: layout;
   }
 
   /* Dark theme styles */
@@ -253,28 +257,16 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
       display: none;
     }
 
-    .theme-icon.system {
+    &[data-theme='system'] .theme-icon.system {
       display: block;
     }
 
-    &[data-theme='dark'] {
-      .theme-icon.system,
-      .theme-icon.dark {
-        display: none;
-      }
-      .theme-icon.light {
-        display: block;
-      }
+    &[data-theme='dark'] .theme-icon.dark {
+      display: block;
     }
 
-    &[data-theme='light'] {
-      .theme-icon.system,
-      .theme-icon.light {
-        display: none;
-      }
-      .theme-icon.dark {
-        display: block;
-      }
+    &[data-theme='light'] .theme-icon.light {
+      display: block;
     }
   }
 
@@ -323,25 +315,6 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
     font-size: 1rem;
   }
 
-  /* Header actions */
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .desktop-menu {
-    display: none;
-  }
-
-  @media (min-width: 640px) {
-    .desktop-menu {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-  }
-
   /* Buttons */
   .buttons-container {
     z-index: 30;
@@ -387,7 +360,7 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
     }
   }
 
-  /* Panel styles */
+  /* Panel styles for mobile menu */
   .panel-title {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
@@ -402,17 +375,31 @@ import { MenuDrawer, MenuDropdown, SearchBox, SlideOut } from '@/components'
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1rem;
+    padding: 1rem;
     font-weight: 500;
     transition:
       color 0.2s ease,
-      background-color 0.2s ease;
-    border-radius: 0.375rem;
+      background-color 0.2s ease,
+      transform 0.1s ease,
+      box-shadow 0.2s ease;
+    border-radius: 0.5rem;
     text-align: left;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border) / 0.6);
+    cursor: pointer;
+    box-shadow: 0 1px 3px hsl(var(--foreground) / 0.1);
   }
 
   .panel-theme-btn:hover {
     color: hsl(var(--primary));
-    background-color: hsl(var(--muted) / 0.5);
+    background-color: hsl(var(--muted) / 0.7);
+    border-color: hsl(var(--primary) / 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px hsl(var(--foreground) / 0.15);
+  }
+
+  .panel-theme-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px hsl(var(--foreground) / 0.1);
   }
 </style>

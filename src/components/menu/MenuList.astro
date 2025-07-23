@@ -1,7 +1,8 @@
 ---
 import config from '@/site.config'
 
-import type { MenuItemConfig } from '@/types/site-config'
+import type { MenuItem, MenuItemConfig, SubmenuItem } from '@/types/site-config'
+
 import { createNavigationHelpers } from './helper'
 
 export interface Props {
@@ -29,7 +30,7 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
           >
             {item.title}
           </div>,
-          ...item.submenu.map((subItem) => (
+          ...item.submenu.map((subItem: MenuItem) => (
             <a
               href={subItem.link}
               class:list={[
@@ -61,10 +62,6 @@ const { hasChildren, isActiveLink, hasActiveSubmenuItem } = createNavigationHelp
 </nav>
 
 <style>
-  .menu-nav {
-    /* Base navigation container */
-  }
-
   .menu-item-base {
     font-weight: 500;
     position: relative;
