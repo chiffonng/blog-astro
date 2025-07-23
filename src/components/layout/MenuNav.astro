@@ -60,7 +60,7 @@ import { MenuDropdown, MenuList, SearchBox, SlideOut } from '@/components'
 </SlideOut>
 
 <script>
-  import { setTheme, showToast } from '@/lib/set-theme'
+  import { setTheme, showToast, prefersReducedMotion } from '@/lib/set-theme'
 
   class Header extends HTMLElement {
     private scrollTicking = false
@@ -116,7 +116,11 @@ import { MenuDropdown, MenuList, SearchBox, SlideOut } from '@/components'
         requestAnimationFrame(() => {
           const currentScrollY = window.scrollY
           const isNotTop = currentScrollY > 20
-          const shouldShow = currentScrollY < 350 || currentScrollY < this.lastScrollY
+
+          // Respect motion preferences for header hide/show behavior
+          const shouldShow = prefersReducedMotion()
+            ? true
+            : (currentScrollY < 350 || currentScrollY < this.lastScrollY)
 
           // Batch DOM updates
           this.updateHeaderState(isNotTop)
@@ -240,6 +244,16 @@ import { MenuDropdown, MenuList, SearchBox, SlideOut } from '@/components'
     @media (min-width: 800px) {
       &.not-top {
         margin-inline: 5%;
+      }
+    }
+
+    /* Respect motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+
+      &[data-show='false'] {
+        transform: none;
+        opacity: 1;
       }
     }
   }
