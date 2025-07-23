@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets'
+
+import { getCurrentlyReadingBooks } from './storygraph-scraper'
+
+interface Props {
+  storygraphUser: string
+}
+
+const { storygraphUser } = Astro.props
+
+const books = await getCurrentlyReadingBooks(storygraphUser)
+---
+
+{
+  books.length > 0 && (
+    <div class='mb-4'>
+      <h2 class='text-lg font-medium mb-4'>Currently Reading (Storygraph)</h2>
+      <div class='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+        {books.map((book) => (
+          <div class='block relative rounded-2xl border bg-muted p-4'>
+            <div class='flex flex-col items-center text-center gap-3'>
+              <a
+                href={book.bookUrl}
+                target='_blank'
+                rel='noopener noreferrer'
+                class='block transition-transform hover:scale-103 mb-1'
+              >
+                <Image
+                  src={book.imageUrl}
+                  alt={book.title}
+                  inferSize
+                  class='object-cover shadow-md rounded-lg'
+                  loading='eager'
+                />
+              </a>
+              <div class='flex flex-col gap-1'>
+                <a href={book.bookUrl} target='_blank' rel='noopener noreferrer'>
+                  <span class='font-medium sm:text-sm line-clamp-2 text-foreground hover:text-primary transition-colors'>
+                    {book.title}
+                  </span>
+                </a>
+                <span class='sm:text-xs text-muted-foreground line-clamp-1'>{book.author}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
