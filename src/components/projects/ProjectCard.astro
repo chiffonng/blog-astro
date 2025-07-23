@@ -69,82 +69,80 @@ const hasDetailPage = project.body && project.body.trim().length > 0
       : 'bg-card hover:bg-muted/30 hover:border-primary/20'
   ]}
 >
-  <div class='px-6 py-3 h-full'>
-    <div class='flex flex-col h-full'>
-      {/* Header */}
-      <div class='flex items-center gap-x-2'>
-        {
-          isHighlighted && (
-            <>
-              <span class='text-primary i-mingcute:star-line' aria-hidden='true' />
-              <span class='sr-only'>Featured</span>
-            </>
-          )
-        }
-        {
-          hasDetailPage ? (
-            <a href={`/projects/${project.id}`} data-astro-prefetch='tap'>
-              <h3 class='my-2 text-lg font-semibold leading-tight text-foreground hover:text-primary'>
-                {title}
-              </h3>
-            </a>
-          ) : (
-            <h3 class='text-lg font-semibold leading-tight'>{title}</h3>
-          )
-        }
-      </div>
-
-      {/* Context and Date */}
-      <div class='flex flex-wrap items-center gap-2 text-sm'>
-        {
-          context && (
-            <span class={contextBadgeClass}>
-              {context.charAt(0).toUpperCase() + context.slice(1)}
-            </span>
-          )
-        }
-        {dateRange && <date class='text-muted-foreground'>{dateRange}</date>}
-      </div>
-
-      {/* Content */}
+  <div class='px-6 py-3 flex flex-col h-full'>
+    {/* Header */}
+    <div class='flex items-center gap-x-2'>
       {
-        descriptionData && (
-          <p class='text-muted-foreground leading-relaxed w-full'>
-            {descriptionData.text}
-            {descriptionData.needsReadMore && (
-              <a
-                href={`/projects/${project.id}`}
-                data-astro-prefetch='tap'
-                class='ml-1 text-primary hover:underline'
-              >
-                Read more →
-              </a>
-            )}
-          </p>
+        isHighlighted && (
+          <>
+            <span class='text-primary i-mingcute:star-line' aria-hidden='true' />
+            <span class='sr-only'>Featured</span>
+          </>
         )
       }
-
-      {/* Tags */}
       {
-        tags && tags.length > 0 && (
-          <div class='flex flex-wrap gap-1'>
-            {tags.map((tag: string) => (
-              <Pill title={tag} />
-            ))}
-          </div>
-        )
-      }
-
-      {/* Links */}
-      {
-        links.length > 0 && (
-          <div class='flex flex-wrap gap-x-2 mt-auto'>
-            {links.map(({ href, icon, label }) => (
-              <LinkExternal href={href} title={label} icon={icon} />
-            ))}
-          </div>
+        hasDetailPage ? (
+          <a href={`/projects/${project.id}`} data-astro-prefetch='tap'>
+            <h3 class='my-2 text-lg font-semibold leading-tight text-foreground hover:text-primary'>
+              {title}
+            </h3>
+          </a>
+        ) : (
+          <h3 class='text-lg font-semibold leading-tight'>{title}</h3>
         )
       }
     </div>
+
+    {/* Context and Date */}
+    <div class='flex flex-wrap items-center gap-2 text-sm'>
+      {
+        context && (
+          <span class={contextBadgeClass}>
+            {context.charAt(0).toUpperCase() + context.slice(1)}
+          </span>
+        )
+      }
+      {dateRange && <date class='text-muted-foreground'>{dateRange}</date>}
+    </div>
+
+    {/* Content */}
+    {
+      descriptionData && (
+        <p class='text-muted-foreground leading-relaxed w-full'>
+          {descriptionData.text}
+          {descriptionData.needsReadMore && (
+            <a
+              href={`/projects/${project.id}`}
+              data-astro-prefetch='tap'
+              class='ml-1 text-primary hover:underline'
+            >
+              Read more →
+            </a>
+          )}
+        </p>
+      )
+    }
+
+    {/* Tags */}
+    {
+      tags && tags.length > 0 && (
+        <div class='flex flex-wrap gap-1'>
+          {tags.map((tag: string) => (
+            <Pill title={tag} />
+          ))}
+        </div>
+      )
+    }
+
+    {/* Links */}
+    {
+      links.length > 0 && (
+        <div class='flex flex-wrap gap-x-2 mt-auto'>
+          {links.map(({ href, icon, label }) => (
+            <LinkExternal href={href} title={label} icon={icon} />
+          ))}
+        </div>
+      )
+    }
   </div>
 </article>
